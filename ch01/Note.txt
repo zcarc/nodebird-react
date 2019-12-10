@@ -94,3 +94,14 @@
 
 
         앤트 디자인의 css를 불러오려면 next/head를 import하고 거기에 css 삽입하는 코드를 넣으면 된다.
+
+
+
+1-5. 기본 페이지들 만들기
+
+        index.jsx : main page
+        profile.jsx : my profile page
+        signup.jsx : sign up page
+
+        <Link href="/profile"><a>프로필</a></Link>
+        a 태그를 생략해도 동작하는데 문제는 없다.
