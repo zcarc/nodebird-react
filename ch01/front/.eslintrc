@@ -1,0 +1,24 @@
+{
+
+  "parserOptions": {
+    "ecmaVersion": 2019,
+    "sourceType": "module", // import, export, require()
+    "ecmaFeatures": { // js 환경에서 jsx 사용 시 eclint의 경고를 없애준다.
+      "jsx": true // 자바스크립트에서 html이나 xml 쓰는것을 허용해준다.
+    }
+  },
+
+    "env": {
+      "browser": true, // 브라우저 사용하기 때문에 true
+      "node": true
+    },
+    "extends": [
+      "eslint: recommended", // eslint 추천하는 기본 코딩스타일
+      "plugin: react/recommended" // eslint가 추천하는 리액트 코딩스타일
+    ],
+    "plugins": [
+      "import", // eslint가 import, export를 지원하지 않기 때문에 그 문법을 사용하게 해준다.
+      "react-hooks" // hooks를 사용하게 해준다.
+    ]
+
+}
