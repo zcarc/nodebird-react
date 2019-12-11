@@ -116,3 +116,35 @@
 
         useState는 함수, 반복문, 조건문에 넣지 않는게 좋은데
         커스텀 Hook에는 넣어도 된다.
+
+
+
+2-1. _app.js로 레이아웃 분리하기
+
+        원칙: props로 넘겨주는 함수는 useCallback 필수!
+        useState가 변경될때마다 Input 태그가 넘겨주는 props 함수들이 다시 실행되서
+        <Input name="user-password" type="password" value={password} required onChange={onChangePassword}></Input>
+        name, type, value, onChange 모두 props 여기서 onChange는 함수인데 이 부분은 useState시 새로 생성되므로 useCallback을 사용해야한다.
+
+
+        useCallback()의 두번째 인자 배열안에는 함수 내부에서 쓰는 state를 deps 배열로 넣는다.
+
+
+        pages/_app.jsx 는 next에서 지정해놓은 레이아웃을 위한 파일명이다.
+        _app.jsx의 props인 Component는 index.jsx, profile.jsx, signup.jsx의 "Component"이다.
+
+
+        // 특정 부분만 골라서 최적화 하는 방법
+        // 지나친 최적화도 별로 좋지 않다.
+        const TextInput = memo(({ value, onChange }) => {
+            return(
+                <Input value={value} required onChange={onChange}></Input>
+            );
+        });
+
+
+        기존 signup.jsx에는 render() 안에 <AppLayout /> 컴포넌트를 사용했었는데
+        이렇게 되면 render()가 될 때마다 Layout를 렌더링 하므로  성능상에 문제가 있다.
+        그래서 해당 컴포넌트들을 분리시켜야하는데 그러기 위해서 pages/_app.jsx를 생성한다. 이 파일명은 약속이다.
+
+
