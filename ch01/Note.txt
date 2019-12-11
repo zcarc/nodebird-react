@@ -148,3 +148,22 @@
         그래서 해당 컴포넌트들을 분리시켜야하는데 그러기 위해서 pages/_app.jsx를 생성한다. 이 파일명은 약속이다.
 
 
+
+2-2. prop-types
+
+        ch01\front> npm i prop-types
+
+        // PropTypes.elementType: props에서 받은 컴포넌트
+        NodeBird.propTypes = {
+          Component: PropTypes.elementType,
+        };
+
+
+        _document.jsx : html, head, body
+        _app.jsx : root (리액트 컴포넌트를 렌더링할 root)
+        _error.jsx : 에러 발생 시 출력
+        pages/ : 실제 컴포넌트
+
+        _로 시작하는 위 3개 파일들은 기본적으로 next에 내장되어 있는데
+        직접 커스터마이징하면 기존 파일을 덮어 씌울 수 있다.
+

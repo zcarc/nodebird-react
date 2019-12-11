@@ -1,16 +1,18 @@
 import React, {useState, useCallback, memo} from 'react'
-import Head from "next/head";
 import {Input, Form, Checkbox, Button} from 'antd';
-import AppLayout from '../components/AppLayout';
+import PropTypes from 'prop-types';
 
 
-// 특정 부분만 골라서 최적화 하는 방법
-// 지나친 최적화도 별로 좋지 않다.
-const TextInput = memo(({ value, onChange }) => {
-    return(
-        <Input value={value} required onChange={onChange}></Input>
+// propTypes value를 string으로 지정하고 number를 넘겨주면 콘솔에 에러가 발생
+const TextInput = ({value}) => {
+    return (
+        <div>{value}</div>
     );
-});
+};
+
+TextInput.propTypes = {
+  value: PropTypes.string,
+};
 
 const Signup = () => {
 
@@ -72,6 +74,7 @@ const Signup = () => {
 
     return (
         <>
+            <TextInput value={"123"} />
             <Form onSubmit={onSubmit} style={{padding: 10}}>
                 <div>
                     <lable htmlFor="user-id">아이디</lable>
