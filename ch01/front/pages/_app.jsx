@@ -4,6 +4,9 @@ import PropTypes from 'prop-types';
 import AppLayout from '../components/AppLayout';
 
 const NodeBird = ({ Component }) => {
+
+  console.log('_app.jsx component...');
+
     return (
       <>
           <Head>

@@ -14,17 +14,22 @@ TextInput.propTypes = {
   value: PropTypes.string,
 };
 
+// 컴포넌트로 내보내기
+export const useInput = (initValue = null) => {
+    const [value, setter] = useState(initValue);
+
+    const handler = useCallback((e) => {
+        setter(e.target.value);
+    }, []);
+
+    return [value, handler];
+}; 
+
 const Signup = () => {
 
-    const useInput = (initValue = null) => {
-        const [value, setter] = useState(initValue);
+    console.log('Signup() component...');
 
-        const handler = useCallback((e) => {
-            setter(e.target.value);
-        }, []);
-
-        return [value, handler];
-    };
+    
 
     const [id, onChangeId] = useInput('');
     const [nick, onChangeNick] = useInput('');
