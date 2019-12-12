@@ -317,6 +317,56 @@
 
         
 
-         
+3-5. redux devtools 사용하기
+
+        redux devtools(확장프로그램)을 사용하면
+        어떤 action이 실행되서 state가 바뀌었는지 추적할 수 있다.
+        그리고 역추적 time-machine도 할 수 있다.
+
+        withRedux()에 middlewares를 추가해야하는데
+        '미들웨어'라는것은 store에서 state,action,reducer 중간에 껴서 
+        그 과정을 변조하거나 기능을 추가하는게 '미들웨어'이다.
+
+        'redux'가 하는것은 단순히 state를 action과 reducer를 따라서 바꾸는 것이다.
+        이것은 가장 기본적인 기능이고 redux에 없는 기능들을 추가하고 싶을 때 바로 미들웨어를 사용한다.
+
+        크롬에서 redux 확장프로그램을 사용하는것도 원래 없는 기능인데 이를 하기 위해서
+        withRedux()에 미들웨어를 사용해야한다.
+
+        미들웨어는 action과 store 사이에서 동작한다.
+
+
+        // 이 코드는 redux devtools 사이트에서 가져왔다.
+        // redux devtools 확장프로그램을 깔게 되면 window 객체에 __REDUX_DEVTOOLS_EXTENSION__ 라는 함수가 생긴다.
+        window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined' ? window.__REDUX_DEVTOOLS_EXTENSION__() : (f) => f,
+
+        // 기존 미들웨어들에 __REDUX_DEVTOOLS_EXTENSION__를 추가해서 '합성'한다는 의미이다.
+        const enhancer = compose(
+                applyMiddleware(...middlewares),
+                window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined' ? window.__REDUX_DEVTOOLS_EXTENSION__() : (f) => f,
+        );
+
+        // 아래 코드는 그냥 외우면 된다. 이유는 나중에 리덕스 사가를 사용하면
+        window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined' ? window.__REDUX_DEVTOOLS_EXTENSION__() : (f) => f,
+
+        
+        compose() : 미들웨어들 여러개 합성하는 것
+        applyMiddleware(...middlewares): middlewares = [미들웨어1, 미들웨어2 ...] 에 정의된 미들웨어들을 적용
+
+        compose()로 "applyMiddleware(...middlewares)"와 "__REDUX_DEVTOOLS_EXTENSION__"를 합쳐준다.
+        여기서 큰 틀은 그대로 유지하고 바뀌는 부분은 middlewares에 들어가는 미들웨어들만 거의 바뀐다.
+
+
+        window is not defined 가 뜬다면 서버사이드 렌더링 시 서버에서 window를 이해할 수 없기 때문이다.
+
+
+        // 서버사이드 렌더링인 경우 window 객체가 없다.
+        // 이 코드 대신에 쓸 수 있는 코드가 있다.
+        typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined' ? window.__REDUX_DEVTOOLS_EXTENSION__() : (f) => f,
+
+        // 아래코드로 대체가 가능하다.
+        // options.isServer는 next에서 제공하는 속성이다.
+        !options.isServer && window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined' ? window.__REDUX_DEVTOOLS_EXTENSION__() : (f) => f,
+
 
         
