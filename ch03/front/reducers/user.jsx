@@ -27,7 +27,7 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 isLoggedIn: true,
                 user: action.data,
-            }
+            };
         }
 
         case LOG_OUT: {
@@ -35,11 +35,13 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 isLoggedIn: false,
                 user: null,
-            }
+            };
         }
 
         default: {
-            return;
+            return {
+                ...state,
+            };
         }
 
     };

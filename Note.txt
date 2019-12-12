@@ -248,3 +248,75 @@
 
         combineReducers(): 흩어져 있는 reducer들을 합쳐주는 메서드
         
+
+
+3-4. redux와 react 연결하기        
+
+        Provider가 redux state를 제공해준다.
+
+        store: state, action, reducer가 합쳐진 것
+
+        Provider로 감싸주게 되면 해주면
+        자식 컴포넌트들은 중앙 통제실의 state들을 전부 받는다.
+        Provider가 제일 최상위 부모이다.
+        <Provider store={store}> 
+
+
+        react-redux와
+        next-redux는 서로 다르다.
+         
+        next에서는
+        ch03/front> npm i next-redux-wrapper 를 설치해줘야한다.
+
+
+        // 이 부분의 store는 next-reducer-wrapper가 전달해준다.
+        const NodeBird = ({ Component, store })
+
+        export default withRedux((initialState, options) => {
+        })(NodeBird);
+
+        export할 때 withRedux()를 사용해서 store를 어떻게 넘겨줘야할지 작성해야한다.
+        모든 프로젝트에서 위와 같이 사용하므로 이해가 안된다면 외우는게 좋다.
+
+        action이 dispatch될 때 state를 어떻게 바꿔야할지 정의하는게
+        reduce이고 이것들을 전부합쳐서 store로 만들고
+        widthRedux()에서 store를 반환하면
+
+        // 이 부분이 store를 받을 수 있다.
+        const NodeBird = ({ Component, store })
+
+        그리고 widthRedux() 내부에서 store를 커스터마이징하는 경우도 있다.
+
+
+        redux의 state들의 switch문에서 default가 없으면 에러가 발생하니 추가해줘야한다.
+
+        
+        switch문의 default는 실행될리가 없다고 보면 된다.
+        이유는 정해진 action만 실행되기 때문에
+        오타나 아무 행동도 안하는 경우가 아니면 default가 실행되지 않는다
+        아무 행동도 안하는 경우는 단순히 로그를 띄울 때(로깅)가 있을 수 있다.
+        
+        reducer는 action이 실행되어야 실행되므로 실행되었을 때 default에 걸린다.
+        그래서 action이 실행되면 무조건 새로운 state를 반환해줘야한다.
+
+        action 하나당 새로운 state 하나씩 매칭해줘야한다.
+        새로운 객체가 만들어지는게 원칙적으로 맞다.
+
+        
+        default: {
+            return {
+                ...state,
+            };
+        }
+
+        default: {
+            return state;
+        }
+
+        아무거나 써도 상관은 없지만 redux 원칙의 불변성을 따르는게 좋아서 첫번째 방법을 사용한다.
+
+        
+
+         
+
+        
