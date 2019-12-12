@@ -1,4 +1,4 @@
-import { Button } from 'antd';
+import { Button, Form, Input } from 'antd';
 
 const NicknameEditForm = () => {
 

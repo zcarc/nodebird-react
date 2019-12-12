@@ -1,6 +1,14 @@
 
 import { Card, Avatar } from 'antd';
 
+const dummy = {
+    nickname: '이현수',
+    Post: [],
+    Followings: [],
+    Followers: [],
+    isLoggedIn: false,
+};
+
 const UserProfile = () => {
 
     console.log('UserProfile component...');
