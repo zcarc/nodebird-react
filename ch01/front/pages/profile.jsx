@@ -1,5 +1,6 @@
 import React from 'react';
 import { Form, Input, Button, List, Card, Icon } from 'antd';
+import NicknameEditForm from '../components/NicknameEditForm';
 
 const Profile = () => {
 
@@ -7,11 +8,8 @@ const Profile = () => {
 
     return (
         <div>
-
-            <Form style={{ marginBottom: '20px', borfer: '1px solid #d9d9d9', padding: '20px' }}>
-                <Input addonBefore="닉네임" />
-                <Button type="primary">수정</Button>
-            </Form>
+            <NicknameEditForm />
+            
 
             <List
                 style={{ marginBottom: '20px' }}

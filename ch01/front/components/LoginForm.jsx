@@ -34,7 +34,7 @@ const LoginForm = () => {
                 <Input name="user-password" value={password} onChange={onChangePassword} type="password" required></Input>
             </div>
 
-            <div>
+            <div style={{ marginTop: '10px' }}>
                 <Button htmlType="submit" type="primary" loading={false}>로그인</Button>
                 <Link href="/signup"><a><Button>회원가입</Button></a></Link>
             </div>
