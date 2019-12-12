@@ -217,3 +217,27 @@
         노드 같은 서버쪽 앱에도 사용할 수 있다.
         리덕스는 리액트와는 별개이고
         리액트에서 리덕스를 제일 많이 사용하기는 한다.
+
+
+
+3-2. 첫 리듀서 만들기
+
+        ch03/front> npm i redux react-redux
+
+        redux: redux 기본 패키지
+        react-redux: react와 redux를 연결해주는 패키지 (redux는 react와 아무런 관련이 없어서 연결해줘야한다.)
+
+
+        ch03/front> npm i react react-dom next prop-types antd
+        ch03/front> npm i -D eslint eslint-plugin-import eslint-plugin-react eslint-plugin-react-hooks nodemon webpack
+
+
+        리덕스의 단점은 코드량이 많아진다.
+        하지만 예상치 못한 동작이 일어날 일은 없다.
+
+        state 구조 잡는 건 경험이 많이 쌓여야 잘 잡을 수 있다.
+
+
+        리덕스는 하나로 모아뒀다고 하지만 실제로 하나로 모으면
+        너무 파일 하나가 너무 커지기 때문에 하나씩 쪼개는 것을 허용해준다.
+        단, root store는 동일해야한다.
