@@ -14,7 +14,7 @@ const dummy = {
 
 const AppLayout = ( {children} ) => {
 
-    console.log('AppLayout() Component...');
+    console.log('AppLayout() component...');
 
     return (
         <div>
@@ -26,7 +26,8 @@ const AppLayout = ( {children} ) => {
                 </Menu.Item>
             </Menu>
 
-            <Row>
+            {/* gutter: Col 간의 간격 */}
+            <Row gutter={8}>
                 <Col xs={24} md={6}>
 
                     {dummy.isLoggedIn 

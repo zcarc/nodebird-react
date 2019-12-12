@@ -5,7 +5,7 @@ import {useInput} from '../pages/signup';
 
 const LoginForm = () => {
 
-    console.log('LoginForm() Component...');
+    console.log('LoginForm() component...');
     
     const [id, onChangeId] = useInput('');
     const [password, onChangePassword] = useInput('');
@@ -21,7 +21,7 @@ const LoginForm = () => {
 
 
     return (
-        <Form onSubmit={onSubmitForm}>
+        <Form onSubmit={onSubmitForm} style={{ padding: '10px' }}>
             <div>
                 <lable htmlFor="user-id">아이디</lable>
                 <br />
