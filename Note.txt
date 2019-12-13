@@ -370,3 +370,28 @@
 
 
         
+3-6. react-redux 훅 사용하기
+
+        react-redux가 원래 hook을 지원안했다가 최근에 지원하기 시작했다.
+        7.1 버전 이상이면 @next로 그 다음 버전을 설치할 필요가 없다.
+        ch03/front> npm i react-redux@next
+        @next는 현재 버전의 다음 버전이다 패키지 next와 연관이 없다.
+
+        ...state : 점 3개가 있는 것을 스프레드 문법이라고 한다.
+
+
+        react-redux에 hooks가 들어와서
+        connect는 class component에만 쓰이고
+        함수 component는 전부 hooks로 진행한다.
+        hooks가 훨씬 더 편하다.
+
+
+        useSelect() : 리액트 리덕스 Hooks
+
+        // 전체 state에서 user의 state를 선택한다.
+        const user = useSelector(state => state.user);
+
+
+        아래 두 메서드 리액트 Hooks, 리덕스 Hooks 같은 의미라고 생각하면 된다.
+        useState() == useSelector()
+        setState() == useDispatch()

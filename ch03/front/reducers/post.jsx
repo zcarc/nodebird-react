@@ -22,6 +22,8 @@ const addDummy = {
 
 const reducer = (state = initialState, action) => {
 
+    console.log('post reducer()...');
+
     switch(action.type) {
 
         case ADD_POST: {

@@ -3,22 +3,25 @@ export const initialState = {
     user: {},
 };
 
-const LOG_IN = 'LOG_IN'; // 액션의 이름
-const LOG_OUT = 'LOG_OUT';
+export const LOG_IN = 'LOG_IN'; // 액션의 이름
+export const LOG_OUT = 'LOG_OUT';
 
-const loginAction = {
+export const loginAction = {
     type: LOG_IN,
     data: {
         nickname: 'hsLee',
     },
 };
 
-const logoutAction = {
+export const logoutAction = {
     type: LOG_OUT,
 };
 
 
 const reducer = (state = initialState, action) => {
+
+    console.log('user reducer()...');
+    console.log('user state: ', state);
 
     switch(action.type) {
 
@@ -27,6 +30,7 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 isLoggedIn: true,
                 user: action.data,
+                temp: 'temmmmmp',
             };
         }
 
@@ -48,3 +52,6 @@ const reducer = (state = initialState, action) => {
 };
 
 export default reducer;
+
+// 이렇게 사용할 수도 있다.
+// export default = (state = initialState, action) => {};
