@@ -395,3 +395,16 @@
         아래 두 메서드 리액트 Hooks, 리덕스 Hooks 같은 의미라고 생각하면 된다.
         useState() == useSelector()
         setState() == useDispatch()
+
+
+
+3-7. react-redux connect
+
+        useSelector(), useDispatch()는 원래 하이오더 컴포넌트였다.
+
+        react hooks가 없었을 때는 redux connect를 사용했었다.
+
+        
+        action은 state를 어떻게 바꿀지 정의하고
+        dispatch는 reducer에게 action을 보낸다.
+        그럼 reducer는 dispatch에게 전달받은 action을 실행해서 리덕스 state에 반영한다.
