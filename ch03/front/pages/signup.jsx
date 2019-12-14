@@ -16,11 +16,21 @@ TextInput.propTypes = {
 
 // 컴포넌트로 내보내기
 export const useInput = (initValue = null) => {
-    const [value, setter] = useState(initValue);
 
-    const handler = useCallback((e) => {
+    console.log('useInput...');
+    console.log('initValue: ', initValue);
+
+    const [value, setter] = useState(initValue);
+    console.log('value: ', value);
+    // const handler = useCallback((e) => {
+    //     console.log('handler...');
+    //     setter(e.target.value);
+    // }, []);
+
+    const handler = (e) => {
+        console.log('handler...');
         setter(e.target.value);
-    }, []);
+    };
 
     return [value, handler];
 }; 

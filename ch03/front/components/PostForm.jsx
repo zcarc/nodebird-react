@@ -1,22 +1,11 @@
 import { Form, Input, Button } from 'antd';
-
-const dummy = {
-    isLoggedIn: true,
-    imagePaths: [],
-    mainPosts: [{
-        User: {
-            id: 1,
-            nickname: '이현수',
-        },
-        content: '첫 번째 게시글',
-        img: 'https://img.jakpost.net/c/2019/12/08/2019_12_08_83319_1575794264._large.jpg',
-    }],
-};
-
+import { useSelector } from 'react-redux';
 
 const PostForm = () => {
 
     console.log('PostForm component...');
+
+    const { imagePaths } = useSelector(state => state.post);
 
     return (
         <Form encType="multipart/form-data" style={{ margin: '10px 20px' }}>
@@ -30,7 +19,7 @@ const PostForm = () => {
             </div>
 
             <div>
-                {dummy.imagePaths.map((v, i) => {
+                {imagePaths.map((v, i) => {
                     return (
                         <div key={v} style={{ display: 'inline-block' }}>
                             <img src={'http://localhost:3000/' + v} style={{ width: '200px' }} alt={v} />

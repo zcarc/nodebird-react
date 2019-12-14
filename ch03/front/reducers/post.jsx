@@ -1,5 +1,16 @@
 export const initialState = {
-    mainPosts: [],
+
+    mainPosts: [{
+        User: {
+            id: 1,
+            nickname: '이현수',
+        },
+        content: '첫 번째 게시글',
+        img: 'https://img.jakpost.net/c/2019/12/08/2019_12_08_83319_1575794264._large.jpg',
+    }],
+
+    imagePaths: [],
+    
 };
 
 const ADD_POST = 'ADD_POST';

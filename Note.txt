@@ -408,3 +408,7 @@
         action은 state를 어떻게 바꿀지 정의하고
         dispatch는 reducer에게 action을 보낸다.
         그럼 reducer는 dispatch에게 전달받은 action을 실행해서 리덕스 state에 반영한다.
+
+        
+        useSelect()로 state를 가져오는 컴포넌트는
+        가져온 state가 변경되면 해당 컴포넌트도 다시 re-rendering 된다.
