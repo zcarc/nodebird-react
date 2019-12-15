@@ -1,6 +1,8 @@
 import React, {useState, useCallback, memo} from 'react'
 import {Input, Form, Checkbox, Button} from 'antd';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { signUpAction } from '../reducers/user';
 
 
 // propTypes value를 string으로 지정하고 number를 넘겨주면 콘솔에 에러가 발생
@@ -50,6 +52,8 @@ const Signup = () => {
     const [passwordError, setPasswordError] = useState(false);
     const [termError, setTermError] = useState(false);
 
+    const dispatch = useDispatch();
+
 
     const onSubmit = useCallback((e) => {
         e.preventDefault();
@@ -62,6 +66,12 @@ const Signup = () => {
             return setTermError(true);
         }
 
+        dispatch(signUpAction({
+            id,
+            password,
+            nick,
+        }));
+
     }, [password, passwordCheck, term]);
 
 
@@ -71,9 +81,12 @@ const Signup = () => {
     }, [password]);
 
     const onChangeTerm = useCallback((e) => {
+        console.log('e.target.checked: ', e.target.checked);
         setTermError(false);
         setTerm(e.target.checked);
+        
     }, []);
+
 
     // 커스텀 Hook
     // 만약 비밀번호 Input에 사용한다면

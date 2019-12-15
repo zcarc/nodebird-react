@@ -412,3 +412,14 @@
         
         useSelect()로 state를 가져오는 컴포넌트는
         가져온 state가 변경되면 해당 컴포넌트도 다시 re-rendering 된다.
+
+
+        action에 넣을 데이터가 동적인 경우에는 action을 함수로 만들어야한다.
+
+        Form 같은 태그들은 리덕스 안쓰고 리액트 state 쓴다. 
+        리덕스는 서버와 통신할 데이터 or 여러 컴포넌트가 같이 쓰는 
+        데이터들은 redux state를 쓰는게 좀 더 낫다.
+        
+        
+        
+        
