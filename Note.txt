@@ -350,7 +350,7 @@
         window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined' ? window.__REDUX_DEVTOOLS_EXTENSION__() : (f) => f,
 
         
-        compose() : 미들웨어들 여러개 합성하는 것
+        compose() : middleware 끼리 합성을 하게 만드는 함수
         applyMiddleware(...middlewares): middlewares = [미들웨어1, 미들웨어2 ...] 에 정의된 미들웨어들을 적용
 
         compose()로 "applyMiddleware(...middlewares)"와 "__REDUX_DEVTOOLS_EXTENSION__"를 합쳐준다.
@@ -451,5 +451,16 @@
         fork(): 함수 비동기적 호출
         put(): 액션 dispatch 동일
 
-        
+
+
+4-2. 사가 미들웨어 리덕스에 연결하기
+
+        실제 서비스에서는 리덕스 확장프로그램을 허용하면 보안에 취약해지기 때문에 "_app.jsx" 에서 아래 부분은 삭제하고 배포한다.
+        window.__REDUX_DEVTOOLS_EXTENSION__
+
+
+        사가 미들웨어는 currying 기법을 사용하는데 인자 하나를 받아서 다른 함수를 리턴한다.
+        제네레이터는 함수 실행을 중간에 멈출 수 있고 기존 컴포넌트에 props 같은 것을 추가할 때 쓴다.
+
+
         
