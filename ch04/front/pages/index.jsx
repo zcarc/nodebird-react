@@ -26,6 +26,24 @@ const Home = () => {
 
 
     useEffect(() => {
+        dispatch({
+            type: 'HELLO_SAGA',
+        });
+        dispatch({
+            type: 'HELLO_SAGA',
+        });
+        dispatch({
+            type: 'HELLO_SAGA',
+        });
+        dispatch({
+            type: 'HELLO_SAGA',
+        });
+        dispatch({
+            type: 'HELLO_SAGA',
+        });
+        dispatch({
+            type: 'HELLO_SAGA',
+        });
     }, []);
 
 
