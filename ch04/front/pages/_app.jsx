@@ -40,7 +40,6 @@ export default withRedux((initialState, options) => {
     console.log('options.isServer: ', options.isServer);
 
     const sagaMiddleware = createSagaMiddleware();
-
     const middlewares = [sagaMiddleware];
 
     // enhance: 향상시키다

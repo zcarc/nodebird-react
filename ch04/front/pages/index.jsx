@@ -4,18 +4,6 @@ import PostCard from '../components/PostCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { LOG_IN, LOG_OUT, loginAction, logoutAction } from '../reducers/user';
 
-// const dummy = {
-//     isLoggedIn: true,
-//     imagePaths: [],
-//     mainPosts: [{
-//         User: {
-//             id: 1,
-//             nickname: '이현수',
-//         },
-//         content: '첫 번째 게시글',
-//         img: 'https://img.jakpost.net/c/2019/12/08/2019_12_08_83319_1575794264._large.jpg',
-//     }],
-// };
 
 const Home = () => {
     console.log('Index() component...');
@@ -35,6 +23,19 @@ const Home = () => {
     // const user = useSelector(state => state.user.user);
     // const isLoggedIn = useSelector(state => state.user.isLoggedIn);
     // const mainPosts = useSelect(state => state.post.mainPosts);
+
+
+    useEffect(() => {
+        dispatch({
+            type: 'HELLO_SAGA',
+        });
+        dispatch({
+            type: 'HELLO_SAGA',
+        });
+        dispatch({
+            type: 'HELLO_SAGA',
+        });
+    }, []);
 
 
     return (
