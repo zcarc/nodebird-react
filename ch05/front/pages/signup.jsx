@@ -2,7 +2,7 @@ import React, {useState, useCallback, memo} from 'react'
 import {Input, Form, Checkbox, Button} from 'antd';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-import { signUpAction } from '../reducers/user';
+import { SIGN_UP_REQUEST } from '../reducers/user';
 
 
 // propTypes value를 string으로 지정하고 number를 넘겨주면 콘솔에 에러가 발생
@@ -20,28 +20,19 @@ TextInput.propTypes = {
 export const useInput = (initValue = null) => {
 
     console.log('useInput...');
-    console.log('initValue: ', initValue);
 
     const [value, setter] = useState(initValue);
-    console.log('value: ', value);
-    // const handler = useCallback((e) => {
-    //     console.log('handler...');
-    //     setter(e.target.value);
-    // }, []);
 
-    const handler = (e) => {
-        console.log('handler...');
+    const handler = useCallback((e) => {
         setter(e.target.value);
-    };
+    }, []);
+
 
     return [value, handler];
-}; 
+};
 
 const Signup = () => {
-
     console.log('Signup() component...');
-
-    
 
     const [id, onChangeId] = useInput('');
     const [nick, onChangeNick] = useInput('');
@@ -66,11 +57,14 @@ const Signup = () => {
             return setTermError(true);
         }
 
-        dispatch(signUpAction({
-            id,
-            password,
-            nick,
-        }));
+        dispatch({
+            type: SIGN_UP_REQUEST,
+            data: {
+              id,
+              password,
+              nick,
+            },
+        });
 
     }, [password, passwordCheck, term]);
 
