@@ -552,3 +552,11 @@
 
         리액트의 Single Page Application 같은 경우에는 <Form> 같은 것은 preventDefault()를 붙여줘야한다.
         그렇지 않으면 새 페이지로 넘어가게 된다.
+
+
+
+4-14. next Router로 페이지 이동하기
+
+        객체끼리 서로 비교하는게 서로 힘들기 때문에
+        객체는 useEffect()에 안넣는게 좋다.
+        그래서 객체 안의 id 또는 nickname을 넣는게 좋다.

@@ -1,7 +1,8 @@
-import React, {useState, useCallback, memo} from 'react'
+import React, {useState, useCallback, useEffect} from 'react'
 import {Input, Form, Checkbox, Button} from 'antd';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
+import Router from 'next/router';
 import { SIGN_UP_REQUEST } from '../reducers/user';
 
 
@@ -44,7 +45,17 @@ const Signup = () => {
     const [termError, setTermError] = useState(false);
 
     const dispatch = useDispatch();
-    const { isSigningUp } = useSelector(state => state.user);
+    const { isSigningUp, me } = useSelector(state => state.user);
+
+
+    useEffect(() => {
+        if(me){
+            alert('로그인 했으니 메인페이지로 이동합니다.');
+            Router.push('/');
+        }
+    }, [me && me.id]); // 자바 스크립트는 undefined 일수도 있으니 가드(%%)를 해줘야한다.
+    // useEffect의 두번째 인자의 비교 대상은 객체가 아니라 객체의 속성이나 변수를 넣는게 낫다.
+    // 객체를 넣는다면 비교하는게 힘들다.
 
 
     const onSubmit = useCallback((e) => {
