@@ -1,7 +1,7 @@
 import React, {useState, useCallback, memo} from 'react'
 import {Input, Form, Checkbox, Button} from 'antd';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { SIGN_UP_REQUEST } from '../reducers/user';
 
 
@@ -44,6 +44,7 @@ const Signup = () => {
     const [termError, setTermError] = useState(false);
 
     const dispatch = useDispatch();
+    const { isSigningUp } = useSelector(state => state.user);
 
 
     const onSubmit = useCallback((e) => {
@@ -96,7 +97,6 @@ const Signup = () => {
 
     return (
         <>
-            <TextInput value={"123"} />
             <Form onSubmit={onSubmit} style={{padding: 10}}>
                 <div>
                     <lable htmlFor="user-id">아이디</lable>
@@ -132,7 +132,7 @@ const Signup = () => {
                 </div>
 
                 <div style={{marginTop: 10}}>
-                    <Button type="primary" htmlType="submit">가입하기</Button>
+                    <Button type="primary" htmlType="submit" loading={isSigningUp}>가입하기</Button>
                 </div>
             </Form>
         </>
