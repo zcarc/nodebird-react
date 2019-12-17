@@ -1,4 +1,3 @@
-
 const dummyUser = {
     nickname: '이현수',
     Post: [],
@@ -31,7 +30,7 @@ export const signUpAction = (data) => {
         type: SIGN_UP_REQUEST,
         data: data,
     };
-    
+
 };
 
 export const signUpSuccess = {
@@ -46,19 +45,28 @@ export const logoutAction = {
     type: LOG_OUT_REQUEST,
 };
 
-export const signUp = (data) => {
-    return {
-        type: SIGN_UP_REQUEST,
-        data,
-    }
-};
+// 이 함수 표현식은 return이 있는데
+// return을 생략해도 return이 동작하는 함수로 바꿀 수 있다.
+// export const signUp = (data) => {
+//     return {
+//         type: SIGN_UP_REQUEST,
+//         data,
+//     }
+// };
+
+
+// return을 생략할 때는 함수 내부를 () 소괄호로 묶어준다.
+export const signUp = data => ({
+    type: SIGN_UP_REQUEST,
+    data,
+});
 
 
 export default (state = initialState, action) => {
 
     console.log('user reducer()...');
 
-    switch(action.type) {
+    switch (action.type) {
 
         case LOG_IN_REQUEST: {
             return {
@@ -99,9 +107,9 @@ export default (state = initialState, action) => {
             };
         }
 
-    };
+    }
+    ;
 };
-
 
 
 // 이렇게 사용할 수도 있다.

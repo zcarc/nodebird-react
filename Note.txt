@@ -522,3 +522,12 @@
         race. cancel, select, throttle, debounce 이펙트도 많이 쓰인다.
 
 
+
+4-9. eslint-config-airbnb와 코드 정리
+
+        ch05/front> npm i -D eslint-config-airbnb : 에어비앤비의 리액트 코딩 스타일
+        ch05/front> npm i -D eslint-plugin-jsx-a11y : Accessibility 웹 접근성이라는 의미로 리액트는 html 태그를 포함하고 있기 때문에 장애인들을 위한 웹 접근성을 다 지켜서 코딩해야한다.
+
+        eslint는 정규 문법 밖에 지원을 안한다.
+        그래서 바벨 최신 문법을 사용한다면 babel-eslint를 설치해야한다.
+        ch05/front> npm i -D babel-eslint
