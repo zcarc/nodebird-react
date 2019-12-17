@@ -12,6 +12,15 @@ export const initialState = {
     imagePaths: [], // 미리보기 이미지 경로
     addPostErrorReason: false, // 포스트 업로드 실패 사유
     isAddingPost: false, // 포스트 업로드 중
+    postAdded: false, // 게시글 작성 성공
+};
+
+const dummyPost = {
+    User: {
+        id: 1,
+        nickname: '이현수',
+    },
+    content: '더미 데이터',
 };
 
 // 메인 포스트 로딩 액션
@@ -38,10 +47,10 @@ export const UPLOAD_IMAGES_FAILURE = 'UPLOAD_IMAGES_FAILURE';
 // 비동기가 필요하지 않아서 동기 액션 사용
 export const REMOVE_IMAGE = 'REMOVE_IMAGE';
 
-// 포스트 업로드 액션
-const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
-const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
-const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
+// 게시글 작성 액션
+export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
+export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
+export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
 
 // 포스트 좋아요 액션
 export const LIKE_POST_REQUEST = 'LIKE_POST_REQUEST';
@@ -82,10 +91,31 @@ const reducer = (state = initialState, action) => {
     switch(action.type) {
 
         case ADD_POST_REQUEST: {
+
             return {
                 ...state,
+                isAddingPost: true,
+                postAdded: false,
             };
+        }
 
+        case ADD_POST_SUCCESS: {
+
+            return {
+                ...state,
+                isAddingPost: false,
+                mainPosts: [ dummyPost, ...state.mainPosts ], // 게시글 작성이 성공하면 기존 게시글 앞에 더미 포스트가 추가된다.
+                postAdded: true,
+            };
+        }
+
+        case ADD_POST_FAILURE: {
+
+            return {
+                ...state,
+                isAddingPost: false,
+                addPostErrorReason: action.error,
+            };
         }
 
         default: {
@@ -94,7 +124,7 @@ const reducer = (state = initialState, action) => {
             };
         }
     }
-}
+};
 
 export default reducer;
 
