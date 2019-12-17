@@ -569,3 +569,73 @@
         리액트와 제이쿼리는 웬만하면 같이 안쓰는게 좋다.
 
 
+
+5-1. 백엔드 서버 구동에 필요한 모듈들
+
+        http 모듈이 http 요청을 받아서 응답을 하는 서버 역할 제공
+        기본 http 모듈로 하면 기능도 부족하고 가독성도 좋지 않아서
+        리액트에 넥스트 프레임워크 올렸듯이
+        노드 위에 백엔드용 서버 프레임워크를 하나 올린다.
+        그게 바로 express 라는 모듈이다.
+
+        ch05/back> npm i express
+        ch05/back> npm i axios
+        ch05/back> npm i bcrypt
+        ch05/back> npm i cookie-parser
+        ch05/back> npm i express-session
+        ch05/back> npm i dotenv
+        ch05/back> npm i cors
+        ch05/back> npm i helmet hpp
+        ch05/back> npm i morgan
+        ch05/back> npm i multer
+        ch05/back> npm i passport passport-local
+        ch05/back> npm i sequelize sequelize-cli
+        ch05/back> npm i -D eslint eslint-config-airbnb
+        ch05/back> npm i -D eslint-plugin-jsx-a11y
+        ch05/back> npm i -D nodemon
+
+        익스프레스가 제일 좋아서 유명한거는 아니고
+        간단하면서도 우아하게 코딩할 수가 있다.
+
+        bcrypt: 비밀번호 암호화 모듈
+            * 설치 안될 경우: npm install -g windows-build-tools, npm install -g node-gyp
+            * 참고: https://stackoverflow.com/questions/34546272/cannot-find-module-bcrypt/41878322
+
+        cookie-parser: 로그인할 때 쿠키를 사용해서 필요
+        express-session: 로그인할 때 쿠키와 함께 정보 저장하기 위한 세션
+        dotenv: 비밀번호를 환경변수에 관리
+
+        cors: 프론트, 백엔드 서버의 주소가 다른데
+              서로 간의 요청을 보낼 때 보안상으로 제약이 걸리는데
+              그 제약을 cors 모듈로 풀어준다.
+
+        helmet, hpp: node와 express의 보안을 담당하는 모듈
+        morgan: 서버에 로그를 기록 (ex: 요청과 응답에 대한 로그)
+        multer: 이미지 업로드 시 사용
+
+        passport, passport-local: 로그인 관리, 로그인이나 회원가입을
+                                  쉽게 처리할 수 있도록 도와주는 모듈
+
+        sequelize, sequelize-cli: mysql
+        eslint, eslint-config-airbnb
+
+
+        노드는 서버쪽 코드를 수정했을 때 자동으로 반영이 안된다.
+        그래서 서버쪽 코드를 수정하면 재시작을 해줘야한다.
+        근데 일일이 하기 번거러우니 nodemon이라고 있는데
+        이 모듈이 서버쪽 코드를 감지해서 알아서 서버 코드를 반영해준다.
+        nodemon: 서버 코드 수정 시 자동 반영
+
+        실제 서버를 배포할 때는 서버가 재시작 되는 일은 별로 없는데
+        개발할 때는 재시작이 빈번하니 nodemon을 사용한다.
+
+
+        <nodemon.json>
+            "watch": [여기에 들어가는 파일 및 폴더들이 수정되면 아래의 exec, ext가 실행된다.],
+            "exec": "node index.js",
+            "ext": "js json"
+
+
+        "exec": "node index.js" : 서버를 실행하는게 아니고 파일을 실행하는데
+                                  서버 시작하는 코드가 파일 안에 있다.
+
