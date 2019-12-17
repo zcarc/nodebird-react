@@ -1,70 +1,44 @@
 import {all, fork, takeLatest, takeEvery, call, put, take, delay} from 'redux-saga/effects';
 import {LOG_IN, LOG_IN_SUCCESS, LOG_IN_FAILURE} from '../reducers/user';
+import axios from 'axios';
 
-const HELLO_SAGA = 'HELLO_SAGA';
+function* watchLogin() {
+    console.log('watchLogin()...');
 
-function loginAPI() {
-    // 서버에 요청을 보내는 부분
+    yield takeEvery(LOG_IN_REQUEST, login);
 }
 
-function* login() {
+function signUpAPI() {
+    console.log('signUpAPI()...');
+
+    // 서버에 요청을 보내는 부분
+
+    return axios.post('./login');
+}
+
+function* signUp() {
+    console.log('signUp()...');
 
     try {
-        yield fork(logger); // logger는 내 기록을 로깅하는 함수 근데 10초 걸림
-        yield call(loginAPI);
+        yield call(signUpAPI);
         yield put({ // put은 dispatch 동일
-            type: LOG_IN_SUCCESS,
+            type: SIGN_UP_SUCCESS,
         });
 
     } catch (e) { // loginAPI 실패
         console.error(e);
         yield put({
-            type: LOG_IN_FAILURE,
+            type: SIGN_UP_FAILURE,
         });
     }
 
 }
 
-function* watchLogin() {
+function* watchSignUp() {
+    console.log('watchSignUp()...');
 
-    console.log('watchLogin()...');
-
-    while(true) {
-        yield take(LOG_IN);
-
-        yield put({
-            type: LOG_IN_SUCCESS,
-        });
-    }
-
+    yield takeEvery(SIGN_UP_REQUEST, signUp);
 }
-
-function* hello() {
-    yield delay(1000);
-    yield put({
-        type: 'BYE_SAGA'
-    });
-}
-
-function* watchHello() {
-
-    console.log('watchHello()...');
-
-    yield takeEvery(HELLO_SAGA, hello);
-
-}
-
-// function* watchHello() {
-//
-//     while(true) {
-//         yield take(HELLO_SAGA);
-//         console.log(1);
-//         console.log(2);
-//         console.log(3);
-//         console.log(4);
-//     }
-// }
-
 
 
 export default function* userSaga() {
@@ -72,7 +46,7 @@ export default function* userSaga() {
 
     yield all([
         fork(watchLogin),
-        fork(watchHello),
+        fork(watchSignUp),
     ]);
 
 }
