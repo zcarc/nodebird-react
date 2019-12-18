@@ -1,6 +1,10 @@
 const express = require('express');
 
+const db = require('./models'); // index는 생략가능해서 ./models/index.js 를 불러온다.
+
 const app = express();
+
+db.sequelize.sync(); // 알아서 테이블 생성을 해준다.
 
 // get() 의 첫번째 인자는 localhost:8080 뒤에 붙는 주소인데,
 // 프론트에서 백엔드로 '/' 으로 요청을 보내면

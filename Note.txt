@@ -589,6 +589,7 @@
         ch05/back> npm i morgan
         ch05/back> npm i multer
         ch05/back> npm i passport passport-local
+        ch05/back> npm i mysql2
         ch05/back> npm i sequelize sequelize-cli
         ch05/back> npm i -D eslint eslint-config-airbnb
         ch05/back> npm i -D eslint-plugin-jsx-a11y
@@ -681,4 +682,6 @@
 
 
 
-5-4 045
+5-5. 시퀄라이즈 Q&A와 DB 연결하기
+        belongToMany() 메서드는 웬만하면 as 옵션을 추가해주는게 낫다.
+

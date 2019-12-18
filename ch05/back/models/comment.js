@@ -2,7 +2,7 @@
 module.exports = (sequelize, DataTypes) => {
 
     const Comment = sequelize.define('Comment', {
-        src: { // S3 저장
+        content: {
             type: DataTypes.TEXT,
             allowNull: false,
         },
@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
         collate: 'utf8mb4_general_ci',
     });
 
-    Image.associate = (db) => {
+    Comment.associate = (db) => {
         db.Comment.belongsTo(db.User);
         db.Comment.belongsTo(db.Post);
     };
