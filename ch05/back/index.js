@@ -9,6 +9,11 @@ const app = express();
 db.sequelize.sync(); // 시퀄라이즈가 자동으로 테이블을 생성 해준다.
 
 
+// routes/*.js에 들어있는 req.body 이 부분을 처리하려면 아래 코드를 추가해야한다.
+app.use(express.json()); // json 데이터 처리
+app.use(express.urlencoded({ extended: true })); // form 데이터 처리
+
+
 // get() 의 첫번째 인자는 localhost:8080 뒤에 붙는 주소인데,
 // 프론트에서 백엔드로 '/' 으로 요청을 보내면
 // 두번째 인자인 콜백함수는 req, res 매개변수를 받고 res 객체로 응답을 보내준다.
