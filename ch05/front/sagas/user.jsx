@@ -44,20 +44,18 @@ function* watchLogin() {
     yield takeEvery(LOG_IN_REQUEST, login);
 }
 
-function signUpAPI() {
+function signUpAPI(signUpData) {
     console.log('signUpAPI()...');
-    // 서버에 요청을 보내는 부분
 
-    return axios.post('./login');
+    // 서버에 요청을 보내는 부분
+    return axios.post('http://localhost:8080/api/user/', signUpData);
 }
 
-function* signUp() {
+function* signUp(action) {
     console.log('signUp()...');
 
     try {
-        // yield call(signUpAPI);
-        yield delay(2000);
-        throw new Error('에러에러에러');
+        yield call(signUpAPI, action.data); // call()의 두번째 인자는 첫번째 인자 signUpAPI의 매개변수가 받는다.
         yield put({ // put은 dispatch 동일
             type: SIGN_UP_SUCCESS,
         });

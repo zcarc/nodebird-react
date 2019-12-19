@@ -1,4 +1,7 @@
 const express = require('express');
+const morgan = require('morgan')
+const cors = require('cors');
+
 const db = require('./models'); // index는 생략가능해서 ./models/index.js 를 불러온다.
 const userAPIRouter = require('./routes/user');
 const postAPIRouter = require('./routes/post');
@@ -6,12 +9,15 @@ const postsAPIRouter = require('./routes/posts');
 
 const app = express();
 
+
 db.sequelize.sync(); // 시퀄라이즈가 자동으로 테이블을 생성 해준다.
 
 
+app.use(morgan('dev')); // 개발 모드 시 로그를 남겨준다.
 // routes/*.js에 들어있는 req.body 이 부분을 처리하려면 아래 코드를 추가해야한다.
 app.use(express.json()); // json 데이터 처리
 app.use(express.urlencoded({ extended: true })); // form 데이터 처리
+app.use(cors());
 
 
 // get() 의 첫번째 인자는 localhost:8080 뒤에 붙는 주소인데,
