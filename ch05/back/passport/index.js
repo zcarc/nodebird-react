@@ -1,5 +1,6 @@
 const passport = require('passport');
 const db = require('../models');
+const local = require('./local');
 
 module.exports = () => {
 
@@ -23,4 +24,6 @@ module.exports = () => {
            return done(e);
        }
     });
+
+    local();
 };

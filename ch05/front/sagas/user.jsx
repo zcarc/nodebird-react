@@ -11,20 +11,18 @@ import axios from 'axios';
 
 
 
-function loginAPI() {
+function loginAPI(loginData) {
     console.log('loginAPI()...');
     // 서버에 요청을 보내는 부분
 
-    return axios.post('./login');
+    return axios.post('./login', loginData);
 }
 
 function* login() {
     console.log('login()...');
 
     try {
-        // yield call(loginAPI);
-
-        yield delay(2000);
+        yield call(loginAPI, action.data);
         yield put({ // put은 dispatch 동일
             type: LOG_IN_SUCCESS,
         });

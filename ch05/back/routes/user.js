@@ -1,5 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
+const passport = require('passport');
 const db = require('../models'); // index에 db.User()로 연결되어 있기 때문에 불러오면 어디서든 쓸 수 있다.
 
 const router = express.Router();
@@ -65,7 +66,39 @@ router.post('/logout', (req, res) => {  //   /api/user/logout
 });
 
 // 로그인
-router.post('/login', (req, res) => {
+router.post('/login', (req, res, next) => { // POST /api/user/login
+
+    // (err, user, info) : done() 메서드의 첫번째 인자 err, 두번째 인자 user, 세번째 인자 info
+    passport.authenticate('local', (err, user, info) => {
+
+        // 서버 에러가 있을 시
+        if(err) {
+            console.error(err);
+            return next(err); // express가 알아서 서버로 에러를 보내준다.
+        }
+
+        // 로직 상의 에러가 있을 시
+        if(info) {
+            return res.status(401).send(info.reason); //send() : 문자열로 이유를 보낸다.
+        }
+
+        // 로그인 성공 시 서버에 쿠키와 세션이 저장된다.
+        return req.login(user, (loginErr) => {
+
+            // 로그인하면서 에러가 발생 시 *이런 경우는 아주아주 드물지만 혹시나 해서 해준다.
+            if (loginErr) {
+                return next(loginErr);
+            }
+
+            // 패스워드가 담겨 있으니 얕은 복사를 한 후에
+            // 패스워드를 삭제하고 프론트에 보내준다.
+            const filteredUser = Object.assign({}, user);
+            delete filteredUser.password;
+
+            // 프론트에 사용자 정보를 JSON 형태로 보내준다.
+            return res.json(filteredUser);
+        });
+    })(req, res, next);
 });
 
 // 특정 유저의 팔로워 목록 가져오기

@@ -6,17 +6,22 @@ const expressSession = require('express-session');
 const dotenv = require('dotenv');
 const passport = require('passport');
 
+const passportConfig = require('./passport');
 const db = require('./models'); // index는 생략가능해서 ./models/index.js 를 불러온다.
 const userAPIRouter = require('./routes/user');
 const postAPIRouter = require('./routes/post');
 const postsAPIRouter = require('./routes/posts');
 
-
+// .env 파일 연결
 dotenv.config();
+
 const app = express();
 
-db.sequelize.sync(); // 시퀄라이즈가 자동으로 테이블을 생성 해준다.
+// 시퀄라이즈가 자동으로 테이블을 생성 해준다.
+db.sequelize.sync();
 
+// passport 연결
+passportConfig();
 
 app.use(morgan('dev')); // 개발 모드 시 로그를 남겨준다.
 // routes/*.js에 들어있는 req.body 이 부분을 처리하려면 아래 코드를 추가해야한다.
