@@ -4,6 +4,7 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const expressSession = require('express-session');
 const dotenv = require('dotenv');
+const passport = require('passport');
 
 const db = require('./models'); // index는 생략가능해서 ./models/index.js 를 불러온다.
 const userAPIRouter = require('./routes/user');
@@ -32,6 +33,12 @@ app.use(expressSession({ // 아래 두개의 옵션은 사용하지는 않지만
         secure: false, // https를 쓸 때 true
     }
 })); // 세션을 사용하게 해준다.
+
+// 이건 expressSession() 아래에 적어줘야한다.
+// passport session이 expressSession을 사용한다.
+// 미들웨어간에 서로 의존관계가 있는 경우 순서가 중요하다.
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 // get() 의 첫번째 인자는 localhost:8080 뒤에 붙는 주소인데,
