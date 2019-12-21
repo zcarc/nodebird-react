@@ -27,16 +27,24 @@ app.use(morgan('dev')); // 개발 모드 시 로그를 남겨준다.
 // routes/*.js에 들어있는 req.body 이 부분을 처리하려면 아래 코드를 추가해야한다.
 app.use(express.json()); // json 데이터 처리
 app.use(express.urlencoded({ extended: true })); // form 데이터 처리
-app.use(cors()); // CORS 문제 프론트,백엔드간의 서버 포트가 달라서 문제가 생기는 것을 해결해준다.
+
+app.use(cors({
+    origin: true,
+    credentials: true,
+})); // CORS 문제 프론트,백엔드간의 서버 포트가 달라서 문제가 생기는 것을 해결해준다.
+
 app.use(cookieParser(process.env.COOKIE_SECRET)); // 쿠키를 파싱해준다.
 app.use(expressSession({ // 아래 두개의 옵션은 사용하지는 않지만 무조건 적어줘야하는 옵션이다. 보통은 false이다.
     resave: false, // 매번 세션에 강제 저장
     saveUninitialized: false, // 아무것도 없는 값도 저장
+    
     secret: process.env.COOKIE_SECRET, // .env 파일에서 불러온다.
     cookie: {
         httpOnly: true, // 자바스크립트에서 접근을 못한다. 해커들이 쿠키 빼돌리는 코드를 심어서 해킹하는 것을 방지.
         secure: false, // https를 쓸 때 true
-    }
+    },
+    name: '_spid', // 쿠키 이름을 변경해준다. 기본 이름이 익스프레스를 사용한다는 것을 알 수 있어서 보안에 취약하다.
+
 })); // 세션을 사용하게 해준다.
 
 // 이건 expressSession() 아래에 적어줘야한다.
@@ -57,11 +65,6 @@ app.use(passport.session()); // 매 요청 시마다 이 부분이 실행되면�
 app.use('/api/user', userAPIRouter);
 app.use('/api/post', postAPIRouter);
 app.use('/api/posts', postsAPIRouter);
-
-
-
-
-
 
 
 // app.get(), app.post()

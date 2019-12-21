@@ -17,7 +17,10 @@ function loginAPI(loginData) {
     console.log('loginAPI()...');
     // 서버에 요청을 보내는 부분
 
-    return axios.post('/user/login', loginData);
+    // 세번째 인자에 withCredentials를 추가해야 프론트와 백엔드 간에 쿠키를 주고 받을 수 있다.
+    return axios.post('/user/login', loginData ,{ 
+        withCredentials: true,
+    });
 }
 
 function* login(action) {
