@@ -9,22 +9,30 @@ import {
 } from '../reducers/user';
 import axios from 'axios';
 
+axios.defaults.baseURL = 'http://localhost:8080/api';
+
 
 
 function loginAPI(loginData) {
     console.log('loginAPI()...');
     // 서버에 요청을 보내는 부분
 
-    return axios.post('./login', loginData);
+    return axios.post('/user/login', loginData);
 }
 
-function* login() {
+function* login(action) {
     console.log('login()...');
 
     try {
-        yield call(loginAPI, action.data);
+
+        // 서버 routes/user 에서 passport.login()의 리턴된 값을 할당한다.
+        const result = yield call(loginAPI, action.data);
+
+        console.log('### result.data: ', result.data, ' ###');
+
         yield put({ // put은 dispatch 동일
             type: LOG_IN_SUCCESS,
+            data: result.data, // axios의 반환값은 result.data에 사용자 정보가 들어있다.
         });
 
     } catch (e) { // loginAPI 실패
@@ -46,7 +54,7 @@ function signUpAPI(signUpData) {
     console.log('signUpAPI()...');
 
     // 서버에 요청을 보내는 부분
-    return axios.post('http://localhost:8080/api/user/', signUpData);
+    return axios.post('/user/', signUpData);
 }
 
 function* signUp(action) {

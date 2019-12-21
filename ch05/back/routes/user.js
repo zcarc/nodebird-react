@@ -63,13 +63,22 @@ router.get('/:id', (req, res) => {
 
 // 로그아웃
 router.post('/logout', (req, res) => {  //   /api/user/logout
+
+    // 아래 두개만 적어주면 알아서 로그아웃이 된다.
+    req.logout();
+    req.session.destroy();
+
+    res.send('Logout 성공');
 });
 
 // 로그인
 router.post('/login', (req, res, next) => { // POST /api/user/login
+    console.log("### router.post('/login', ...) ###");
 
+    // 먼저 passport/local.js로 넘어가게 된다.
     // (err, user, info) : done() 메서드의 첫번째 인자 err, 두번째 인자 user, 세번째 인자 info
     passport.authenticate('local', (err, user, info) => {
+        console.log(`### authenticate... err: ${err}, user: ${user}, info: ${info}`);
 
         // 서버 에러가 있을 시
         if(err) {
@@ -83,7 +92,12 @@ router.post('/login', (req, res, next) => { // POST /api/user/login
         }
 
         // 로그인 성공 시 서버에 쿠키와 세션이 저장된다.
+        // req.login()을 할 때 passport/index.js의 passport.serializeUser()가 실행된다.
+        // serializeUser()의 매개변수 user는 req.login(user, ...)의 첫번째 인자가 전달된다.
+        // 로그인 성공한 유저의 id를 새로 빼고 쿠키는 새로 만들어서 [{id: 1, cookie: 'DFy47r'}] 이런식으로 익스프레션 세션에 저장된다.
         return req.login(user, (loginErr) => {
+
+            console.log('### req.login: ', user, ' ###');
 
             // 로그인하면서 에러가 발생 시 *이런 경우는 아주아주 드물지만 혹시나 해서 해준다.
             if (loginErr) {
@@ -92,13 +106,16 @@ router.post('/login', (req, res, next) => { // POST /api/user/login
 
             // 패스워드가 담겨 있으니 얕은 복사를 한 후에
             // 패스워드를 삭제하고 프론트에 보내준다.
-            const filteredUser = Object.assign({}, user);
+            const filteredUser = Object.assign({}, user.toJSON());
             delete filteredUser.password;
+
+            console.log('### filteredUser: ', filteredUser, ' ###');
 
             // 프론트에 사용자 정보를 JSON 형태로 보내준다.
             return res.json(filteredUser);
         });
     })(req, res, next);
+
 });
 
 // 특정 유저의 팔로워 목록 가져오기

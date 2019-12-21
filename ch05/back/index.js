@@ -43,7 +43,7 @@ app.use(expressSession({ // 아래 두개의 옵션은 사용하지는 않지만
 // passport session이 expressSession을 사용한다.
 // 미들웨어간에 서로 의존관계가 있는 경우 순서가 중요하다.
 app.use(passport.initialize());
-app.use(passport.session());
+app.use(passport.session()); // 매 요청 시마다 이 부분이 실행되면서 passport.deserializeUser()가 살행된다.
 
 
 // get() 의 첫번째 인자는 localhost:8080 뒤에 붙는 주소인데,
