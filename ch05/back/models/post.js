@@ -11,10 +11,14 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     Post.associate = (db) => {
-        db.Post.belongsTo(db.User); // belongTo()가 있는 테이블에 다른 테이블의 id를 저장 (Post 테이블에 UserId 저장)
+
+        // belongTo()가 있는 테이블에 다른 테이블의 id를 저장 (Post 테이블에 UserId 저장)
+        // 테이블에 UserId 컬럼이 생긴다.
+        db.Post.belongsTo(db.User); 
+
         db.Post.hasMany(db.Comment);
         db.Post.hasMany(db.Image);
-        db.Post.belongsTo(db.Post, { as: 'Retweet' });
+        db.Post.belongsTo(db.Post, { as: 'Retweet' }); // 테이블에 RetweetId 컬럼이 생긴다.
         db.Post.belongsToMany(db.Hashtag, { through: 'PostHashtag'} );
         db.Post.belongsToMany(db.User, { through: 'Like', as: 'Likers'});
     };

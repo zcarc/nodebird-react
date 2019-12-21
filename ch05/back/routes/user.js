@@ -95,7 +95,7 @@ router.post('/login', (req, res, next) => { // POST /api/user/login
         // req.login()을 할 때 passport/index.js의 passport.serializeUser()가 실행된다.
         // serializeUser()의 매개변수 user는 req.login(user, ...)의 첫번째 인자가 전달된다.
         // 로그인 성공한 유저의 id를 새로 빼고 쿠키는 새로 만들어서 [{id: 1, cookie: 'DFy47r'}] 이런식으로 익스프레션 세션에 저장된다.
-        return req.login(user, (loginErr) => {
+        return req.login(user, async (loginErr) => {
 
             console.log('### req.login: ', user, ' ###');
 
@@ -104,15 +104,37 @@ router.post('/login', (req, res, next) => { // POST /api/user/login
                 return next(loginErr);
             }
 
-            // 패스워드가 담겨 있으니 얕은 복사를 한 후에
-            // 패스워드를 삭제하고 프론트에 보내준다.
-            const filteredUser = Object.assign({}, user.toJSON());
-            delete filteredUser.password;
+            const fullUser = await db.User.findOne({
+                where: { id: user.id },
+                include: [{ 
+                    model: db.Post,
+                    as: 'Posts',
+                    attributes: ['id'], // id만 가져온다.
+                }, {
+                    model: db.User,
+                    as: 'Followings',
+                    attributes: ['id'], 
+                }, {
+                    model: db.User,
+                    as: 'Followers',
+                    attributes: ['id'], 
+                }],
+                attributes: ['id', 'nickname', 'userId'], // 사용자 정보는 패스워드만 제외하고 프론트로 보낸다.
+            });
 
-            console.log('### filteredUser: ', filteredUser, ' ###');
+            console.log('### fullUser: ', fullUser, '###');
+            debugger;
+            return res.json(fullUser);
 
-            // 프론트에 사용자 정보를 JSON 형태로 보내준다.
-            return res.json(filteredUser);
+            // // 패스워드가 담겨 있으니 얕은 복사를 한 후에
+            // // 패스워드를 삭제하고 프론트에 보내준다.
+            // const filteredUser = Object.assign({}, user.toJSON());
+            // delete filteredUser.password;
+
+            // console.log('### filteredUser: ', filteredUser, ' ###');
+
+            // // 프론트에 사용자 정보를 JSON 형태로 보내준다.
+            // return res.json(filteredUser);
         });
     })(req, res, next);
 
