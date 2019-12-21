@@ -13,8 +13,8 @@ const Home = () => {
 
     // 만약 user.jsx에 등록된 state가 변경되면
     // 현재 index.jsx의 컴포넌트가 re-rendering 된다.
-    const {isLoggedIn} = useSelector(state => state.user);
-    const {mainPosts} = useSelector(state => state.post);
+    const { me } = useSelector(state => state.user);
+    const { mainPosts } = useSelector(state => state.post);
 
 
     // 성능 최적화를 위해 아래와 같이 쪼갤수도 있다.
@@ -25,7 +25,7 @@ const Home = () => {
 
     return (
         <div>
-            {isLoggedIn && <PostForm/>}
+            {me && <PostForm/>}
 
             {mainPosts.map((c) => {
                 return (
