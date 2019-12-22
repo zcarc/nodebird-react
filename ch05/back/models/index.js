@@ -4,7 +4,14 @@ const env = process.env.NODE_ENV || 'development';
 const config = require('../config/config')[env];
 const db = {};
 
-const sequelize = new Sequelize(config.database, config.username, config.password, config);
+// const sequelize = new Sequelize(config.database, config.username, config.password, config);
+
+// 테스트 결과 그냥 객체 하나만 넘겨줘도 생성이 된다.
+const sequelize = new Sequelize(config);
+
+console.log(`### models/index.js... ###`);
+console.log(`### config: ${JSON.stringify(config)} ###`);
+// console.log(`### sequelize: ${JSON.stringify(sequelize)} ###`);
 
 
 db.Comment = require('./comment')(sequelize, Sequelize);

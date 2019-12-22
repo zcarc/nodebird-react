@@ -6,13 +6,6 @@ import { Menu, Input, Row, Col } from 'antd';
 import LoginForm from './LoginForm';
 import UserProfile from './UserProfile';
 
-const dummy = {
-    nickname: '이현수',
-    Post: [],
-    Followings: [],
-    Followers: [],
-    isLoggedIn: false,
-};
 
 const AppLayout = ( {children} ) => {
 

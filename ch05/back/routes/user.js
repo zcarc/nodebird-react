@@ -7,6 +7,14 @@ const router = express.Router();
 
 // 내 정보 조회
 router.get('/', (req, res) => { //   /api/user/
+
+    if(!req.user){
+        return res.status(401).send('로그인이 필요합니다.');
+    }
+
+    const user = Object.assign({}, req.user.toJSON());
+    delete user.password;
+    return res.json(user);
 });
 
 // 회원가입
@@ -43,7 +51,7 @@ router.post('/', async (req, res, next) => {
             password: hashedPassword,
         });
 
-        console.log(`newUser: ${newUser}`);
+        // console.log(`newUser: ${newUser}`);
         return res.status(200).json(newUser); // 여기서 status(200)을 생략해도 기본값 (200 or 304)으로 설정되어 있다.
 
     } catch (e) {
@@ -78,7 +86,7 @@ router.post('/login', (req, res, next) => { // POST /api/user/login
     // 먼저 passport/local.js로 넘어가게 된다.
     // (err, user, info) : done() 메서드의 첫번째 인자 err, 두번째 인자 user, 세번째 인자 info
     passport.authenticate('local', (err, user, info) => {
-        console.log(`### authenticate... err: ${err}, user: ${user}, info: ${info}`);
+        // console.log(`### authenticate... err: ${err}, user: ${user}, info: ${info}`);
 
         // 서버 에러가 있을 시
         if(err) {
@@ -97,7 +105,7 @@ router.post('/login', (req, res, next) => { // POST /api/user/login
         // 로그인 성공한 유저의 id를 새로 빼고 쿠키는 새로 만들어서 [{id: 1, cookie: 'DFy47r'}] 이런식으로 익스프레션 세션에 저장된다.
         return req.login(user, async (loginErr) => {
 
-            console.log('### req.login: ', user, ' ###');
+            // console.log('### req.login: ', user, ' ###');
 
             // 로그인하면서 에러가 발생 시 *이런 경우는 아주아주 드물지만 혹시나 해서 해준다.
             if (loginErr) {
@@ -122,8 +130,7 @@ router.post('/login', (req, res, next) => { // POST /api/user/login
                 attributes: ['id', 'nickname', 'userId'], // 사용자 정보는 패스워드만 제외하고 프론트로 보낸다.
             });
 
-            console.log('### fullUser: ', fullUser, '###');
-            debugger;
+            // console.log('### fullUser: ', fullUser, '###');
             return res.json(fullUser);
 
             // // 패스워드가 담겨 있으니 얕은 복사를 한 후에

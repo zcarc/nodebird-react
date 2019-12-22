@@ -104,7 +104,7 @@ export const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE';
 
 const reducer = (state = initialState, action) => {
 
-    console.log('post reducer()...');
+    console.log(`### post reducer()... action: ${JSON.stringify(action)} ###`);
 
     switch(action.type) {
 
@@ -113,6 +113,7 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 isAddingPost: true,
+                addPostErrorReason: '',
                 postAdded: false,
             };
         }
@@ -122,7 +123,7 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 isAddingPost: false,
-                mainPosts: [ action.data, ...state.mainPosts ], // 게시글 작성이 성공하면 기존 게시글 앞에 더미 포스트가 추가된다.
+                mainPosts: [action.data, ...state.mainPosts], // 게시글 작성이 성공하면 기존 게시글 앞에 더미 포스트가 추가된다.
                 postAdded: true,
             };
         }
@@ -170,6 +171,29 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 isAddingComment: false,
                 addCommentErrorReason: action.error,
+            };
+        }
+
+        case LOAD_MAIN_POSTS_REQUEST: {
+
+            return {
+                ...state,
+                mainPosts: [],
+            };
+        }
+
+        case LOAD_MAIN_POSTS_SUCCESS: {
+
+            return {
+                ...state,
+                mainPosts: action.data,
+            };
+        }
+
+        case LOAD_MAIN_POSTS_FAILURE: {
+
+            return {
+                ...state,
             };
         }
 

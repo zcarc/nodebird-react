@@ -1,12 +1,8 @@
+import {all, fork, takeLatest, put, delay, call} from 'redux-saga/effects';
 import {
-  all, fork, takeLatest, put, delay, call
-} from 'redux-saga/effects';
-import {
-  ADD_POST_REQUEST,
-  ADD_POST_SUCCESS,
-  ADD_POST_FAILURE,
-  ADD_COMMENT_SUCCESS,
-  ADD_COMMENT_FAILURE, ADD_COMMENT_REQUEST,
+  ADD_POST_REQUEST, ADD_POST_SUCCESS, ADD_POST_FAILURE,
+  ADD_COMMENT_REQUEST, ADD_COMMENT_SUCCESS, ADD_COMMENT_FAILURE, 
+  LOAD_MAIN_POSTS_REQUEST, LOAD_MAIN_POSTS_SUCCESS, LOAD_MAIN_POSTS_FAILURE
 } from '../reducers/post';
 import axios from 'axios';
 
@@ -31,6 +27,7 @@ function* addPost(action) {
     const result = yield call(addPostAPI, action.data);
     yield put({
       type: ADD_POST_SUCCESS,
+      data: result.data,
     });
 
   } catch (e) {
@@ -44,7 +41,38 @@ function* addPost(action) {
 }
 
 function* watchAddPost() {
+  
   yield takeLatest(ADD_POST_REQUEST, addPost);
+}
+
+
+function loadMainPostsAPI() {
+
+  // 로그인하지 않은 사용자로 메인 페이지 게시글을 볼 수 있으니
+  // withCredentials 설정을 하지 않아도 된다.
+  return axios.get('/posts');
+}
+
+function* loadMainPosts() {
+
+  try {
+
+    const result = yield call(loadMainPostsAPI);
+    yield put({
+      type: LOAD_MAIN_POSTS_SUCCESS,
+      data: result.data,
+    });
+
+  } catch (e) {
+    yield put({
+      type: LOAD_MAIN_POSTS_FAILURE,
+      error: e,
+    });
+  }
+}
+
+function* watchLoadMainPosts() {
+  yield takeLatest(LOAD_MAIN_POSTS_REQUEST, loadMainPosts);
 }
 
 function addCommentAPI() {
@@ -78,6 +106,7 @@ export default function* postSaga() {
   console.log('postSaga()...');
 
   yield all([
+    fork(watchLoadMainPosts),
     fork(watchAddPost),
     fork(watchAddComment),
   ]);

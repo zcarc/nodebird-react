@@ -7,7 +7,7 @@ const dummyUser = {
 };
 
 export const initialState = {
-    isLoggedIn: false, // 로그인 여부
+    // isLoggedIn: false, // 로그인 여부
     isLoggingOut: false, // 로그아웃 시도 중
     isLoggingIn: false, // 로그인 시도 중
     logInErrorReason: '', // 로그인 실패 사유
@@ -109,9 +109,17 @@ export default (state = initialState, action) => {
         case LOG_OUT_REQUEST: {
             return {
                 ...state,
-                isLoggedIn: false,
+                isLoggingOut: true,
                 me: null,
 
+            };
+        }
+
+        case LOG_OUT_SUCCESS: {
+            return {
+                ...state,
+                isLoggingOut: false,
+                me: null,
             };
         }
 
@@ -120,6 +128,7 @@ export default (state = initialState, action) => {
                 ...state,
                 isSigningUp: true,
                 isSignedUp: false,
+                signUpErrorReason: '',
             };
         }
 
@@ -146,7 +155,7 @@ export default (state = initialState, action) => {
         }
 
     }
-    ;
+
 };
 
 

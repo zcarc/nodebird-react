@@ -14,15 +14,21 @@ const PostForm = () => {
     useEffect(() => {
 
         setText('')
-    }, [postAdded === true]);
+    }, [postAdded]);
 
-    const onSubmitForm = useCallback((e) => {
+    const onSubmitForm = useCallback( (e) => {
         e.preventDefault();
+
+        // 게시글이 없을 때 알림창
+        // 트림을 하는 이유는 스페이스바 치는 사람들이 있기 떄문이다.
+        if(!text || !text.trim()) {
+            return alert('게시글을 작성하세요.');
+        }
 
         dispatch({
             type: ADD_POST_REQUEST,
             data: {
-                content: text,
+                content: text.trim(),
             },
         });
 

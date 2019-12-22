@@ -1,7 +1,8 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import PostForm from '../components/PostForm';
 import PostCard from '../components/PostCard';
-import { useSelector } from 'react-redux';
+import { LOAD_MAIN_POSTS_REQUEST } from '../reducers/post';
 
 
 const Home = () => {
@@ -15,6 +16,19 @@ const Home = () => {
     // 현재 index.jsx의 컴포넌트가 re-rendering 된다.
     const { me } = useSelector(state => state.user);
     const { mainPosts } = useSelector(state => state.post);
+
+    console.log(`### mainPosts: ${JSON.stringify(mainPosts)} ###`);
+
+    const dispatch = useDispatch();
+
+
+    useEffect( () => {
+
+        dispatch({
+            type: LOAD_MAIN_POSTS_REQUEST,
+        });
+
+    }, []);
 
 
     // 성능 최적화를 위해 아래와 같이 쪼갤수도 있다.
