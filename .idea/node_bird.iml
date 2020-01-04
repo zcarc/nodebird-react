@@ -5,7 +5,13 @@
       <excludeFolder url="file://$MODULE_DIR$/ch01" />
       <excludeFolder url="file://$MODULE_DIR$/ch03" />
       <excludeFolder url="file://$MODULE_DIR$/ch04" />
+      <excludeFolder url="file://$MODULE_DIR$/ch05" />
+      <excludeFolder url="file://$MODULE_DIR$/ch05/back/node_modules" />
+      <excludeFolder url="file://$MODULE_DIR$/ch05/front/.next" />
+      <excludeFolder url="file://$MODULE_DIR$/ch06/back/node_modules" />
+      <excludeFolder url="file://$MODULE_DIR$/ch06/front/.next" />
     </content>
+    <content url="file://$MODULE_DIR$/ch05/back/node_modules" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
