@@ -264,7 +264,7 @@
 
         react-redux와
         next-redux는 서로 다르다.
-         
+
         next에서는
         ch03/front> npm i next-redux-wrapper 를 설치해줘야한다.
 
@@ -285,7 +285,7 @@
         // 이 부분이 store를 받을 수 있다.
         const NodeBird = ({ Component, store })
 
-        그리고 widthRedux() 내부에서 store를 커스터마이징하는 경우도 있다.
+        그리고 withRedux() 내부에서 store를 커스터마이징하는 경우도 있다.
 
 
         redux의 state들의 switch문에서 default가 없으면 에러가 발생하니 추가해줘야한다.

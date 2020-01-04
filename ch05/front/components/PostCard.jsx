@@ -59,18 +59,7 @@ const PostCard = ({post}) => {
                 <Card.Meta
                     avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
                     title={post.User.nickname}
-                    description={(
-                        <div>
-                            {post.content.split(/(#[^\s]+)/g).map((v) => {
-                                if (v.match(/#[^\s]+/)) {
-                                    return (
-                                        <Link href="/hashtag" key={v}>{v}</Link>
-                                    );
-                                }
-                                return v;
-                            })}
-                        </div>
-                    )}
+                    description={post.content}
                 />
             </Card>
 
