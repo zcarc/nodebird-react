@@ -29,6 +29,9 @@ module.exports = () => {
               where: { id },
            });
 
+           // req.user에 저장된다.
+           // '/' 경로에서 req.user를 호출하면 done()의 유저 정보가 들어있다.
+           // 패스포트를 사용하지 않으면 request 객체는 user라는 속성을 가지고 있지 않다.
            return done(null, user); // req.user
 
        } catch (e) {
