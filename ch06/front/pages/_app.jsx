@@ -45,7 +45,7 @@ NodeBird.getInitialProps = async(context) => {
 
     // Nodebird의 Component와 같다.
     // <Component/> : pages 폴더의 파일들
-    // 해당 파일에 getInitialProps를 사용한다면 true
+    // 해당 파일이 getInitialProps를 사용한다면 true
     if (Component.getInitialProps) {
         pageProps = await Component.getInitialProps(ctx);
     }

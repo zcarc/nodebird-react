@@ -67,6 +67,48 @@ router.post('/', async (req, res, next) => {
 // :id는 req.params.id로 가져올 수 있다.
 router.get('/:id', (req, res) => {
 
+    try {
+        const user = await db.User.findOne({
+            where: { id: parseInt(req.params.id, 10) },
+            include:[{
+                model: db.Post,
+                as: 'Posts',
+                attributes: ['id'],
+            }, {
+                model: db.User,
+                as: 'Followings',
+                attributes: ['id'],
+            }, {
+                model: db.User,
+                as: 'Followers',
+                attributes: ['id'],
+            }],
+            attributes: ['id', 'nickname'],
+        });
+
+        // 다른사용자의 팔로잉이나 팔로워가 개인정보 노출이 될 수 있으므로 숫자만 보냄
+        const jsonUser = user.toJSON();
+
+        console.log(`##### router.get('/:id' user: ${user} #####`);
+        console.log(`##### user.toJSON(): ${jsonUser} #####`);
+
+        jsonUser.Posts = jsonUser.Posts ? jsonUser.Posts.length : 0;
+        jsonUser.Followings = jsonUser.Followings ? jsonUser.Followings.length : 0;
+        jsonUser.Followers = jsonUser.Followers ? jsonUser.Followers.length : 0;
+
+        // pages/user.jsx에 보냄
+        req.json(jsonUser);
+
+    } catch (e) {
+        console.error(e);
+        next(e);
+    }
+
+
+
+
+
+
 });
 
 // 로그아웃
@@ -164,7 +206,26 @@ router.delete('/:id/follower', (req, res) => {
 });
 
 // 특정 게시글 전부 가져오기
-router.get('/:id/posts', (req, res) => {
+router.get('/:id/posts', async (req, res) => {
+
+    try {
+        const posts = await db.Post.findAll({
+            where: { // post 테이블 기준 조건
+                UserId: parseInt(req.params.id, 10),
+                RetweetId: null, // 남이 리트윗한거 빼고 내가 쓴거만 가져옴
+            },
+            include: [{
+                model: db.User,
+                attributes: ['id', 'nickname'], // password 제외
+            }],
+        });
+
+        res.json(posts);
+
+    }catch (e) {
+        console.log(e);
+        next(e);
+    }
 });
 
 module.exports = router;

@@ -148,6 +148,34 @@ export default (state = initialState, action) => {
             };
         }
 
+        case LOAD_USER_REQUEST: {
+            return {
+                ...state,
+            };
+        }
+
+        case LOAD_USER_SUCCESS: {
+
+            // 내 정보가 있다면 내 정보를 출력
+            if(action.me)
+            return {
+                ...state,
+                me: action.data,
+            };
+
+            // 다른사람 정보라면 다른사람 정보 출력
+            return {
+                ...state,
+                userInfo: action.data,
+            };
+        }
+
+        case LOAD_USER_FAILURE: {
+            return {
+                ...state,
+            };
+        }
+
         default: {
             return {
                 ...state,

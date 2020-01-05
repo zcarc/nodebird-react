@@ -5,12 +5,9 @@ import {
     LOG_IN_REQUEST,
     SIGN_UP_REQUEST,
     SIGN_UP_SUCCESS,
-    SIGN_UP_FAILURE
+    SIGN_UP_FAILURE, LOAD_USER_FAILURE, LOAD_USER_SUCCESS, LOAD_USER_REQUEST
 } from '../reducers/user';
 import axios from 'axios';
-
-
-
 
 
 function loginAPI(loginData) {
@@ -85,6 +82,43 @@ function* watchSignUp() {
     yield takeEvery(SIGN_UP_REQUEST, signUp);
 }
 
+function loadUserAPI(userId) {
+    console.log('loadUserAPI()...');
+
+    // 서버에 요청을 보내는 부분
+    return axios.post(userId ? `/user/${userId}` : /user/, { // userId가 있으면 다른사람 정보 불러오고 없다면 내 정보 불러오기
+        withCredentials: true,
+    });
+}
+
+function* loadUser(action) {
+    console.log('loadUser()...');
+
+    try {
+        // yield call(loadUserAPI);
+        const result = yield call(loadUserAPI, action.data);
+        yield put({
+            type: LOAD_USER_SUCCESS,
+            data: result.data,
+            me: !action.data, // action.data == userId 없다면 true
+        });
+
+    } catch (e) {
+        console.error(e);
+        yield put({
+            type: LOAD_USER_FAILURE,
+            error: e
+        });
+    }
+
+}
+
+function* watchLoadUser() {
+    console.log('watchLoadUser()...');
+
+    yield takeEvery(LOAD_USER_REQUEST, loadUser);
+}
+
 
 export default function* userSaga() {
     console.log('userSaga()...');
@@ -92,6 +126,7 @@ export default function* userSaga() {
     yield all([
         fork(watchLogin),
         fork(watchSignUp),
+        fork(watchLoadUser),
     ]);
 
 }

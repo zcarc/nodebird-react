@@ -65,6 +65,7 @@ app.use(passport.session()); // 매 요청 시마다 이 부분이 실행되면�
 app.use('/api/user', userAPIRouter);
 app.use('/api/post', postAPIRouter);
 app.use('/api/posts', postsAPIRouter);
+app.use('/api/hashtag', hashtagAPIRouter);
 
 
 // app.get(), app.post()
