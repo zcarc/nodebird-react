@@ -14,7 +14,12 @@ import {
   LOAD_HASHTAG_POSTS_FAILURE,
   LOAD_USER_POSTS_REQUEST,
   LOAD_USER_POSTS_FAILURE,
-  LOAD_USER_POSTS_SUCCESS, LOAD_COMMENTS_SUCCESS, LOAD_COMMENTS_FAILURE, LOAD_COMMENTS_REQUEST
+  LOAD_USER_POSTS_SUCCESS,
+  LOAD_COMMENTS_SUCCESS,
+  LOAD_COMMENTS_FAILURE,
+  LOAD_COMMENTS_REQUEST,
+  UPLOAD_IMAGES_REQUEST,
+  UPLOAD_IMAGES_FAILURE, UPLOAD_IMAGES_SUCCESS
 } from '../reducers/post';
 import axios from 'axios';
 
@@ -209,6 +214,40 @@ function* watchLoadComments() {
   yield takeLatest(LOAD_COMMENTS_REQUEST, loadComments);
 }
 
+function uploadImagesAPI(formData) {
+  return axios.post('post/images', formData, {
+    withCredentials: true,
+  });
+}
+
+// 사가 post.jsx의 uploadImages(action) 이 부분의 action은
+// PostCard.jsx의 ADD_COMMENT_REQUEST를 dispatch하는 메서드의 action을 아래 함수의 매개변수가 넘겨받는다.
+function* uploadImages(action) {
+
+  try {
+    // 이미지 업로드가 완료되면 서버는
+    // 이미지가 어디에 저장되어 있는지 주소를 보내준다.
+    // 그래서 이미지 미리보기도 하고
+    // 게시글 작성버튼을 누를 때 그 이미지 주소를 게시글과 같이 업로드 한다.
+    const result = yield call(uploadImagesAPI, action.data);
+    yield put({
+      type: UPLOAD_IMAGES_SUCCESS,
+      data: result.data, // 서버쪽에 저장된 이미지 주소를 받는다.
+    });
+
+  } catch (e) {
+    console.error(e);
+    yield put({
+      type: UPLOAD_IMAGES_FAILURE,
+      error: e,
+    });
+  }
+}
+
+function* watchUploadImages() {
+  yield takeLatest(UPLOAD_IMAGES_REQUEST, uploadImages);
+}
+
 export default function* postSaga() {
   console.log('postSaga()...');
 
@@ -219,5 +258,6 @@ export default function* postSaga() {
     fork(watchLoadComments),
     fork(watchLoadHashtagPosts),
     fork(watchLoadUserPosts),
+    fork(watchUploadImages),
   ]);
 }

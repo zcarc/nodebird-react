@@ -80,6 +80,31 @@ const reducer = (state = initialState, action) => {
 
     switch(action.type) {
 
+        case UPLOAD_IMAGES_REQUEST: {
+
+            return {
+                ...state,
+            };
+        }
+
+        case UPLOAD_IMAGES_SUCCESS: {
+
+            // imagePaths: 이미지 미리보기 할 수 있는 경로 + 새로운 action.data 를 합쳐준다.
+            // 처음에 하나만 올렸다가 몇 개 더 올리게 돼도 기존 이미지들돠 합쳐주기 때문에
+            // 여러개의 이미지를 따로따로 올릴 수 있게 된다.
+            return {
+                ...state,
+                imagePaths: [...state.imagePaths, ...action.data],
+            };
+        }
+
+        case UPLOAD_IMAGES_FAILURE: {
+
+            return {
+                ...state,
+            };
+        }
+
         case ADD_POST_REQUEST: {
 
             return {
