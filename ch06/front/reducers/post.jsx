@@ -58,9 +58,9 @@ export const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS';
 export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
 
 // 게시글 댓글 불러오는 액션
-export const LOAD_COMMENT_REQUEST = 'LOAD_COMMENT_REQUEST';
-export const LOAD_COMMENT_SUCCESS = 'LOAD_COMMENT_SUCCESS';
-export const LOAD_COMMENT_FAILURE = 'LOAD_COMMENT_FAILURE';
+export const LOAD_COMMENTS_REQUEST = 'LOAD_COMMENTS_REQUEST';
+export const LOAD_COMMENTS_SUCCESS = 'LOAD_COMMENTS_SUCCESS';
+export const LOAD_COMMENTS_FAILURE = 'LOAD_COMMENTS_FAILURE';
 
 // 리트윗 액션
 export const RETWEET_REQUEST = 'RETWEET_REQUEST';
@@ -120,7 +120,6 @@ const reducer = (state = initialState, action) => {
         }
 
         case ADD_COMMENT_SUCCESS: {
-
             const postIndex = state.mainPosts.findIndex( v => v.id === action.data.postId);
             const post = state.mainPosts[postIndex];
             const Comments = [...post.Comments, action.data.comment];
@@ -153,6 +152,23 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 mainPosts: [],
+            };
+        }
+
+        case LOAD_COMMENTS_SUCCESS: {
+            const postIndex = state.mainPosts.findIndex( v => v.id === action.data.postId);
+            const post = state.mainPosts[postIndex];
+            const Comments = action.data.comments; // 이 부분을 배열로 만들어서 에러가 있었다.
+            const mainPosts = [...state.mainPosts];
+
+            console.log(`### front/reducers/post.jsx... LOAD_COMMENTS_SUCCESS... mainPosts: ${JSON.stringify(mainPosts)}  ###`);
+            console.log(`### front/reducers/post.jsx... LOAD_COMMENTS_SUCCESS... action.data: ${JSON.stringify(action.data)}  ###`);
+
+            mainPosts[postIndex] = { ...post, Comments };
+
+            return {
+                ...state,
+                mainPosts,
             };
         }
 

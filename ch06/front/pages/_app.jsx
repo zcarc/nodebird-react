@@ -13,7 +13,7 @@ import rootSaga from "../sagas";
 const NodeBird = ({Component, store, pageProps}) => {
 
     console.log('### front/pages/_app.jsx... const NodeBird = ({Component, store, pageProps})... ###');
-    console.log(`### front/pages/_app.jsx... NodeBird... pageProps: ${JSON.stringify(pageProps)} ###`);
+    // console.log(`### front/pages/_app.jsx... NodeBird... pageProps: ${JSON.stringify(pageProps)} ###`);
 
     return (
         <Provider store={store}>

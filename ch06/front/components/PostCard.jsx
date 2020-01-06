@@ -2,20 +2,31 @@ import {useState, useCallback, useEffect} from 'react';
 import {Button, Card, Icon, Avatar, Form, Input, List, Comment} from 'antd';
 import PropTypes from 'prop-types';
 import {useSelector, useDispatch} from "react-redux";
-import {ADD_COMMENT_REQUEST} from "../reducers/post";
+import {ADD_COMMENT_REQUEST, LOAD_COMMENTS_REQUEST} from "../reducers/post";
 import Link from 'next/link';
 
 const PostCard = ({post}) => {
-    console.log(' ### front/components/PostCard.jsx... const PostCard = ({post})... {post}: ', post ,' ###');
+    console.log(' ### front/components/PostCard.jsx... const PostCard = ({post})... post: ', post ,' ###');
+    console.log(' ### front/components/PostCard.jsx... const PostCard = ({post})... post.id: ', post.id ,' ###');
 
-    const [commentFormOpended, setCommentFormOpened] = useState(false);
+    const [commentFormOpened, setCommentFormOpened] = useState(false);
     const [commentText, setCommentText] = useState('');
     const {me} = useSelector(state => state.user);
     const {commentAdded, isAddingComment} = useSelector(state => state.post);
     const dispatch = useDispatch();
 
     const onToggleComment = useCallback(() => {
+        console.log(' ### front/components/PostCard.jsx... befre setCommentFormOpened... commentFormOpened: ', commentFormOpened ,' ###');
         setCommentFormOpened(prev => !prev);
+        console.log(' ### front/components/PostCard.jsx... after setCommentFormOpened... commentFormOpened: ', commentFormOpened ,' ###');
+
+        if(!commentFormOpened) {
+            console.log(' ### front/components/PostCard.jsx... if(!commentFormOpened)... post.id: ', post.id ,' ###');
+            dispatch({
+                type: LOAD_COMMENTS_REQUEST,
+                data: post.id,
+            });
+        }
     }, []);
 
     const onSubmitComment = useCallback((e) => {
@@ -29,9 +40,10 @@ const PostCard = ({post}) => {
             type: ADD_COMMENT_REQUEST,
             data: {
                 postId: post.id,
+                content: commentText,
             },
         });
-    }, [me && me.id]); // 객체를 넣지 말고 객체의 값을 넣어줘야한다.
+    }, [me && me.id, commentText]); // 객체를 넣지 말고 객체의 값을 넣어줘야한다.
 
     useEffect(() => {
         setCommentText('');
@@ -87,7 +99,7 @@ const PostCard = ({post}) => {
                 />
             </Card>
 
-            {commentFormOpended && (
+            {commentFormOpened && (
                 <>
                     <Form onSubmit={onSubmitComment}>
 
@@ -108,7 +120,7 @@ const PostCard = ({post}) => {
                                     author={item.User.nickname}
                                     // as를 붙여주면 URL에 querystring이 사라지게 할 수 있다.
                                     avatar={( // 중괄호 생략가능
-                                        <Link href={{ pathname:'/user', query: { id: post.User.id } }} as={`/user/${post.User.id}`}>
+                                        <Link href={{ pathname:'/user', query: { id: item.User.id } }} as={`/user/${item.User.id}`}>
                                             <a><Avatar>{item.User.nickname[0]}</Avatar></a>
                                         </Link>
                                     )}
@@ -116,10 +128,12 @@ const PostCard = ({post}) => {
                                 />
                             </li>
                         )}
+
                     />
 
                 </>
             )}
+
 
         </div>
     );
@@ -135,3 +149,4 @@ PostCard.protoTypes = {
 };
 
 export default PostCard;
+
