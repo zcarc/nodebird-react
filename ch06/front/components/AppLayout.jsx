@@ -9,7 +9,7 @@ import UserProfile from './UserProfile';
 
 const AppLayout = ( {children} ) => {
 
-    console.log('AppLayout() component...');
+    console.log('### front/components/AppLayout.jsx... const AppLayout = ( {children} )... {children}: ,', {children}, ' ###');
 
     const { isLoggedIn } = useSelector(state => state.user);
 

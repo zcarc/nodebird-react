@@ -7,7 +7,6 @@ const dummyUser = {
 };
 
 export const initialState = {
-    // isLoggedIn: false, // 로그인 여부
     isLoggingOut: false, // 로그아웃 시도 중
     isLoggingIn: false, // 로그인 시도 중
     logInErrorReason: '', // 로그인 실패 사유
@@ -73,8 +72,7 @@ export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
 
 
 export default (state = initialState, action) => {
-
-    console.log('user reducer()...');
+    console.log(`### front/reducers/user.jsx : action: ${action} ###`);
 
     switch (action.type) {
 
@@ -157,11 +155,12 @@ export default (state = initialState, action) => {
         case LOAD_USER_SUCCESS: {
 
             // 내 정보가 있다면 내 정보를 출력
-            if(action.me)
-            return {
-                ...state,
-                me: action.data,
-            };
+            if(action.me) {
+                return {
+                    ...state,
+                    me: action.data,
+                };
+            }
 
             // 다른사람 정보라면 다른사람 정보 출력
             return {

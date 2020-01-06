@@ -11,6 +11,8 @@ const db = require('./models'); // index는 생략가능해서 ./models/index.js
 const userAPIRouter = require('./routes/user');
 const postAPIRouter = require('./routes/post');
 const postsAPIRouter = require('./routes/posts');
+const hashtagAPIRouter = require('./routes/hashtag');
+
 
 // .env 파일 연결
 dotenv.config();

@@ -6,8 +6,7 @@ import {ADD_COMMENT_REQUEST} from "../reducers/post";
 import Link from 'next/link';
 
 const PostCard = ({post}) => {
-    console.log('PostCard component...');
-    console.log('post: ', post);
+    console.log(' ### front/components/PostCard.jsx... const PostCard = ({post})... {post}: ', post ,' ###');
 
     const [commentFormOpended, setCommentFormOpened] = useState(false);
     const [commentText, setCommentText] = useState('');
@@ -57,14 +56,28 @@ const PostCard = ({post}) => {
                 extra={<Button>팔로우</Button>}
             >
                 <Card.Meta
-                    avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
+                    // <Link href={`/user/${post.User.id}`}><a><Avatar>{post.User.nickname[0]}</Avatar></a></Link>
+                    // 이렇게 사용하면 동적인 처리를 프론트에서 못해서 익스프레스로 넘어가게 된다.
+                    // 그렇게 되면 front/server.js 의 server.get(/user/:id) 부분이 실행되서 페이지가 새로 렌더링 된다.
+                    // 그래서 프론트에서 처리할 수 있게 링크를 아래 코드로 바꿔줘야한다.
+
+                    // pathname: pages 폴더 내에 있는 파일
+                    // query: 프론트에서 동적으로 처리한 query 부분
+                    // server.js에서 app.render()에서 3,4번째 인자와 똑같다.
+                    avatar={(
+                        <Link href={{ pathname: '/user', query: { id: post.User.id } }} as={`/user/${post.User.id}`}>
+                            <a><Avatar>{post.User.nickname[0]}</Avatar></a>
+                        </Link>
+                    )}
                     title={post.User.nickname}
                     description={(
                         <div>
                             {post.content.split(/(#[^\s]+)/g).map((v) => {
                                 if (v.match(/#[^\s]+/)) {
                                     return (
-                                        <Link href={`/hashtag/${v.slice(1)}`} key={v}>{v}</Link>
+                                        <Link href={{ pathname: '/hashtag', query: { tag: v.slice(1) } }} as={`/hashtag/${v.slice(1)}`} key={v}>
+                                            <a>{v}</a>
+                                        </Link>
                                     );
                                 }
                                 return v;
@@ -93,7 +106,12 @@ const PostCard = ({post}) => {
                             <li>
                                 <Comment
                                     author={item.User.nickname}
-                                    avatar={<Avatar>{item.User.nickname[0]}</Avatar>}
+                                    // as를 붙여주면 URL에 querystring이 사라지게 할 수 있다.
+                                    avatar={( // 중괄호 생략가능
+                                        <Link href={{ pathname:'/user', query: { id: post.User.id } }} as={`/user/${post.User.id}`}>
+                                            <a><Avatar>{item.User.nickname[0]}</Avatar></a>
+                                        </Link>
+                                    )}
                                     content={item.content}
                                 />
                             </li>

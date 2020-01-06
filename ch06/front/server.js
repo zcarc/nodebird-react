@@ -34,8 +34,10 @@ app.prepare().then(() => {
 
     server.get('/hashtag/:tag', (req, res) => {
 
+        console.log(`### front/server.js '/hashtag/:tag'... ###`);
+
         // 3번째 인자: 화면상에 뿌려질 화면은 pages/hashtag.jsx hashtag 페이지가 동적인 주소를 붙일 수 없어서 이렇게 연결해준다.
-        // 4번째 인자: 프론트에 동적인 값을 넘겨준다.
+        // 4번째 인자: hashtag.jsx에 QueryString 값을 넘겨준다.
         return app.render(req, res, '/hashtag', { tag: req.params.tag });
     });
 

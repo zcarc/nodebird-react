@@ -11,7 +11,7 @@ import axios from 'axios';
 
 
 function loginAPI(loginData) {
-    console.log('loginAPI()...');
+    console.log(`### front/sagas/user.jsx... loginAPI(loginData)... loginData : ${JSON.stringify(loginData)} ###`);
     // 서버에 요청을 보내는 부분
 
     // 세번째 인자에 withCredentials를 추가해야 프론트와 백엔드 간에 쿠키를 주고 받을 수 있다.
@@ -21,14 +21,14 @@ function loginAPI(loginData) {
 }
 
 function* login(action) {
-    console.log('login()...');
+    console.log(`### front/sagas/user.jsx... *login(action)... signUpData : ${JSON.stringify(action)} ###`);
 
     try {
 
         // 서버 routes/user 에서 passport.login()의 리턴된 값을 할당한다.
         const result = yield call(loginAPI, action.data);
 
-        console.log('### result.data: ', result.data, ' ###');
+        console.log('### front/sagas/user.jsx... const result = yield call(loginAPI, action.data): ', result, ' ###');
 
         yield put({ // put은 dispatch 동일
             type: LOG_IN_SUCCESS,
@@ -45,20 +45,20 @@ function* login(action) {
 }
 
 function* watchLogin() {
-    console.log('watchLogin()...');
+    console.log(`### front/sagas/user.jsx... *watchLogin()... ###`);
 
     yield takeEvery(LOG_IN_REQUEST, login);
 }
 
 function signUpAPI(signUpData) {
-    console.log('signUpAPI()...');
+    console.log(`### front/sagas/user.jsx... signUpAPI(signUpData)... signUpData : ${JSON.stringify(signUpData)} ###`);
 
     // 서버에 요청을 보내는 부분
     return axios.post('/user/', signUpData);
 }
 
 function* signUp(action) {
-    console.log('signUp()...');
+    console.log(`### front/sagas/user.jsx... *signUp(action)... action : ${JSON.stringify(action)} ###`);
 
     try {
         yield call(signUpAPI, action.data); // call()의 두번째 인자는 첫번째 인자 signUpAPI의 매개변수가 받는다.
@@ -77,30 +77,32 @@ function* signUp(action) {
 }
 
 function* watchSignUp() {
-    console.log('watchSignUp()...');
+    console.log(`### front/sagas/user.jsx... *watchSignUp()...  ###`);
 
     yield takeEvery(SIGN_UP_REQUEST, signUp);
 }
 
 function loadUserAPI(userId) {
-    console.log('loadUserAPI()...');
+    console.log(`### front/sagas/user.jsx... loadUserAPI(userId)... userId : ${JSON.stringify(userId)} ###`);
 
     // 서버에 요청을 보내는 부분
-    return axios.post(userId ? `/user/${userId}` : /user/, { // userId가 있으면 다른사람 정보 불러오고 없다면 내 정보 불러오기
+    return axios.get(userId ? `/user/${userId}` : /user/, { // userId가 있으면 다른사람 정보 불러오고 없다면 내 정보 불러오기
         withCredentials: true,
     });
 }
 
 function* loadUser(action) {
-    console.log('loadUser()...');
+    console.log(`### front/sagas/user.jsx... *loadUser(action)... action : ${JSON.stringify(action)} ###`);
 
     try {
         // yield call(loadUserAPI);
         const result = yield call(loadUserAPI, action.data);
+        console.log(`### front/sagas/user.jsx... *loadUser(action)... const result = yield call(loadUserAPI, action.data): ${JSON.stringify(result)} ###`);
+
         yield put({
             type: LOAD_USER_SUCCESS,
             data: result.data,
-            me: !action.data, // action.data == userId 없다면 true
+            me: !action.data, // action.data == userId (없다면 true)
         });
 
     } catch (e) {
@@ -114,14 +116,14 @@ function* loadUser(action) {
 }
 
 function* watchLoadUser() {
-    console.log('watchLoadUser()...');
+    console.log(`### front/sagas/user.jsx... *watchLoadUser()... ###`);
 
     yield takeEvery(LOAD_USER_REQUEST, loadUser);
 }
 
 
 export default function* userSaga() {
-    console.log('userSaga()...');
+    console.log(`### front/sagas/user.jsx... userSaga()... ###`);
 
     yield all([
         fork(watchLogin),

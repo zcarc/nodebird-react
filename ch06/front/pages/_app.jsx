@@ -12,7 +12,8 @@ import rootSaga from "../sagas";
 
 const NodeBird = ({Component, store, pageProps}) => {
 
-    console.log('_app.jsx component...');
+    console.log('### front/pages/_app.jsx... const NodeBird = ({Component, store, pageProps})... ###');
+    console.log(`### front/pages/_app.jsx... NodeBird... pageProps: ${JSON.stringify(pageProps)} ###`);
 
     return (
         <Provider store={store}>
@@ -39,7 +40,8 @@ NodeBird.propTypes = {
 // 프론트, 백엔드 둘 다 실행가능
 // 서버사이드 렌더링 시 중요
 NodeBird.getInitialProps = async(context) => {
-    console.log('NodeBird.getInitialProps context: ', context);
+    console.log('### front/pages/_app.jsx... NodeBird.getInitialProps = async(context) ###');
+    // console.log('### front/pages/_app.jsx... NodeBird.getInitialProps = async(context)... context: ', context ,' ###');
     const { ctx, Component } = context;
     let pageProps = {};
 
@@ -50,6 +52,8 @@ NodeBird.getInitialProps = async(context) => {
         pageProps = await Component.getInitialProps(ctx);
     }
 
+    console.log(`### front/pages/_app.jsx... pageProps = await Component.getInitialProps(ctx)... pageProps: ${JSON.stringify(pageProps)} ###`);
+
     // 컴포넌트의 props.
     // NodeBird의 파라미터로 받고 해당 <Component/>의 파라미터로 전달된다.
     return { pageProps };
@@ -57,7 +61,7 @@ NodeBird.getInitialProps = async(context) => {
 
 const configureStore = (initialState, options) => {
 
-    console.log('withRedux...');
+    console.log('### front/pages/_app.jsx... configureStore... ###');
     // console.log('options: ', options);
     // console.log('options.isServer: ', options.isServer);
 

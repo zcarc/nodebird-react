@@ -8,13 +8,14 @@ import {LOAD_USER_POSTS_REQUEST} from "../reducers/post";
 
 
 const User = ({ id }) => {
-
-    console.log('user.jsx id: ', tag);
+    console.log('### front/pages/user.jsx... const User = ({ id })... { id }: ', id, ' ###');
 
     const dispatch = useDispatch();
 
     // post reducer
     const { mainPosts } = useSelector(state => state.post);
+    console.log('### front/pages/user.jsx... const { mainPosts } = useSelector(state => state.post)... { mainPosts }: ', { mainPosts }, ' ###');
+
     const { userInfo } = useSelector(state => state.user);
 
     useEffect(() => {
@@ -42,7 +43,7 @@ const User = ({ id }) => {
                         <div key="following">
                             팔로잉
                             <br />
-                            {userInfo.Following}
+                            {userInfo.Followings}
                         </div>,
                         <div key="follower">
                         팔로워
@@ -60,7 +61,7 @@ const User = ({ id }) => {
             }
             {mainPosts.map(c => (
                 <PostCard key={+c.createdAt} post={c} />
-            ))};
+            ))}
         </div>
     );
 
@@ -72,9 +73,8 @@ User.propTypes = {
 };
 
 User.getInitialProps = async(context) => {
-    console.log('user getInitialProps ', context.query.id);
+    console.log('### front/pages/user.jsx... User.getInitialProps = async(context)... context.query.id: ', context.query.id, ' ###');
 
-    // user.jsx의 컴포넌트의 props로 리턴하면 User의 파라미터로 받는다.
     return { id: parseInt(context.query.id, 10)};
 };
 

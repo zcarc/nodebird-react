@@ -17,7 +17,7 @@ const Home = () => {
     const { me } = useSelector(state => state.user);
     const { mainPosts } = useSelector(state => state.post);
 
-    console.log(`### mainPosts: ${JSON.stringify(mainPosts)} ###`);
+    console.log(`### pages/index.jsx mainPosts: ${JSON.stringify(mainPosts)} ###`);
 
     const dispatch = useDispatch();
 

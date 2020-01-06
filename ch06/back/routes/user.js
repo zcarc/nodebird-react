@@ -65,7 +65,9 @@ router.post('/', async (req, res, next) => {
 // 다른 사람 정보 조회
 // ex) /api/user/3
 // :id는 req.params.id로 가져올 수 있다.
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res, next) => {
+
+    console.log(`### back/routes/user.js router.get('/:id'... ###`);
 
     try {
         const user = await db.User.findOne({
@@ -89,25 +91,20 @@ router.get('/:id', (req, res) => {
         // 다른사용자의 팔로잉이나 팔로워가 개인정보 노출이 될 수 있으므로 숫자만 보냄
         const jsonUser = user.toJSON();
 
-        console.log(`##### router.get('/:id' user: ${user} #####`);
-        console.log(`##### user.toJSON(): ${jsonUser} #####`);
+        console.log(`### back/routes/user.js router.get('/:id' user: ${JSON.stringify(user)} ###`);
+        console.log(`### back/routes/user.js user.toJSON(): ${JSON.stringify(jsonUser)} ###`);
 
         jsonUser.Posts = jsonUser.Posts ? jsonUser.Posts.length : 0;
         jsonUser.Followings = jsonUser.Followings ? jsonUser.Followings.length : 0;
         jsonUser.Followers = jsonUser.Followers ? jsonUser.Followers.length : 0;
 
         // pages/user.jsx에 보냄
-        req.json(jsonUser);
+        res.json(jsonUser);
 
     } catch (e) {
         console.error(e);
         next(e);
     }
-
-
-
-
-
 
 });
 

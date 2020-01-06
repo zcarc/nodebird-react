@@ -84,7 +84,7 @@ function* loadMainPosts() {
 }
 
 function* watchLoadMainPosts() {
-  yield takeLatest(LOAD_HASHTAG_POSTS_REQUEST, loadMainPosts);
+  yield takeLatest(LOAD_MAIN_POSTS_REQUEST, loadMainPosts);
 }
 
 function loadHashtagPostsAPI(tag) {
@@ -118,7 +118,7 @@ function* watchLoadHashtagPosts() {
 
 function loadUserPostsAPI(id) {
 
-  // 로그인하지 않은 사용자로 메인 페이지 게시글을 볼 수 있으니
+  // 로그인하지 않은 사용자도 메인 페이지 게시글을 볼 수 있으니
   // withCredentials 설정을 하지 않아도 된다.
   return axios.get(`/user/${id}/posts`);
 }
