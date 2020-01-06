@@ -2,15 +2,12 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 const db = require('../models'); // index에 db.User()로 연결되어 있기 때문에 불러오면 어디서든 쓸 수 있다.
+const { isLoggedIn } = require('./middleware');
 
 const router = express.Router();
 
 // 내 정보 조회
-router.get('/', (req, res) => { //   /api/user/
-
-    if(!req.user){
-        return res.status(401).send('로그인이 필요합니다.');
-    }
+router.get('/', isLoggedIn, (req, res) => { //   /api/user/
 
     const user = Object.assign({}, req.user.toJSON());
     delete user.password;

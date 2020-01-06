@@ -1,10 +1,14 @@
 const express = require('express');
 const db = require('../models');
 const router = express.Router();
+const { isLoggedIn } = require('./middleware');
 
 
 // 게시글 작성완료
-router.post('/', async (req, res, next) => { // POST /api/post
+// isLoggedIn: routes/middleware.js
+// 원래는 두번째 인자에 async (req, res, next) 가 있었지만
+// 공통되는 부분 미들웨어로 만들어서 두번째 인자로 해당 미들웨어를 넘겨준다.
+router.post('/', isLoggedIn, async (req, res, next) => { // POST /api/post
     console.log(`### back/routes/post.js... router.post('/', async (req, res, next)... ###`);
 
     try {
@@ -109,14 +113,10 @@ router.get('/:id/comments', async (req, res, next) => {
 });
 
 // 댓글 등록하기
-router.post('/:id/comment', async (req, res, next) => { // POST /api/post/3/comment
+router.post('/:id/comment', isLoggedIn,async (req, res, next) => { // POST /api/post/3/comment
     console.log(`### back/routes/post.js... router.post('/:id/comment', async (req, res, next)... ###`);
 
     try {
-        // 로그인된 사용자가 없다면 true
-        if (!req.user) {
-            return res.status(401).send('로그인이 필요합니다.');
-        }
 
         const post = await db.Post.findOne({where: {id: req.params.id}});
         if (!post) {
