@@ -1,4 +1,6 @@
 const express = require('express');
+const multer = require('multer');
+const path = require('path');
 const db = require('../models');
 const router = express.Router();
 const { isLoggedIn } = require('./middleware');
@@ -81,7 +83,55 @@ router.post('/', isLoggedIn, async (req, res, next) => { // POST /api/post
 });
 
 // 이미지 등록하기
-router.post('/images', (req, res) => {
+const upload = multer({
+    // 파일 업로드에 대한 설정
+    // 이미지 외에 파일,동영상 같은 것도 올릴 수 있습니다.
+
+    // 서버쪽 드라이브에 저장한다는 의미입니다.
+    // 이걸 나중에 S3 or Google Cloud로 바꿔서 저장할 수 있습니다.
+    storage: multer.diskStorage({
+
+        // 어떤 경로에 저장할 지 설정
+        destination(req, file, done) {
+
+            // done()는 passport의 done()이라고 생각하면 될 것 같습니다.
+            // 첫번째 인자: 서버 에러
+            // 두번째 인자 : 성공 시 인자 (back/uploads)
+            done(null, 'uploads');
+        },
+
+        // 파일 이름 설정
+        filename(req, file, done) {
+            // file.originalname: 기존 파일명이 들어있습니다.
+            // 해당 파일에서 확장자를 추출합니다.
+            const ext = path.extname(file.originalname);
+
+            // 확장자를 제외한 이름을 추출해낸다.
+            const basename = path.basename(file.originalname, ext); // nodeproject.png, ext === .png, basename === nodeproject
+            done(null, basename + new Date().valueOf() + ext);
+        },
+    }),
+
+    // 파일 사이즈 제한
+    limits: { fileSize: 20 * 1024 * 1024 },
+
+    // 동시 업로드 파일 제한도 있는데 따로 알아봐야합니다.
+
+});
+
+// upload.array()의 이름은 front/PostForm에서 ImageFormData.append()의 첫번째 인자의 이름
+// upload.single() : 하나
+// upload.array() : 여러개
+// upload.fields() : 파일마다 이름이 다를 시 사용
+// upload.none() : 이미지나 파일 등을 하나도 안올린 것
+// 이렇게 사용하면 알아서 이미지가 업로드 된다.
+router.post('/images', upload.array('image'), (req, res) => {
+
+    console.log(`back/routes/post.js... router.post('/images', upload.array('image'), (req, res)... req.files: ${JSON.stringify(req.files)}`);
+
+    // req.file: 파일 한개일 시 여기에 저장 됩니다.
+    // req.files: 파일 여러개 일 시 여기에 저장 됩니다.
+    res.json(req.files.map(v => v.filename));
 
 });
 
