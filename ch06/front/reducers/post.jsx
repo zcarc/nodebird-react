@@ -129,6 +129,7 @@ const reducer = (state = initialState, action) => {
                 isAddingPost: false,
                 mainPosts: [action.data, ...state.mainPosts], // 게시글 작성이 성공하면 기존 게시글 앞에 더미 포스트가 추가된다.
                 postAdded: true,
+                imagePaths: [], // 게시글 작성이 성공되는 순간, 이미지 미리보기 지우기
             };
         }
 

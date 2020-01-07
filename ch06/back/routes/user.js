@@ -211,6 +211,8 @@ router.get('/:id/posts', async (req, res) => {
             include: [{
                 model: db.User,
                 attributes: ['id', 'nickname'], // password 제외
+            }, {
+                model: db.Image,
             }],
         });
 

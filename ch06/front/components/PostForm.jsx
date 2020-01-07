@@ -27,14 +27,20 @@ const PostForm = () => {
             return alert('게시글을 작성하세요.');
         }
 
-        dispatch({
-            type: ADD_POST_REQUEST,
-            data: {
-                content: text.trim(),
-            },
+        const formData = new FormData();
+        // 폼데이터의 단점은 하나씩 append를 해줘야한다.
+        imagePaths.forEach((i) => {
+            formData.append('image', i); // 텍스트 값
         });
 
-    }, [text]);
+        formData.append('content', text);
+        console.log('### front/components/PostForm... formData', formData ,' ###');
+        dispatch({
+            type: ADD_POST_REQUEST,
+            data: formData,
+        });
+
+    }, [text, imagePaths]);
 
     const onChangeText = useCallback((e) => {
 
@@ -74,11 +80,11 @@ const PostForm = () => {
 
     // 고차함수는 HOC처럼 기존 함수 기능을 확장한다.
     // REMOVE_IMAGE는 이미지 제거만 하는것이기 때문에 비동기가 아니라 동기이다.
-    const onRemoveImage = useCallback((index) => () => {
+    const onRemoveImage = useCallback(index => () => {
         dispatch({
             type: REMOVE_IMAGE,
             index,
-        })
+        });
     }, []);
 
     return (
