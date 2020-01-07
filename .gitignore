@@ -186,3 +186,6 @@ dist
 /ch05/front/node_modules/
 /ch05/back/node_modules/
 /ch05/back/.env
+/ch06/back/.env
+/ch06/front/.env
+/ch06/back/uploads/

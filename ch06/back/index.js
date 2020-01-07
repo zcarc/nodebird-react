@@ -26,6 +26,15 @@ db.sequelize.sync();
 passportConfig();
 
 app.use(morgan('dev')); // 개발 모드 시 로그를 남겨준다.
+
+// express 안에 static 미들웨어가 있는데 경로를 지정해주면
+// 그 안에 있는 파일들을 다른 서버에서 가져갈 수 있게 해준다.
+// 그래서 이렇게 설정하면 프론트에서 폴더 내 파일들을 가져갈 수 있다.
+// 첫번째 인자 '/' 루트 경로의 의미는 uploads 폴더가 root 폴더인 것처럼 사용한다는 의미이다.
+// 더 쉽게 말하면 첫번째 인자 '/'는 프론트에서 접근하는 주소이다.
+// 두번째 인자는 서버에 있는 주소이다.
+app.use('/', express.static('uploads'));
+
 // routes/*.js에 들어있는 req.body 이 부분을 처리하려면 아래 코드를 추가해야한다.
 app.use(express.json()); // json 데이터 처리
 app.use(express.urlencoded({ extended: true })); // form 데이터 처리

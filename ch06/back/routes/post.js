@@ -108,6 +108,7 @@ const upload = multer({
 
             // 확장자를 제외한 이름을 추출해낸다.
             const basename = path.basename(file.originalname, ext); // nodeproject.png, ext === .png, basename === nodeproject
+
             done(null, basename + new Date().valueOf() + ext);
         },
     }),

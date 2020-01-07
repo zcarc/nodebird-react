@@ -215,6 +215,8 @@ function* watchLoadComments() {
 }
 
 function uploadImagesAPI(formData) {
+  console.log('### front/sagas/post uploadImagesAPI... formData: ', formData ,' ###');
+
   return axios.post('post/images', formData, {
     withCredentials: true,
   });
@@ -223,6 +225,7 @@ function uploadImagesAPI(formData) {
 // 사가 post.jsx의 uploadImages(action) 이 부분의 action은
 // PostCard.jsx의 ADD_COMMENT_REQUEST를 dispatch하는 메서드의 action을 아래 함수의 매개변수가 넘겨받는다.
 function* uploadImages(action) {
+  console.log('### front/sagas/post *uploadImages... action: ', action ,' ###');
 
   try {
     // 이미지 업로드가 완료되면 서버는
@@ -245,6 +248,7 @@ function* uploadImages(action) {
 }
 
 function* watchUploadImages() {
+  console.log('### front/sagas/post *watchUploadImages... ###');
   yield takeLatest(UPLOAD_IMAGES_REQUEST, uploadImages);
 }
 

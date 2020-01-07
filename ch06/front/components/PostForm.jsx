@@ -1,12 +1,13 @@
 import {useCallback, useState, useEffect, useRef} from "react";
 import {Form, Input, Button} from 'antd';
 import {useSelector, useDispatch} from 'react-redux';
-import {ADD_POST_REQUEST, UPLOAD_IMAGES_REQUEST} from '../reducers/post';
+import {ADD_POST_REQUEST, REMOVE_IMAGE, UPLOAD_IMAGES_REQUEST} from '../reducers/post';
 
 
 const PostForm = () => {
 
-    console.log('PostForm component...');
+    console.log('### front/components/PostForm ... ###');
+
     const dispatch = useDispatch();
     const [text, setText] = useState('');
     const {imagePaths, isAddingPost, postAdded} = useSelector(state => state.post);
@@ -17,12 +18,12 @@ const PostForm = () => {
         setText('')
     }, [postAdded]);
 
-    const onSubmitForm = useCallback( (e) => {
+    const onSubmitForm = useCallback((e) => {
         e.preventDefault();
 
         // 게시글이 없을 때 알림창
         // 트림을 하는 이유는 스페이스바 치는 사람들이 있기 떄문이다.
-        if(!text || !text.trim()) {
+        if (!text || !text.trim()) {
             return alert('게시글을 작성하세요.');
         }
 
@@ -50,12 +51,13 @@ const PostForm = () => {
 
     // 이미지를 업로드 했을 때 실행된다.
     const onChangeImages = useCallback((e) => {
-        console.log(e.target.files);
+        console.log('### front/components/PostForm... onChangeImages... e.target.files:', e.target.files, ' ###');
 
         // encType="multipart/form-data"를 사용했기 때문에
         // 이 객체를 생성해서 이미지 파일을 하나씩 넣어줘야한다.
         const imageFormData = new FormData();
 
+        console.log('### front/components/PostForm... dispatch... ###');
         // 원래는 submit하면 서버로 전송되는데 여기서는 바로 보내지 않고
         // SPA 유지를 하기 위해서 ajax로 보내게 된다.
         dispatch({
@@ -63,13 +65,21 @@ const PostForm = () => {
             data: imageFormData,
         });
 
+        console.log('### front/components/PostForm... [].forEach.call()... ###');
         [].forEach.call(e.target.files, (f) => {
             // ajax로 요청을 보내기 때문에 key, key 형태로 생성해야한다.
             imageFormData.append('image', f);
         });
     }, []);
 
-
+    // 고차함수는 HOC처럼 기존 함수 기능을 확장한다.
+    // REMOVE_IMAGE는 이미지 제거만 하는것이기 때문에 비동기가 아니라 동기이다.
+    const onRemoveImage = useCallback((index) => () => {
+        dispatch({
+            type: REMOVE_IMAGE,
+            index,
+        })
+    }, []);
 
     return (
         // 이미지, 동영상, 파일 : multipart/form-data
@@ -84,12 +94,12 @@ const PostForm = () => {
             </div>
 
             <div>
-                {imagePaths.map((v) => (
+                {imagePaths.map((v, i) => (
 
                     <div key={v} style={{display: 'inline-block'}}>
-                        <img src={`http://localhost:3000/${v}`} style={{width: '200px'}} alt={v}/>
+                        <img src={`http://localhost:8080/${v}`} style={{width: '200px'}} alt={v}/>
                         <div>
-                            <Button>제거</Button>
+                            <Button onClick={onRemoveImage(i)}>제거</Button>
                         </div>
                     </div>
                 ))}

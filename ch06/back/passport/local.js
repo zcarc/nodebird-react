@@ -21,11 +21,11 @@ module.exports = () => {
 
             const user = await db.User.findOne({ where: { userId } });
 
+            // done()이 실행되면 passport.authenticate()의 두번째 인자 함수의 매개변수에 전달된다.
             if (!user) {
                 return done(null, false, {reason: '존재하지 않는 사용자입니다.!'});
             }
 
-            // done()이 실행되면 passport.authenticate()의 두번째 인자 함수의 매개변수에 전달된다.
             const result = await bcrypt.compare(password, user.password);
             
             if (result) {

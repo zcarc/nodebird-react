@@ -76,7 +76,7 @@ export const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE';
 
 const reducer = (state = initialState, action) => {
 
-    console.log(`### post reducer()... action: ${JSON.stringify(action)} ###`);
+    console.log(`### front/reducers/post... reducer()... action: ${JSON.stringify(action)} ###`);
 
     switch(action.type) {
 
@@ -103,6 +103,13 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
             };
+        }
+
+        case REMOVE_IMAGE: {
+            return {
+                ...state,
+                imagePaths: state.imagePaths.filter((v, i) => i !== action.index),
+            }
         }
 
         case ADD_POST_REQUEST: {
