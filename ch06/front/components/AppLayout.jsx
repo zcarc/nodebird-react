@@ -6,7 +6,7 @@ import { Menu, Input, Row, Col } from 'antd';
 import LoginForm from './LoginForm';
 import UserProfile from './UserProfile';
 
-
+// children은 props
 const AppLayout = ( {children} ) => {
 
     console.log('### front/components/AppLayout.jsx... const AppLayout = ( {children} )... {children}: ,', {children}, ' ###');

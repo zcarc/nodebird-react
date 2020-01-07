@@ -21,6 +21,7 @@ const NodeBird = ({Component, store, pageProps}) => {
                 <title>NodeBird</title>
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/3.25.3/antd.css"/>
             </Head>
+            {/* AppLayout props에 Component가 주입된다. ( 메인으로 접속 시 AppLayout props에 index.jsx가 들어감 )*/}
             <AppLayout>
                 <Component {...pageProps}/>
             </AppLayout>

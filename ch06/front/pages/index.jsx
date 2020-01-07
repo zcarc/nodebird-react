@@ -35,8 +35,6 @@ const Home = () => {
     // const user = useSelector(state => state.user.user);
     // const isLoggedIn = useSelector(state => state.user.isLoggedIn);
     // const mainPosts = useSelect(state => state.post.mainPosts);
-
-
     return (
         <div>
             {me && <PostForm/>}
