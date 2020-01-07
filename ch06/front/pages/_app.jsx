@@ -20,6 +20,8 @@ const NodeBird = ({Component, store, pageProps}) => {
             <Head>
                 <title>NodeBird</title>
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/3.25.3/antd.css"/>
+                <link rel="stylesheet" type="text/css" charset="UTF-8" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css" />
+                <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css" />
             </Head>
             {/* AppLayout props에 Component가 주입된다. ( 메인으로 접속 시 AppLayout props에 index.jsx가 들어감 )*/}
             <AppLayout>
