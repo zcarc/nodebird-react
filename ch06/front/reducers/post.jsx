@@ -311,7 +311,7 @@ const reducer = (state = initialState, action) => {
             };
         }
 
-        case LIKE_POST_FAILURE: {
+        case RETWEET_FAILURE: {
 
             return {
                 ...state,
