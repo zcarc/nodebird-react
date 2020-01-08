@@ -231,4 +231,40 @@ router.post('/:id/comment', isLoggedIn, async (req, res, next) => { // POST /api
     }
 });
 
+router.post('/:id/like', isLoggedIn, async (req, res, next) => {
+
+
+    try {
+        // 항상 사용자가 있는지 확인해봐야한다.
+        // 사용자가 없는데 해커들이 요청을 보낼 수도 있다.
+        const post = await db.Post.findOne({ where: { id: req.params.id }});
+        if(!post) {
+            return res.status(404).send('포스트가 존재하지 않습니다.');
+        }
+        await post.addLiker(req.user.id); // 시퀄라이즈가 associate에 설정된 값들을 토대로 추가해준 기본 제공 메소드
+        res.json({ userId: req.user.id });
+
+    } catch(e) {
+        console.error(e);
+        next(e);
+    }
+
+});
+
+router.delete('/:id/like', isLoggedIn, async (req, res, next) => {
+
+    try {
+        const post = await db.Post.findOne({ where: { id: req.params.id }});
+        if(!post) {
+            return res.status(404).send('포스트가 존재하지 않습니다.');
+        }
+        await post.removeLiker(req.user.id);
+        res.json({ userId: req.user.id });
+
+    } catch(e) {
+        console.error(e);
+        next(e);
+    }
+});
+
 module.exports = router;

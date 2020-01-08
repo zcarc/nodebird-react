@@ -191,6 +191,7 @@ const reducer = (state = initialState, action) => {
         case LOAD_COMMENTS_SUCCESS: {
             const postIndex = state.mainPosts.findIndex( v => v.id === action.data.postId);
             const post = state.mainPosts[postIndex];
+
             const Comments = action.data.comments; // 이 부분을 배열로 만들어서 에러가 있었다.
             const mainPosts = [...state.mainPosts];
 
@@ -218,6 +219,76 @@ const reducer = (state = initialState, action) => {
         case LOAD_MAIN_POSTS_FAILURE:
         case LOAD_HASHTAG_POSTS_FAILURE:
         case LOAD_USER_POSTS_FAILURE: {
+
+            return {
+                ...state,
+            };
+        }
+
+        case LIKE_POST_REQUEST: {
+
+            return {
+                ...state,
+            };
+        }
+
+        case LIKE_POST_SUCCESS: {
+
+            // 바뀔 객체만 새로 만들어준다.
+            const postIndex = state.mainPosts.findIndex(v => v.id === action.data.postId);
+            // 내가 좋아요한 게시글이 몇번째에 있는지 확인
+            const post = state.mainPosts[postIndex];
+            // 좋아요 누른 사람 목록에 내 이름을 추가
+            console.log(`### front/reducers/post... LIKE_POST_SUCCESS... before Likers: ${JSON.stringify(Likers)} ###`);
+            const Likers = [{ id: action.data.userId }, ...post.Likers];
+            console.log(`### front/reducers/post... LIKE_POST_SUCCESS... after Likers: ${JSON.stringify(Likers)} ###`);
+
+            const mainPosts = [...state.mainPosts];
+            // 불변성 지키면서 다시 복원
+            mainPosts[postIndex] = {...post, Likers};
+
+            return {
+                ...state,
+                mainPosts,
+            };
+        }
+
+        case LIKE_POST_FAILURE: {
+
+            return {
+                ...state,
+            };
+        }
+
+        case UNLIKE_POST_REQUEST: {
+
+            return {
+                ...state,
+            };
+        }
+
+        case UNLIKE_POST_SUCCESS: {
+
+            // 바뀔 객체만 새로 만들어준다.
+            const postIndex = state.mainPosts.findIndex(v => v.id === action.data.postId);
+            // 내가 좋아요한 게시글이 몇번째에 있는지 확인
+            const post = state.mainPosts[postIndex];
+            // 좋아요 누른 사람 목록에 내 이름을 제외
+            console.log(`### front/reducers/post... UNLIKE_POST_SUCCESS... before Likers: ${JSON.stringify(Likers)} ###`);
+            const Likers = post.Likers.filter(v => v.id !== action.data.userId);
+            console.log(`### front/reducers/post... UNLIKE_POST_SUCCESS... after Likers: ${JSON.stringify(Likers)} ###`);
+
+            const mainPosts = [...state.mainPosts];
+            // 불변성 지키면서 다시 복원
+            mainPosts[postIndex] = {...post, Likers};
+
+            return {
+                ...state,
+                mainPosts,
+            };
+        }
+
+        case UNLIKE_POST_FAILURE: {
 
             return {
                 ...state,

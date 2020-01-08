@@ -19,7 +19,12 @@ import {
   LOAD_COMMENTS_FAILURE,
   LOAD_COMMENTS_REQUEST,
   UPLOAD_IMAGES_REQUEST,
-  UPLOAD_IMAGES_FAILURE, UPLOAD_IMAGES_SUCCESS
+  UPLOAD_IMAGES_FAILURE,
+  UPLOAD_IMAGES_SUCCESS,
+  LIKE_POST_SUCCESS,
+  LIKE_POST_FAILURE,
+  LIKE_POST_REQUEST,
+  UNLIKE_POST_SUCCESS, UNLIKE_POST_FAILURE, UNLIKE_POST_REQUEST
 } from '../reducers/post';
 import axios from 'axios';
 
@@ -252,6 +257,76 @@ function* watchUploadImages() {
   yield takeLatest(UPLOAD_IMAGES_REQUEST, uploadImages);
 }
 
+function likePostAPI(postId) {
+  console.log('### front/sagas/post likePostAPI... postId: ', postId ,' ###');
+
+  return axios.post(`post/${postId}/like`, {}, {
+    withCredentials: true,
+  });
+}
+
+function* likePost(action) {
+  console.log('### front/sagas/post *likePost... action: ', action ,' ###');
+
+  try {
+    const result = yield call(likePostAPI, action.data);
+    yield put({
+      type: LIKE_POST_SUCCESS,
+      data: {
+       postId: action.data,
+       userId: result.data.userId, // 서버에서 좋아요 누른 사람 아이디를 보내줌
+      },
+    });
+
+  } catch (e) {
+    console.error(e);
+    yield put({
+      type: LIKE_POST_FAILURE,
+      error: e,
+    });
+  }
+}
+
+function* watchLikePost() {
+  console.log('### front/sagas/post *watchLikePost... ###');
+  yield takeLatest(LIKE_POST_REQUEST, likePost);
+}
+
+function unLikePostAPI(postId) {
+  console.log('### front/sagas/post unLikePostAPI... postId: ', postId ,' ###');
+
+  return axios.delete(`post/${postId}/like`, {
+    withCredentials: true,
+  });
+}
+
+function* unLikePost(action) {
+  console.log('### front/sagas/post *unLikePost... action: ', action ,' ###');
+
+  try {
+    const result = yield call(unLikePostAPI, action.data);
+    yield put({
+      type: UNLIKE_POST_SUCCESS,
+      data: {
+        postId: action.data,
+        userId: result.data.userId, // 서버에서 좋아요 누른 사람 아이디를 보내줌
+      },
+    });
+
+  } catch (e) {
+    console.error(e);
+    yield put({
+      type: UNLIKE_POST_FAILURE,
+      error: e,
+    });
+  }
+}
+
+function* watchUnlikePost() {
+  console.log('### front/sagas/post *watchUnlikePost... ###');
+  yield takeLatest(UNLIKE_POST_REQUEST, unLikePost);
+}
+
 export default function* postSaga() {
   console.log('postSaga()...');
 
@@ -263,5 +338,7 @@ export default function* postSaga() {
     fork(watchLoadHashtagPosts),
     fork(watchLoadUserPosts),
     fork(watchUploadImages),
+    fork(watchLikePost),
+    fork(watchUnlikePost),
   ]);
 }

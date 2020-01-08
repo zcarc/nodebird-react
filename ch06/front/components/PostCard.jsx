@@ -2,7 +2,7 @@ import {useState, useCallback, useEffect} from 'react';
 import {Button, Card, Icon, Avatar, Form, Input, List, Comment} from 'antd';
 import PropTypes from 'prop-types';
 import {useSelector, useDispatch} from "react-redux";
-import {ADD_COMMENT_REQUEST, LOAD_COMMENTS_REQUEST} from "../reducers/post";
+import {ADD_COMMENT_REQUEST, LIKE_POST_REQUEST, LOAD_COMMENTS_REQUEST, UNLIKE_POST_REQUEST} from "../reducers/post";
 import Link from 'next/link';
 import PostImages from './PostImages';
 
@@ -15,6 +15,8 @@ const PostCard = ({post}) => {
     const {me} = useSelector(state => state.user);
     const {commentAdded, isAddingComment} = useSelector(state => state.post);
     const dispatch = useDispatch();
+
+    const liked = me && post.Likers && post.Likers.find(v => v.id === me.id);
 
     const onToggleComment = useCallback(() => {
         console.log(' ### front/components/PostCard.jsx... befre setCommentFormOpened... commentFormOpened: ', commentFormOpened ,' ###');
@@ -54,6 +56,26 @@ const PostCard = ({post}) => {
         setCommentText(e.target.value);
     }, []);
 
+    const onToggleLike = useCallback(() => {
+
+        if(!me) {
+            return alert('로그인이 필요합니다.');
+        }
+        // post.Likers: 좋아요를 누른사람들의 아이디가 배열로 들어있다.
+        // 좋아요를 누른 사람 중에 내 아이디가 있는지 확인
+        if(liked) { // 좋아요 누른 상태
+            dispatch({
+                type: UNLIKE_POST_REQUEST,
+                data: post.id,
+            });
+        } else { // 좋아요 안 누른 상태
+            dispatch({
+                type: LIKE_POST_REQUEST,
+                data: post.id,
+            })
+        }
+    }, [me && me.id, post && post.id, liked]);
+
 
     return (
         <div>
@@ -62,7 +84,7 @@ const PostCard = ({post}) => {
                 cover={post.Images[0] && <PostImages images={post.Images} />}
                 actions={[
                     <Icon type="retweet" key="retweet"/>,
-                    <Icon type="heart" key="heart"/>,
+                    <Icon type="heart" key="heart" theme={liked ? "twoTone" : "outlined"} twoToneColor="#eb2f96" onClick={onToggleLike}/>, // Icon 기본 테마는 outlined인데 색을 주고 싶으면 twoTone으로 바꾸면 된다.
                     <Icon type="message" key="message" onClick={onToggleComment}/>,
                     <Icon type="ellipsis" key="ellipsis"/>,
                 ]}

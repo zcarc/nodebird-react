@@ -213,6 +213,12 @@ router.get('/:id/posts', async (req, res) => {
                 attributes: ['id', 'nickname'], // password 제외
             }, {
                 model: db.Image,
+            },{
+                // 게시글을 좋아요한 사람을 include
+                model: db.User,
+                through: 'Like',
+                as: 'Likers',
+                attributes: ['id'],
             }],
         });
 
