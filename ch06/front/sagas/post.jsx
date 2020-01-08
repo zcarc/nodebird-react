@@ -24,7 +24,7 @@ import {
   LIKE_POST_SUCCESS,
   LIKE_POST_FAILURE,
   LIKE_POST_REQUEST,
-  UNLIKE_POST_SUCCESS, UNLIKE_POST_FAILURE, UNLIKE_POST_REQUEST
+  UNLIKE_POST_SUCCESS, UNLIKE_POST_FAILURE, UNLIKE_POST_REQUEST, RETWEET_SUCCESS, RETWEET_FAILURE, RETWEET_REQUEST
 } from '../reducers/post';
 import axios from 'axios';
 
@@ -327,6 +327,40 @@ function* watchUnlikePost() {
   yield takeLatest(UNLIKE_POST_REQUEST, unLikePost);
 }
 
+function retweetAPI(postId) {
+  console.log('### front/sagas/post retweetAPI... postId: ', postId ,' ###');
+
+  // 데이터가 없어도 두번째 인자에 빈 객체를 보내줘야한다.
+  return axios.post(`post/${postId}/retweet`, {}, {
+    withCredentials: true,
+  });
+}
+
+function* retweet(action) {
+  console.log('### front/sagas/post *retweet... action: ', action ,' ###');
+
+  try {
+    const result = yield call(retweetAPI, action.data);
+    yield put({
+      type: RETWEET_SUCCESS,
+      data: result.data, // 리트윗한 게시글의 데이터가 들어있음.
+    });
+
+  } catch (e) {
+    console.error(e);
+    yield put({
+      type: RETWEET_FAILURE,
+      error: e,
+    });
+    alert(e.response && e.response.data);
+  }
+}
+
+function* watchRetweet() {
+  console.log('### front/sagas/post *watchUnlikePost... ###');
+  yield takeLatest(RETWEET_REQUEST, retweet);
+}
+
 export default function* postSaga() {
   console.log('postSaga()...');
 
@@ -340,5 +374,6 @@ export default function* postSaga() {
     fork(watchUploadImages),
     fork(watchLikePost),
     fork(watchUnlikePost),
+    fork(watchRetweet),
   ]);
 }
