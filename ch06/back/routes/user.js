@@ -188,11 +188,43 @@ router.get('/:id/follow', (req, res) => {   //   /api/user/:id/follow
 });
 
 // 특정 유저의 팔로우 하기
-router.post('/:id/follow', (req, res) => {
+router.post('/:id/follow', isLoggedIn,async (req, res, next) => {
+
+    try {
+
+        const me = await db.User.findOne({
+            where: { id: req.user.id },
+        });
+
+        // 내가 남을 팔로잉하게 연결해준다.
+        await me.addFollowing(req.params.id);
+
+        res.send(req.params.id);
+
+    }catch (e) {
+        console.log(e);
+        next(e);
+    }
 });
 
 // 특정 유저 팔로우 취소하기
-router.delete('/:id/follow', (req, res) => {
+router.delete('/:id/follow', isLoggedIn, async (req, res) => {
+
+    try {
+
+        const me = await db.User.findOne({
+            where: { id: req.user.id },
+        });
+
+        // 내가 다른사람을 팔로잉하고 있는 상태를 취소한다.
+        await me.removeFollowing(req.params.id);
+
+        res.send(req.params.id);
+
+    }catch (e) {
+        console.log(e);
+        next(e);
+    }
 });
 
 // 특정 유저 팔로우 삭제하기
