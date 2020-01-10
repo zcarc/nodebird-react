@@ -26,9 +26,10 @@ function logInAPI(loginData) {
     // 서버에 요청을 보내는 부분
 
     // 세번째 인자에 withCredentials를 추가해야 프론트와 백엔드 간에 쿠키를 주고 받을 수 있다.
-    return axios.post('/user/login', loginData ,{ 
+    return axios.post('/user/login', loginData ,{
         withCredentials: true,
     });
+
 }
 
 function* login(action) {
@@ -38,7 +39,6 @@ function* login(action) {
 
         // 서버 routes/user 에서 passport.login()의 리턴된 값을 할당한다.
         const result = yield call(logInAPI, action.data);
-
         console.log('### front/sagas/user.jsx... const result = yield call(loginAPI, action.data): ', result, ' ###');
 
         yield put({ // put은 dispatch 동일
@@ -132,7 +132,7 @@ function loadUserAPI(userId) {
     console.log(`### front/sagas/user.jsx... loadUserAPI(userId)... userId : ${JSON.stringify(userId)} ###`);
 
     // 서버에 요청을 보내는 부분
-    return axios.get(userId ? `/user/${userId}` : /user/, { // userId가 있으면 다른사람 정보 불러오고 없다면 내 정보 불러오기
+    return axios.get(userId ? `/user/${userId}` : '/user/', { // userId가 있으면 다른사람 정보 불러오고 없다면 내 정보 불러오기
         withCredentials: true,
     });
 }
@@ -143,7 +143,7 @@ function* loadUser(action) {
     try {
         // yield call(loadUserAPI);
         const result = yield call(loadUserAPI, action.data);
-        console.log(`### front/sagas/user.jsx... *loadUser(action)... const result = yield call(loadUserAPI, action.data): ${JSON.stringify(result)} ###`);
+        console.log('### front/sagas/user.jsx... *loadUser(action)... const result = yield call(loadUserAPI, action.data): ', result, ' ###');
 
         yield put({
             type: LOAD_USER_SUCCESS,
@@ -244,7 +244,7 @@ function* watchUnFollow() {
 
 
 export default function* userSaga() {
-    console.log(`### front/sagas/user.jsx... userSaga()... ###`);
+    console.log(`### front/sagas/user... ###`);
 
     yield all([
         fork(watchLogIn),

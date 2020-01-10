@@ -772,3 +772,19 @@ multer 라는 모듈을 사용해야한다.
 
         - routes의 include 남용이 성능 저하의 원인
 
+
+6-18. 6-18. 다른 리듀서 데이터 조작하기
+
+        - 리덕스 사가 요청 자체는 비동기 처리라서
+
+             case LOG_IN_REQUEST: {
+                        return {
+                            ...state,
+                            isLoggingIn: true,
+                            logInErrorReason: '',
+                        };
+                    }
+          이런 요청이 들어왔다고 가정하면 일단 return을 먼저하고 비동기로 사가를 호출해서
+          LOG_IN_REQUEST 요청이 있다면 호출해서 로직 상에 LOG_IN_SUCCESS 있으면 put 메소드로
+          다시 리듀서를 호출해서 완료됐다면 다시 그 리듀서를 return 한다.
+

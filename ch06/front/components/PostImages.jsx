@@ -4,6 +4,7 @@ import {Icon} from "antd";
 import ImagesZoom from "./ImagesZoom";
 
 const PostImages = ({images}) => {
+    console.log('### front/components/PostImages... ###');
 
     const [showImagesZoom, setShowImagesZoom] = useState(false);
 

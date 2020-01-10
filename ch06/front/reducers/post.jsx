@@ -75,7 +75,6 @@ export const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE';
 
 
 const reducer = (state = initialState, action) => {
-
     console.log(`### front/reducers/post... reducer()... action: ${JSON.stringify(action)} ###`);
 
     switch(action.type) {

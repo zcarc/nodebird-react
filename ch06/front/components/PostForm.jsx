@@ -5,7 +5,6 @@ import {ADD_POST_REQUEST, REMOVE_IMAGE, UPLOAD_IMAGES_REQUEST} from '../reducers
 
 
 const PostForm = () => {
-
     console.log('### front/components/PostForm ... ###');
 
     const dispatch = useDispatch();

@@ -6,7 +6,7 @@ import { LOAD_MAIN_POSTS_REQUEST } from '../reducers/post';
 
 
 const Home = () => {
-    console.log('Index() component...');
+    console.log('### front/pages/index... ###');
 
 
     // useState()가 useSelector()로 바뀌었다고 생각하면 된다.

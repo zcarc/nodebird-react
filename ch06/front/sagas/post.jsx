@@ -27,6 +27,7 @@ import {
   UNLIKE_POST_SUCCESS, UNLIKE_POST_FAILURE, UNLIKE_POST_REQUEST, RETWEET_SUCCESS, RETWEET_FAILURE, RETWEET_REQUEST
 } from '../reducers/post';
 import axios from 'axios';
+import { ADD_POST_TO_ME} from "../reducers/user";
 
 
 function addPostAPI(postData) { // postData에는 게시글들이 들어있다.
@@ -47,9 +48,14 @@ function* addPost(action) {
 
   try {
     const result = yield call(addPostAPI, action.data);
-    yield put({
+    yield put({ // post reducer의 데이터를 수정
       type: ADD_POST_SUCCESS,
       data: result.data,
+    });
+
+    yield put({ // user reducer의 데이터를 수정
+      type: ADD_POST_TO_ME,
+      data: result.data.id,
     });
 
   } catch (e) {
@@ -362,7 +368,7 @@ function* watchRetweet() {
 }
 
 export default function* postSaga() {
-  console.log('postSaga()...');
+  console.log('### front/sagas/post... ###');
 
   yield all([
     fork(watchLoadMainPosts),

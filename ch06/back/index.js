@@ -35,6 +35,7 @@ app.use(morgan('dev')); // 개발 모드 시 로그를 남겨준다.
 // 두번째 인자는 서버에 있는 주소이다.
 app.use('/', express.static('uploads'));
 
+
 // routes/*.js에 들어있는 req.body 이 부분을 처리하려면 아래 코드를 추가해야한다.
 app.use(express.json()); // json 데이터 처리
 app.use(express.urlencoded({ extended: true })); // form 데이터 처리
@@ -54,7 +55,7 @@ app.use(expressSession({ // 아래 두개의 옵션은 사용하지는 않지만
         httpOnly: true, // 자바스크립트에서 접근을 못한다. 해커들이 쿠키 빼돌리는 코드를 심어서 해킹하는 것을 방지.
         secure: false, // https를 쓸 때 true
     },
-    name: '_spid', // 쿠키 이름을 변경해준다. 기본 이름이 익스프레스를 사용한다는 것을 알 수 있어서 보안에 취약하다.
+    name: 'rnbck2', // 쿠키 이름을 변경해준다. 기본 이름이 익스프레스를 사용한다는 것을 알 수 있어서 보안에 취약하다.
 
 })); // 세션을 사용하게 해준다.
 

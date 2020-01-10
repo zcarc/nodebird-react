@@ -7,7 +7,7 @@ axios.defaults.baseURL = 'http://localhost:8080/api';
 
 // 리듀서와 마찬가지로 user,post를 불러온다.
 export default function* rootSaga() {
-  console.log('rootSaga()...');
+  console.log('### front/sagas/index... ###');
 
   yield all([
     call(user),

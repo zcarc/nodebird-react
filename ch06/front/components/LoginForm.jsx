@@ -6,13 +6,14 @@ import { useInput } from '../pages/signup';
 import { LOG_IN_REQUEST } from '../reducers/user';
 
 const LoginForm = () => {
-
-    console.log('LoginForm() component...');
+    console.log('### front/components/LoginForm... ###');
     
-    const [id, onChangeId] = useInput();
+    const [id, onChangeId] = useInput('');
     const [password, onChangePassword] = useInput('');
     const { isLoggingIn } = useSelector(state => state.user);
     const dispatch = useDispatch();
+
+    console.log('### front/components/LoginForm... isLoggingIn: ', isLoggingIn, ' ###');
 
 
     const onSubmitForm = useCallback((e) => {

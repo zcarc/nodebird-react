@@ -5,6 +5,8 @@ import PostImages from "./PostImages";
 import Slick from 'react-slick'; // 이미지 슬라이더 역할
 
 const ImagesZoom = ({images, onClose}) => {
+    console.log('### front/components/ImagesZoom... ###');
+
     const [currentSlide, setCurrentSlide] = useState(0);
 
     return (

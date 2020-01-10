@@ -10,7 +10,7 @@ module.exports = () => {
         console.log('### passport.serializeUser... ###');
 
         // 여기의 user._id가 req.session.passport.user에 저장
-       return done(null, user.id); // return 안해도 되는데 뒷 부분이 실행 안된다는 안전장치로 해둔다.
+        return done(null, user.id); // return 안해도 되는데 뒷 부분이 실행 안된다는 안전장치로 해둔다.
     });
 
 
@@ -24,20 +24,33 @@ module.exports = () => {
 
         console.log('### passport.deserializeUser... ###');
 
-       try {
-           const user = await db.User.findOne({
-              where: { id },
-           });
+        try {
+            const user = await db.User.findOne({
+                where: {id},
+                include: [{
+                    model: db.Post,
+                    as: 'Posts',
+                    attributes: ['id'],
+                }, {
+                    model: db.User,
+                    as: 'Followings',
+                    attributes: ['id'],
+                }, {
+                    model: db.User,
+                    as: 'Followers',
+                    attributes: ['id'],
+                }],
+            });
 
-           // req.user에 저장된다.
-           // '/' 경로에서 req.user를 호출하면 done()의 유저 정보가 들어있다.
-           // 패스포트를 사용하지 않으면 request 객체는 user라는 속성을 가지고 있지 않다.
-           return done(null, user); // req.user
+            // req.user에 저장된다.
+            // '/' 경로에서 req.user를 호출하면 done()의 유저 정보가 들어있다.
+            // 패스포트를 사용하지 않으면 request 객체는 user라는 속성을 가지고 있지 않다.
+            return done(null, user); // req.user
 
-       } catch (e) {
-           console.error(e);
-           return done(e);
-       }
+        } catch (e) {
+            console.error(e);
+            return done(e);
+        }
     });
 
     local();

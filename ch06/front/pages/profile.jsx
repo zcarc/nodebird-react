@@ -3,8 +3,7 @@ import { Form, Input, Button, List, Card, Icon } from 'antd';
 import NicknameEditForm from '../components/NicknameEditForm';
 
 const Profile = () => {
-
-    console.log('Profile() component...');
+    console.log('### front/pages/Profile... ###');
 
     return (
         <div>

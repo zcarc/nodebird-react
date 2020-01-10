@@ -5,7 +5,7 @@ import { LOG_OUT_REQUEST } from '../reducers/user';
 
 
 const UserProfile = () => {
-    console.log('UserProfile component...');
+    console.log('### front/components/UserProfile... ###');
 
     const { me } = useSelector(state => state.user);
     const dispatch = useDispatch();

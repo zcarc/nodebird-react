@@ -72,7 +72,7 @@ export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
 
 
 export default (state = initialState, action) => {
-    console.log(`### front/reducers/user.jsx : action: ${action} ###`);
+    console.log(`### front/reducers/user.jsx : action: ${JSON.stringify(action)} ###`);
 
     switch (action.type) {
 
@@ -221,6 +221,17 @@ export default (state = initialState, action) => {
             return {
                 ...state,
             };
+        }
+
+        // sagas/post 에서 아래 리듀서를 호출
+        case ADD_POST_TO_ME: {
+            return {
+                ...state,
+                me: {
+                    ...state.me,
+                    Posts: [{ id: action.data }, ...state.me.Posts], // 기존 게시글들에 새로 작성한 게시글을 추가
+                },
+            }
         }
 
         default: {

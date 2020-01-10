@@ -15,7 +15,7 @@ module.exports = () => {
 
     }, async (userId, password, done) => {
 
-        console.log('### passport/local.js async... ###');
+        console.log('### back/passport/local.js async... ###');
 
         try {
 
@@ -23,15 +23,15 @@ module.exports = () => {
 
             // done()이 실행되면 passport.authenticate()의 두번째 인자 함수의 매개변수에 전달된다.
             if (!user) {
-                return done(null, false, {reason: '존재하지 않는 사용자입니다.!'});
+                console.log('존재하지 않는 사용자입니다.');
+                return done(null, false, {reason: '존재하지 않는 사용자입니다.'});
             }
 
             const result = await bcrypt.compare(password, user.password);
-            
             if (result) {
                 return done(null, user);
             }
-
+            console.log('비밀번호가 틀립니다.');
             return done(null, false, {reason: '비밀번호가 틀립니다.'});
 
         } catch (e) {

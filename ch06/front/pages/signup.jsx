@@ -33,7 +33,7 @@ export const useInput = (initValue = null) => {
 };
 
 const Signup = () => {
-    console.log('Signup() component...');
+    console.log('### front/pages/signup... ###');
 
     const [id, onChangeId] = useInput('');
     const [nick, onChangeNick] = useInput('');
