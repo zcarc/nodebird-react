@@ -133,7 +133,7 @@ const Signup = () => {
                     <lable htmlFor="user-password-check">비밀번호 체크</lable>
                     <br/>
                     <Input name="user-password-check" type="password" value={passwordCheck} required
-                           onChange={onChangePasswordCheck}></Input>
+                           onChange={onChangePasswordCheck} />
                     {passwordError && <div style={{color: 'red'}}>비밀번호가 일치하지 않습니다.</div>}
                 </div>
 

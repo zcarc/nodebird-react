@@ -273,7 +273,7 @@ router.post('/:id/follow', isLoggedIn, async (req, res, next) => {
 });
 
 // 특정 유저 팔로우 취소하기
-router.delete('/:id/follow', isLoggedIn, async (req, res) => {
+router.delete('/:id/follow', isLoggedIn, async (req, res, next) => {
 
     try {
 
@@ -293,7 +293,7 @@ router.delete('/:id/follow', isLoggedIn, async (req, res) => {
 });
 
 // 특정 게시글 전부 가져오기
-router.get('/:id/posts', async (req, res) => {
+router.get('/:id/posts', async (req, res, next) => {
 
     try {
         const posts = await db.Post.findAll({
@@ -316,6 +316,25 @@ router.get('/:id/posts', async (req, res) => {
         });
 
         res.json(posts);
+
+    } catch (e) {
+        console.log(e);
+        next(e);
+    }
+});
+
+// 닉네임 수정
+router.patch('/nickname', isLoggedIn, async (req, res, next) => {
+
+    try {
+
+        await db.User.update({
+            nickname: req.body.nickname,
+        }, {
+            where: {id: req.user.id},
+        });
+
+        res.send(req.body.nickname);
 
     } catch (e) {
         console.log(e);

@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import { Form, Input, Button, List, Card, Icon } from 'antd';
 import NicknameEditForm from '../components/NicknameEditForm';
 import {useDispatch, useSelector} from "react-redux";
@@ -17,6 +17,7 @@ const Profile = () => {
     const dispatch = useDispatch();
     const {me, followingList, followerList} = useSelector(state => state.user);
     const {mainPosts} = useSelector(state => state.post);
+
 
     useEffect(() => {
         // 내가 로그인 했을 경우
