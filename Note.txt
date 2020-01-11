@@ -788,3 +788,4 @@ multer 라는 모듈을 사용해야한다.
           LOG_IN_REQUEST 요청이 있다면 호출해서 로직 상에 LOG_IN_SUCCESS 있으면 put 메소드로
           다시 리듀서를 호출해서 완료됐다면 다시 그 리듀서를 return 한다.
 
+619 848

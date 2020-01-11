@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 const db = require('../models'); // index에 db.User()로 연결되어 있기 때문에 불러오면 어디서든 쓸 수 있다.
-const { isLoggedIn } = require('./middleware');
+const {isLoggedIn} = require('./middleware');
 
 const router = express.Router();
 
@@ -23,12 +23,12 @@ router.post('/', async (req, res, next) => {
 
         // < 회원가입 하려는 사용자가 기존에 있는지 조회 >
         const exUser = await db.User.findOne({ // findOne({}) 하나만 찾을 때 사용한다.
-           where: { // where에 조건을 적어주면 된다.
-               userId: req.body.userId,
-           },
+            where: { // where에 조건을 적어주면 된다.
+                userId: req.body.userId,
+            },
         });
 
-        if(exUser) {
+        if (exUser) {
             // 에러를 응답으로 보내려면 res.state(400~599)
             // 404: 페이지가 없다.
             // 403: 접근이 금지되어 있다.
@@ -70,8 +70,8 @@ router.get('/:id', async (req, res, next) => {
 
     try {
         const user = await db.User.findOne({
-            where: { id: parseInt(req.params.id, 10) },
-            include:[{
+            where: {id: parseInt(req.params.id, 10)},
+            include: [{
                 model: db.Post,
                 as: 'Posts',
                 attributes: ['id'],
@@ -129,13 +129,13 @@ router.post('/login', (req, res, next) => { // POST /api/user/login
         console.log('### back/routes/user... passport.authenticate... info:', info, ' ###');
 
         // 서버 에러가 있을 시
-        if(err) {
+        if (err) {
             console.error(err);
             return next(err); // express가 알아서 서버로 에러를 보내준다.
         }
 
         // 로직 상의 에러가 있을 시
-        if(info) {
+        if (info) {
             return res.status(401).send(info.reason); //send() : 문자열로 이유를 보낸다.
         }
 
@@ -145,7 +145,7 @@ router.post('/login', (req, res, next) => { // POST /api/user/login
         // 로그인 성공한 유저의 id를 새로 빼고 쿠키는 새로 만들어서 [{id: 1, cookie: 'DFy47r'}] 이런식으로 익스프레션 세션에 저장된다.
         return req.login(user, async (loginErr) => {
 
-            try{
+            try {
                 // console.log('### req.login: ', user, ' ###');
 
                 // 로그인하면서 에러가 발생 시 *이런 경우는 아주아주 드물지만 혹시나 해서 해준다.
@@ -154,7 +154,7 @@ router.post('/login', (req, res, next) => { // POST /api/user/login
                 }
 
                 const fullUser = await db.User.findOne({
-                    where: { id: user.id },
+                    where: {id: user.id},
                     include: [{
                         model: db.Post,
                         as: 'Posts',
@@ -181,7 +181,7 @@ router.post('/login', (req, res, next) => { // POST /api/user/login
 
                 // // 프론트에 사용자 정보를 JSON 형태로 보내준다.
                 // return res.json(filteredUser);
-            }catch (e) {
+            } catch (e) {
                 console.error(e);
                 next(e);
             }
@@ -190,17 +190,75 @@ router.post('/login', (req, res, next) => { // POST /api/user/login
 
 });
 
-// 특정 유저의 팔로워 목록 가져오기
-router.get('/:id/follow', (req, res) => {   //   /api/user/:id/follow
+// 내가 팔로잉하는 사람 목록 가져오기
+router.get('/:id/followings', isLoggedIn, async (req, res, next) => {   //   /api/user/:id/followings
+
+    try {
+
+        const user = await db.User.findOne({
+            where: {id: parseInt(req.params.id, 10)},
+        });
+
+        // user의 followers를 찾아준다.
+        // 시퀄라이즈에서 생성해주는 함수
+        // findOne처럼 똑같은 옵션을 줄 수 있다.
+        const followers = await user.getFollowings({
+            attributes: ['id', 'nickname'],
+        });
+        res.json(followers);
+
+    } catch (e) {
+        console.error(e);
+        next(e);
+    }
 });
 
-// 특정 유저의 팔로우 하기
-router.post('/:id/follow', isLoggedIn,async (req, res, next) => {
+// 나를 팔로워하는 사람 목록 가져오기
+router.get('/:id/followers', isLoggedIn, async (req, res, next) => {   //   /api/user/:id/followers
+    try {
 
+        const user = await db.User.findOne({
+            where: {id: parseInt(req.params.id, 10)},
+        });
+
+        // user의 followers를 찾아준다.
+        // 시퀄라이즈에서 생성해주는 함수
+        // findOne처럼 똑같은 옵션을 줄 수 있다.
+        const followers = await user.getFollowers({
+            attributes: ['id', 'nickname'],
+        });
+        res.json(followers);
+
+    } catch (e) {
+        console.error(e);
+        next(e);
+    }
+});
+
+// 팔로워 삭제하기
+router.delete('/:id/follower', isLoggedIn, async (req, res, next) => {
     try {
 
         const me = await db.User.findOne({
             where: { id: req.user.id },
+        });
+
+        await me.removeFollower(req.params.id);
+        res.send(req.params.id);
+
+    } catch (e) {
+        console.error(e);
+        next(e);
+    }
+});
+
+// 특정 유저의 팔로우 하기
+router.post('/:id/follow', isLoggedIn, async (req, res, next) => {
+
+    try {
+
+        const me = await db.User.findOne({
+            where: {id: req.user.id},
         });
 
         // 내가 남을 팔로잉하게 연결해준다.
@@ -208,7 +266,7 @@ router.post('/:id/follow', isLoggedIn,async (req, res, next) => {
 
         res.send(req.params.id);
 
-    }catch (e) {
+    } catch (e) {
         console.log(e);
         next(e);
     }
@@ -220,7 +278,7 @@ router.delete('/:id/follow', isLoggedIn, async (req, res) => {
     try {
 
         const me = await db.User.findOne({
-            where: { id: req.user.id },
+            where: {id: req.user.id},
         });
 
         // 내가 다른사람을 팔로잉하고 있는 상태를 취소한다.
@@ -228,14 +286,10 @@ router.delete('/:id/follow', isLoggedIn, async (req, res) => {
 
         res.send(req.params.id);
 
-    }catch (e) {
+    } catch (e) {
         console.log(e);
         next(e);
     }
-});
-
-// 특정 유저 팔로우 삭제하기
-router.delete('/:id/follower', (req, res) => {
 });
 
 // 특정 게시글 전부 가져오기
@@ -252,7 +306,7 @@ router.get('/:id/posts', async (req, res) => {
                 attributes: ['id', 'nickname'], // password 제외
             }, {
                 model: db.Image,
-            },{
+            }, {
                 // 게시글을 좋아요한 사람을 include
                 model: db.User,
                 through: 'Like',
@@ -263,7 +317,7 @@ router.get('/:id/posts', async (req, res) => {
 
         res.json(posts);
 
-    }catch (e) {
+    } catch (e) {
         console.log(e);
         next(e);
     }
