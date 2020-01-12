@@ -22,15 +22,6 @@ const Home = () => {
     const dispatch = useDispatch();
 
 
-    useEffect( () => {
-
-        dispatch({
-            type: LOAD_MAIN_POSTS_REQUEST,
-        });
-
-    }, []);
-
-
     // 성능 최적화를 위해 아래와 같이 쪼갤수도 있다.
     // const user = useSelector(state => state.user.user);
     // const isLoggedIn = useSelector(state => state.user.isLoggedIn);
@@ -46,6 +37,21 @@ const Home = () => {
             })}
         </div>
     );
+};
+
+// front/pages/_app.js 에서 넣어주는 Component.getInitalProps(ctx); 의 "ctx"가 아래 함수의 매개변수로 전달됨
+Home.getInitialProps = async (context) => {
+    // context key에 store는 redux의 것이다.
+    // 이 안에는 dispatch, getState 등이 있다.
+    // getState는 redux state 들을 가져올 수 있는 함수이다.
+    // store.dispatch, store.getState를 사용하면
+    // getInitialProps 함수 안에서 redux 작업을 할 수 있다.
+    console.log('### front/pages/index... Home.getInitialProps()... Object.keys(context): ', Object.keys(context), ' ###');
+
+    context.store.dispatch({
+        type: LOAD_MAIN_POSTS_REQUEST,
+    });
+
 };
 
 export default Home;

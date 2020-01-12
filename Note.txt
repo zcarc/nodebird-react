@@ -788,4 +788,25 @@ multer 라는 모듈을 사용해야한다.
           LOG_IN_REQUEST 요청이 있다면 호출해서 로직 상에 LOG_IN_SUCCESS 있으면 put 메소드로
           다시 리듀서를 호출해서 완료됐다면 다시 그 리듀서를 return 한다.
 
-619 848
+
+7-1. 서버 사이드 렌더링(SSR)
+
+        - front/pages/user.js... User.getInitialProps는 백엔드, 프론트엔드에서 한번씩 실행된다.
+          페이지를 처음 로딩할 때, 백엔드에서 실행,
+          Next router로 페이지 전환될 때, 프론트에서 실행
+
+          백엔드에서 getInitailProps가 실행될 때, 데이터를 받아올 수 있다.
+          그러므로 여기서 axios 등을 사용할 수도 있는데,
+          현재 프로젝트의 프론트 비동기 호출은 리덕스 사가로 구현되어 있어서 리덕스 사가를 여기서 호출해주면 된다.
+
+          next를 안쓰면 이 부분이 엄청 복잡해진다.
+          next가 getInitialProps 라이프 사이클을 만들었기 때문에 개발할 때 수월하게 진행할 수 있다.
+          그래서 SSR App을 만들 때는 순수 리액트보다 next로 만드는것을 추천한다.
+          어차피 getInitialProps는 구현해야하는데 next는 기본적으로 제공하기 해주고 있어서
+          직접 구현하는 것 보다는 제공되는 것을 사용하는게 좋다.
+
+          next-redux-saga 이 모듈이 있어야 next server에서 redux-saga를 사용할 수 있다.
+
+          front/pages/index에 SSR을 적용했으니 새로고침할 때 마다 바로 게시글들이 로드된 상태로 바로바로 게시글들이 보이게 된다.
+
+          getInitialProps가 한번은 서버쪽에서 실행되기 때문에 그때 서버에서 dispatch 부분을 가져오게 된다.

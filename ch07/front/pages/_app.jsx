@@ -2,6 +2,7 @@ import React from 'react';
 import Head from 'next/head';
 import PropTypes from 'prop-types';
 import withRedux from 'next-redux-wrapper';
+import withReduxSaga from 'next-redux-saga'; // next에서 사용하는 redux-saga
 import AppLayout from '../components/AppLayout';
 import {createStore, compose, applyMiddleware} from 'redux';
 import {Provider} from 'react-redux';
@@ -85,10 +86,14 @@ const configureStore = (initialState, options) => {
 
     // createStore()에 첫번째 인자에 root reducer를 넣어준다.
     const store = createStore(reducer, initialState, enhancer);
-    sagaMiddleware.run(rootSaga);
+    store.sagaTask = sagaMiddleware.run(rootSaga);
 
     return store;
 
 };
 
-export default withRedux(configureStore)(NodeBird);
+// withRedux는 configureStore 이라는 설정이 있고,
+// withReduxSaga는 설정 부분이 없지만 store에 사가 미들웨어 run을 넣어줘야한다.
+// withReduxSaga는 내부에서 sagaMiddleware.run(rootSaga)를 필요로 한다.
+// 이 부분이 있어야 next에서 SSR를 할 수 있다.
+export default withRedux(configureStore)(withReduxSaga(NodeBird));
