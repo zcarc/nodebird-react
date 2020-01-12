@@ -9,6 +9,8 @@ import {Provider} from 'react-redux';
 import reducer from '../reducers'
 import createSagaMiddleware from 'redux-saga';
 import rootSaga from "../sagas";
+import {LOAD_USER_REQUEST} from "../reducers/user";
+import axios from 'axios';
 
 
 const NodeBird = ({Component, store, pageProps}) => {
@@ -21,8 +23,10 @@ const NodeBird = ({Component, store, pageProps}) => {
             <Head>
                 <title>NodeBird</title>
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/3.25.3/antd.css"/>
-                <link rel="stylesheet" type="text/css" charset="UTF-8" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css" />
-                <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css" />
+                <link rel="stylesheet" type="text/css" charset="UTF-8"
+                      href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"/>
+                <link rel="stylesheet" type="text/css"
+                      href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"/>
             </Head>
             {/* AppLayout props에 Component가 주입된다. ( 메인으로 접속 시 AppLayout props에 index.jsx가 들어감 )*/}
             <AppLayout>
@@ -43,11 +47,38 @@ NodeBird.propTypes = {
 // 주로 서버 작업을 할 때 사용
 // 프론트, 백엔드 둘 다 실행가능
 // 서버사이드 렌더링 시 중요
-NodeBird.getInitialProps = async(context) => {
+NodeBird.getInitialProps = async (context) => {
     console.log('### front/pages/_app.jsx... NodeBird.getInitialProps = async(context) ###');
     // console.log('### front/pages/_app.jsx... NodeBird.getInitialProps = async(context)... context: ', context ,' ###');
-    const { ctx, Component } = context;
+    const {ctx, Component} = context;
     let pageProps = {};
+
+
+    // 서버 사이드 렌더링 시에는 클라이언트와 다르게 브라우저가 없기 때문에
+    // 백엔드 서버로 axios 요청을 보낼 때 기본값으로 쿠키를 넣어서 보내줘야한다.
+    // ctx의 req는 서버 환경일 때만 req가 존재한다.
+    // 클라이언트인 경우에는 req가 undefined가 된다.
+    const cookie = ctx.isServer ? ctx.req.headers.cookie : '';
+    console.log(`### front/pages/_app.jsx... getInitialProps... ctx.req.headers.cookie:`, cookie ,` ###`);
+
+    // getInitialProps()가 클라이언트일 경우와 서버일 경우 둘 다 실행되기 때문에
+    // 클라이언트일 경우에는 쿠키를 직접 보낼 필요가 없어서 분기처리를 해주는게 좋다.
+    if(ctx.isServer && cookie) { // 서버 사이드 이고 쿠키도 존재한다면
+
+        // front/sagas/index... axios.defaults.baseURL 처럼 axios.defaults.headers.Cookie를 사용하면 모든 axios에 적용된다.
+        axios.defaults.headers.Cookie = cookie;
+    }
+
+    // 이 부분이 await Component.getInitialProps(ctx) 로직보다 위에 호출되어야해서 먼저 호출한다.
+    // 호출 순서를 원하는대로 정해주어야 한다.
+    const state = ctx.store.getState();
+    console.log(`### front/pages/_app.jsx... getInitialProps... ctx.store.getState():`, state ,` ###`);
+
+    if(!state.user.me) {
+        ctx.store.dispatch({
+            type: LOAD_USER_REQUEST,
+        });
+    }
 
     // Nodebird의 Component와 같다.
     // <Component/> : pages 폴더의 파일들
@@ -57,10 +88,9 @@ NodeBird.getInitialProps = async(context) => {
     }
 
     console.log(`### front/pages/_app.jsx... pageProps = await Component.getInitialProps(ctx)... pageProps: ${JSON.stringify(pageProps)} ###`);
-
     // 컴포넌트의 props.
     // NodeBird의 파라미터로 받고 해당 <Component/>의 파라미터로 전달된다.
-    return { pageProps };
+    return {pageProps};
 };
 
 const configureStore = (initialState, options) => {
@@ -92,8 +122,12 @@ const configureStore = (initialState, options) => {
 
 };
 
+// 서버 사이드 렌더링 (SSR)
 // withRedux는 configureStore 이라는 설정이 있고,
 // withReduxSaga는 설정 부분이 없지만 store에 사가 미들웨어 run을 넣어줘야한다.
 // withReduxSaga는 내부에서 sagaMiddleware.run(rootSaga)를 필요로 한다.
-// 이 부분이 있어야 next에서 SSR를 할 수 있다.
+
+// 여기에서는 아래 코드가 있어야 next에서 SSR를 할 수 있다.
+// store.sagaTask = sagaMiddleware.run(rootSaga);
+// withReduxSaga(NodeBird)
 export default withRedux(configureStore)(withReduxSaga(NodeBird));

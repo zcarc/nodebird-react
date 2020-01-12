@@ -8,12 +8,17 @@ import { LOAD_MAIN_POSTS_REQUEST } from '../reducers/post';
 const Home = () => {
     console.log('### front/pages/index... ###');
 
+    const user = useSelector(state => state.user);
+    console.log('### front/pages/index... useSelector(state => state.user): ', user, ' ###')
+
 
     // useState()가 useSelector()로 바뀌었다고 생각하면 된다.
     // useSelector()의 state는 리덕스에서 자동적으로 root reducer에 등록된 state들을 전달해준다.
 
     // 만약 user.jsx에 등록된 state가 변경되면
     // 현재 index.jsx의 컴포넌트가 re-rendering 된다.
+    // useSelector()의 매개변수인 state는 전체 state를 의미한다.
+    // 거기에서 reducers/index combineReducers()의 user를 가져온다는 의미이고
     const { me } = useSelector(state => state.user);
     const { mainPosts } = useSelector(state => state.post);
 

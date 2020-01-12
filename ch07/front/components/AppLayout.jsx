@@ -12,16 +12,6 @@ const AppLayout = ({children}) => {
     console.log('### front/components/AppLayout.jsx... const AppLayout = ( {children} )... {children}: ', {children}, ' ###');
 
     const {me} = useSelector(state => state.user);
-    const dispatch = useDispatch();
-
-    // 컴포넌트가 마운트 될 때, 사용자 요청
-    useEffect(() => {
-        if (!me) {
-            dispatch({
-                type: LOAD_USER_REQUEST,
-            });
-        }
-    }, []);
 
     return (
         <div>
