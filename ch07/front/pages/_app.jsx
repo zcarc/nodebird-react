@@ -45,7 +45,7 @@ NodeBird.propTypes = {
 // context : next에서 받아온다.
 // getInitialProps는 next의 라이프사이클 componentDidMount 보다 먼저 실행
 // 주로 서버 작업을 할 때 사용
-// 프론트, 백엔드 둘 다 실행가능
+// 클라이언트 사이드 렌더링 또는 서버 사이드 렌더링인 두 경우 모두 실행된다.
 // 서버사이드 렌더링 시 중요
 NodeBird.getInitialProps = async (context) => {
     console.log('### front/pages/_app.jsx... NodeBird.getInitialProps = async(context) ###');
@@ -54,16 +54,16 @@ NodeBird.getInitialProps = async (context) => {
     let pageProps = {};
 
 
-    // 서버 사이드 렌더링 시에는 클라이언트와 다르게 브라우저가 없기 때문에
+    // 서버 사이드 렌더링 시에는 클라이언트 사이드 렌더링과 다르게 브라우저가 없기 때문에
     // 백엔드 서버로 axios 요청을 보낼 때 기본값으로 쿠키를 넣어서 보내줘야한다.
-    // ctx의 req는 서버 환경일 때만 req가 존재한다.
-    // 클라이언트인 경우에는 req가 undefined가 된다.
+    // ctx의 req는 서버 사이드 렌더링 환경일 때만 req가 존재한다.
+    // 클라이언트 사이드 렌더링인 경우에는 req가 undefined가 된다.
     const cookie = ctx.isServer ? ctx.req.headers.cookie : '';
     console.log(`### front/pages/_app.jsx... getInitialProps... ctx.req.headers.cookie:`, cookie ,` ###`);
 
     // getInitialProps()가 클라이언트일 경우와 서버일 경우 둘 다 실행되기 때문에
     // 클라이언트일 경우에는 쿠키를 직접 보낼 필요가 없어서 분기처리를 해주는게 좋다.
-    if(ctx.isServer && cookie) { // 서버 사이드 이고 쿠키도 존재한다면
+    if(ctx.isServer && cookie) { // 서버 사이드 렌더링 이고 쿠키도 존재한다면
 
         // front/sagas/index... axios.defaults.baseURL 처럼 axios.defaults.headers.Cookie를 사용하면 모든 axios에 적용된다.
         axios.defaults.headers.Cookie = cookie;
@@ -100,7 +100,14 @@ const configureStore = (initialState, options) => {
     // console.log('options.isServer: ', options.isServer);
 
     const sagaMiddleware = createSagaMiddleware();
-    const middlewares = [sagaMiddleware];
+    // const middlewares = [sagaMiddleware];
+
+    // 리덕스 사가 에러 찾아내는 커스텀 미들웨어
+    // type: @@redux-saga (서버쪽에서 이 액션을 실행해줘서 서버사이드 렌더링이 가능하다.)
+    const middlewares = [sagaMiddleware, (store) => (next) => (action) => {
+        console.log('middlewares action: ', action);
+        next(action);
+    }];
 
     // enhance: 향상시키다
     // 리덕스의 기능을 향상시키는 것으로 생각하면 된다.

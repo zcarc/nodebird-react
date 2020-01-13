@@ -44,8 +44,9 @@ const Home = () => {
     );
 };
 
-// front/pages/_app.js 에서 넣어주는 Component.getInitalProps(ctx); 의 "ctx"가 아래 함수의 매개변수로 전달됨
+// front/pages/_app.js 에서 넣어주는 Component.getInitalProps(ctx); 의 "ctx"가 아래 함수의 매개변수로 전달된다.
 Home.getInitialProps = async (context) => {
+
     // context key에 store는 redux의 것이다.
     // 이 안에는 dispatch, getState 등이 있다.
     // getState는 redux state 들을 가져올 수 있는 함수이다.

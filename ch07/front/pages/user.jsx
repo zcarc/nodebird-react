@@ -7,10 +7,8 @@ import {LOAD_USER_REQUEST} from "../reducers/user";
 import {LOAD_USER_POSTS_REQUEST} from "../reducers/post";
 
 
-const User = ({ id }) => {
-    console.log('### front/pages/user.jsx... const User = ({ id })... { id }: ', id, ' ###');
-
-    const dispatch = useDispatch();
+const User = () => {
+    console.log('### front/pages/user.jsx... ###');
 
     // post reducer
     const { mainPosts } = useSelector(state => state.post);
@@ -18,17 +16,6 @@ const User = ({ id }) => {
 
     const { userInfo } = useSelector(state => state.user);
 
-    useEffect(() => {
-        dispatch({
-            type: LOAD_USER_REQUEST,
-            data: id,
-        });
-
-        dispatch({
-            type: LOAD_USER_POSTS_REQUEST,
-            data: id,
-        });
-    }, []);
 
     return (
         <div>
@@ -68,14 +55,22 @@ const User = ({ id }) => {
 
 };
 
-User.propTypes = {
-  id: PropTypes.number.isRequired,
-};
-
 User.getInitialProps = async(context) => {
-    console.log('### front/pages/user.jsx... User.getInitialProps = async(context)... context.query.id: ', context.query.id, ' ###');
 
-    return { id: parseInt(context.query.id, 10)};
+    const id = parseInt(context.query.id, 10);
+    console.log('### front/pages/user.jsx... User.getInitialProps = async(context)... context.query.id: ', id, ' ###');
+
+    context.store.dispatch({
+        type: LOAD_USER_REQUEST,
+        data: id,
+    });
+
+    context.store.dispatch({
+        type: LOAD_USER_POSTS_REQUEST,
+        data: id,
+    });
+
+    return { id };
 };
 
 export default User;

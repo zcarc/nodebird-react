@@ -107,7 +107,7 @@ function loadHashtagPostsAPI(tag) {
 
   // 로그인하지 않은 사용자로 메인 페이지 게시글을 볼 수 있으니
   // withCredentials 설정을 하지 않아도 된다.
-  return axios.get(`/hashtag/${tag}`);
+  return axios.get(`/hashtag/${encodeURIComponent(tag)}`);
 }
 
 function* loadHashtagPosts(action) {
