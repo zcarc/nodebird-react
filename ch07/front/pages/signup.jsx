@@ -106,6 +106,15 @@ const Signup = () => {
     // };
 
 
+    // 사용자가 로그인 상태라면 회원가입 페이지가 안보이게
+    // SSR를 하기 때문에 me가 있을 경우, 없을 경우가 있다.
+    // CSR를 하게 되면 me가 없다가 LOAD_USER_REQUEST로 나중에 유저 정보를 받아 왔다면
+    // 로그인을 했더라도 다시 요청을 하기 때문에 잠깐 동안 me가 없을 수 있다.
+    if(me){
+        return null;
+    }
+
+
     return (
         <>
             <Form onSubmit={onSubmit} style={{padding: 10}}>

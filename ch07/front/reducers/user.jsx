@@ -66,6 +66,7 @@ export const EDIT_NICKNAME_SUCCESS = 'EDIT_NICKNAME_SUCCESS';
 export const EDIT_NICKNAME_FAILURE = 'EDIT_NICKNAME_FAILURE';
 
 export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
+export const REMOVE_POST_OF_ME = 'REMOVE_POST_OF_ME';
 
 
 // return을 생략할 때는 함수 내부를 () 소괄호로 묶어준다.
@@ -235,6 +236,16 @@ export default (state = initialState, action) => {
                 me: {
                     ...state.me,
                     Posts: [{ id: action.data }, ...state.me.Posts], // 기존 게시글들에 새로 작성한 게시글을 추가
+                },
+            }
+        }
+
+        case REMOVE_POST_OF_ME: {
+            return {
+                ...state,
+                me: {
+                    ...state.me,
+                    Posts: state.me.Posts.filter(v => v.id !== action.data),
                 },
             }
         }

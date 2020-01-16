@@ -24,10 +24,16 @@ import {
   LIKE_POST_SUCCESS,
   LIKE_POST_FAILURE,
   LIKE_POST_REQUEST,
-  UNLIKE_POST_SUCCESS, UNLIKE_POST_FAILURE, UNLIKE_POST_REQUEST, RETWEET_SUCCESS, RETWEET_FAILURE, RETWEET_REQUEST
+  UNLIKE_POST_SUCCESS,
+  UNLIKE_POST_FAILURE,
+  UNLIKE_POST_REQUEST,
+  RETWEET_SUCCESS,
+  RETWEET_FAILURE,
+  RETWEET_REQUEST,
+  REMOVE_POST_SUCCESS, REMOVE_POST_FAILURE, REMOVE_POST_REQUEST
 } from '../reducers/post';
 import axios from 'axios';
-import { ADD_POST_TO_ME} from "../reducers/user";
+import {ADD_POST_TO_ME, REMOVE_POST_OF_ME} from "../reducers/user";
 
 
 function addPostAPI(postData) { // postData에는 게시글들이 들어있다.
@@ -162,7 +168,7 @@ function* watchLoadUserPosts() {
 }
 
 function addCommentAPI(data) {
-  return axios.post(`post/${data.postId}/comment`, { content: data.content },{
+  return axios.post(`/post/${data.postId}/comment`, { content: data.content },{
         withCredentials: true, // 로그인한 사용자만 작성
       });
 }
@@ -195,7 +201,7 @@ function* watchAddComment() {
 }
 
 function loadCommentsAPI(postId) {
-  return axios.get(`post/${postId}/comments`);
+  return axios.get(`/post/${postId}/comments`);
 }
 
 // 사가 post.jsx의 loadComments(action) 이 부분의 action은
@@ -228,7 +234,7 @@ function* watchLoadComments() {
 function uploadImagesAPI(formData) {
   console.log('### front/sagas/post uploadImagesAPI... formData: ', formData ,' ###');
 
-  return axios.post('post/images', formData, {
+  return axios.post('/post/images', formData, {
     withCredentials: true,
   });
 }
@@ -266,7 +272,7 @@ function* watchUploadImages() {
 function likePostAPI(postId) {
   console.log('### front/sagas/post likePostAPI... postId: ', postId ,' ###');
 
-  return axios.post(`post/${postId}/like`, {}, {
+  return axios.post(`/post/${postId}/like`, {}, {
     withCredentials: true,
   });
 }
@@ -301,7 +307,7 @@ function* watchLikePost() {
 function unLikePostAPI(postId) {
   console.log('### front/sagas/post unLikePostAPI... postId: ', postId ,' ###');
 
-  return axios.delete(`post/${postId}/like`, {
+  return axios.delete(`/post/${postId}/like`, {
     withCredentials: true,
   });
 }
@@ -337,7 +343,7 @@ function retweetAPI(postId) {
   console.log('### front/sagas/post retweetAPI... postId: ', postId ,' ###');
 
   // 데이터가 없어도 두번째 인자에 빈 객체를 보내줘야한다.
-  return axios.post(`post/${postId}/retweet`, {}, {
+  return axios.post(`/post/${postId}/retweet`, {}, {
     withCredentials: true,
   });
 }
@@ -363,8 +369,46 @@ function* retweet(action) {
 }
 
 function* watchRetweet() {
-  console.log('### front/sagas/post *watchUnlikePost... ###');
+  console.log('### front/sagas/post *watchRetweet... ###');
   yield takeLatest(RETWEET_REQUEST, retweet);
+}
+
+function removePostAPI(postId) {
+  console.log('### front/sagas/post removePostAPI... postId: ', postId ,' ###');
+
+  return axios.delete(`/post/${postId}`,  {
+    withCredentials: true,
+  });
+}
+
+function* removePost(action) {
+  console.log('### front/sagas/post *removePost... action: ', action ,' ###');
+
+  try {
+    const result = yield call(removePostAPI, action.data);
+    yield put({
+      type: REMOVE_POST_SUCCESS,
+      data: result.data,
+    });
+
+    // 게시글 삭제 시, 짹짹 삭제 (user reducer)
+    yield put({
+      type: REMOVE_POST_OF_ME,
+      data: result.data,
+    });
+
+  } catch (e) {
+    console.error(e);
+    yield put({
+      type: REMOVE_POST_FAILURE,
+      error: e,
+    });
+  }
+}
+
+function* watchRemovePost() {
+  console.log('### front/sagas/post *watchRemovePost... ###');
+  yield takeLatest(REMOVE_POST_REQUEST, removePost);
 }
 
 export default function* postSaga() {
@@ -381,5 +425,6 @@ export default function* postSaga() {
     fork(watchLikePost),
     fork(watchUnlikePost),
     fork(watchRetweet),
+    fork(watchRemovePost),
   ]);
 }

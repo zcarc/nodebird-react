@@ -317,6 +317,29 @@ const reducer = (state = initialState, action) => {
             };
         }
 
+        case REMOVE_POST_REQUEST: {
+
+            return {
+                ...state,
+            };
+        }
+
+        case REMOVE_POST_SUCCESS: {
+            // RetweetWithPrevPost로 게시글 가져온게 action.data에 들어있다.
+            // 그 부분을 기존 게시글 제일 앞에 붙여주면 된다.
+            return {
+                ...state,
+                mainPosts: state.mainPosts.filter(v => v.id !== action.data),
+            };
+        }
+
+        case REMOVE_POST_FAILURE: {
+
+            return {
+                ...state,
+            };
+        }
+
         default: {
             return {
                 ...state,

@@ -1,11 +1,11 @@
 import {useState, useCallback, useEffect} from 'react';
-import {Button, Card, Icon, Avatar, Form, Input, List, Comment} from 'antd';
+import {Button, Card, Icon, Avatar, Form, Input, List, Comment, Popover} from 'antd';
 import PropTypes from 'prop-types';
 import {useSelector, useDispatch} from "react-redux";
 import {
     ADD_COMMENT_REQUEST,
     LIKE_POST_REQUEST,
-    LOAD_COMMENTS_REQUEST,
+    LOAD_COMMENTS_REQUEST, REMOVE_POST_REQUEST,
     RETWEET_REQUEST,
     UNLIKE_POST_REQUEST
 } from "../reducers/post";
@@ -109,6 +109,15 @@ const PostCard = ({post}) => {
         });
     }, []);
 
+    // 게시글 삭제
+    const onRemovePost = useCallback(userId => () => {
+        dispatch({
+            type: REMOVE_POST_REQUEST,
+            data: userId,
+        });
+
+    }, []);
+
 
     return (
         <div>
@@ -120,7 +129,24 @@ const PostCard = ({post}) => {
                     <Icon type="heart" key="heart" theme={liked ? "twoTone" : "outlined"} twoToneColor="#eb2f96"
                           onClick={onToggleLike}/>, // Icon 기본 테마는 outlined인데 색을 주고 싶으면 twoTone으로 바꾸면 된다.
                     <Icon type="message" key="message" onClick={onToggleComment}/>,
-                    <Icon type="ellipsis" key="ellipsis"/>,
+                    <Popover
+                        key="ellipsis"
+                        content={(
+                            <Button.Group>
+                                {me && post.UserId === me.id
+                                    ? (
+                                        <>
+                                            <Button>수정</Button>
+                                            <Button type="danger" onClick={onRemovePost(post.id)}>삭제</Button>
+                                        </>
+                                    )
+                                    : <Button>신고</Button>}
+                            </Button.Group>
+                        )}
+                    >
+                        <Icon type="ellipsis" key="ellipsis"/>
+                    </Popover>
+
                 ]}
                 // 리트윗한 게시글인 경우 출력
                 title={post.RetweetId ? `${post.User.nickname}님이 리트윗 하셨습니다.` : null}
