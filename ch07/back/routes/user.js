@@ -196,7 +196,8 @@ router.get('/:id/followings', isLoggedIn, async (req, res, next) => {   //   /ap
     try {
 
         const user = await db.User.findOne({
-            where: {id: parseInt(req.params.id, 10)},
+            // req.params.id가 0이라면 본인이라고 간주한다.
+            where: { id: parseInt(req.params.id, 10) || (req.user && req.user.id) || 0 },
         });
 
         // user의 followers를 찾아준다.
@@ -218,7 +219,8 @@ router.get('/:id/followers', isLoggedIn, async (req, res, next) => {   //   /api
     try {
 
         const user = await db.User.findOne({
-            where: {id: parseInt(req.params.id, 10)},
+            // req.params.id가 0이라면 본인이라고 간주한다.
+            where: { id: parseInt(req.params.id, 10) || (req.user && req.user.id) || 0 },
         });
 
         // user의 followers를 찾아준다.
@@ -298,7 +300,8 @@ router.get('/:id/posts', async (req, res, next) => {
     try {
         const posts = await db.Post.findAll({
             where: { // post 테이블 기준 조건
-                UserId: parseInt(req.params.id, 10),
+                // req.params.id가 0이라면 본인이라고 간주한다.
+                UserId: parseInt(req.params.id, 10) || (req.user && req.user.id) || 0,
                 RetweetId: null, // 남이 리트윗한거 빼고 내가 쓴거만 가져옴
             },
             include: [{

@@ -132,7 +132,7 @@ function* watchLoadHashtagPosts() {
   yield takeLatest(LOAD_HASHTAG_POSTS_REQUEST, loadHashtagPosts);
 }
 
-function loadUserPostsAPI(id) {
+function loadUserPostsAPI(id = 0) {
 
   // 로그인하지 않은 사용자도 메인 페이지 게시글을 볼 수 있으니
   // withCredentials 설정을 하지 않아도 된다.

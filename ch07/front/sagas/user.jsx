@@ -143,7 +143,7 @@ function loadUserAPI(userId) {
     console.log(`### front/sagas/user.jsx... loadUserAPI(userId)... userId : ${JSON.stringify(userId)} ###`);
 
     // 서버에 요청을 보내는 부분
-    return axios.get(userId ? `/user/${userId}` : '/user/', { // userId가 있으면 다른사람 정보 불러오고 없다면 내 정보 불러오기
+    return axios.get(userId ? `/user/${userId || 0}` : '/user/', { // userId가 있으면 다른사람 정보 불러오고 없다면 내 정보 불러오기
         // 클라이언트에서 백엔드 서버로 요청을 보낼 때는 브라우저가 쿠키를 동봉해준다.
         // 그래서 이 부분을 추가해주면 브라우저가 쿠키를 같이 보내준다.
         // 하지만 서버 사이드 렌더링일 경우는, 브라우저가 없다.
@@ -257,10 +257,12 @@ function* watchUnFollow() {
     yield takeEvery(UNFOLLOW_USER_REQUEST, unFollow);
 }
 
+// 매개변수 userId가 null인 경우 기본 값이 적용이 안된다.
+// undefiend인 경우에만 기본값이 적용된다.
 function loadFollowersAPI(userId) {
     console.log(`### front/sagas/user.jsx... loadFollowersAPI(userId)... userId : ${JSON.stringify(userId)} ###`);
 
-    return axios.get(`/user/${userId}/followers`,  {
+    return axios.get(`/user/${userId || 0}/followers`,  {
         withCredentials: true,
     });
 }
@@ -297,7 +299,8 @@ function* watchLoadFollowers() {
 function loadFollowingsAPI(userId) {
     console.log(`### front/sagas/user.jsx... loadFollowingsAPI(userId)... userId : ${JSON.stringify(userId)} ###`);
 
-    return axios.get(`/user/${userId}/followings`,  {
+    // 값이 없다면 (null 이라면) 0을 넣어준다.
+    return axios.get(`/user/${userId || 0}/followings`,  {
         withCredentials: true,
     });
 }
