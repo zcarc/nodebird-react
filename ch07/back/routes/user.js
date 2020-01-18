@@ -205,6 +205,8 @@ router.get('/:id/followings', isLoggedIn, async (req, res, next) => {   //   /ap
         // findOne처럼 똑같은 옵션을 줄 수 있다.
         const followers = await user.getFollowings({
             attributes: ['id', 'nickname'],
+            limit: parseInt(req.query.limit, 10),
+            offset: parseInt(req.query.offset, 10),
         });
         res.json(followers);
 
@@ -228,6 +230,8 @@ router.get('/:id/followers', isLoggedIn, async (req, res, next) => {   //   /api
         // findOne처럼 똑같은 옵션을 줄 수 있다.
         const followers = await user.getFollowers({
             attributes: ['id', 'nickname'],
+            limit: parseInt(req.query.limit, 10),
+            offset: parseInt(req.query.offset, 10),
         });
         res.json(followers);
 

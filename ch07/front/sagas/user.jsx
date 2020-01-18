@@ -259,10 +259,10 @@ function* watchUnFollow() {
 
 // 매개변수 userId가 null인 경우 기본 값이 적용이 안된다.
 // undefiend인 경우에만 기본값이 적용된다.
-function loadFollowersAPI(userId) {
+function loadFollowersAPI(userId, offset = 0, limit = 3) {
     console.log(`### front/sagas/user.jsx... loadFollowersAPI(userId)... userId : ${JSON.stringify(userId)} ###`);
 
-    return axios.get(`/user/${userId || 0}/followers`,  {
+    return axios.get(`/user/${userId || 0}/followers?offset=${offset}&limit=${limit}`,  {
         withCredentials: true,
     });
 }
@@ -271,7 +271,7 @@ function* loadFollowers(action) {
     console.log(`### front/sagas/user.jsx... *loadFollowers(action)... action : ${JSON.stringify(action)} ###`);
 
     try {
-        const result = yield call(loadFollowersAPI, action.data);
+        const result = yield call(loadFollowersAPI, action.data, action.offset);
         console.log(`### front/sagas/user.jsx... *loadFollowers(action)... const result = yield call(loadFollowersAPI, action.data): ${JSON.stringify(result)} ###`);
 
         yield put({
@@ -296,11 +296,11 @@ function* watchLoadFollowers() {
 }
 
 
-function loadFollowingsAPI(userId) {
+function loadFollowingsAPI(userId, offset = 0, limit = 3) {
     console.log(`### front/sagas/user.jsx... loadFollowingsAPI(userId)... userId : ${JSON.stringify(userId)} ###`);
 
     // 값이 없다면 (null 이라면) 0을 넣어준다.
-    return axios.get(`/user/${userId || 0}/followings`,  {
+    return axios.get(`/user/${userId || 0}/followings?offset=${offset}&limit=${limit}`,  {
         withCredentials: true,
     });
 }
@@ -309,7 +309,7 @@ function* loadFollowings(action) {
     console.log(`### front/sagas/user.jsx... *loadFollowings(action)... action : ${JSON.stringify(action)} ###`);
 
     try {
-        const result = yield call(loadFollowingsAPI, action.data);
+        const result = yield call(loadFollowingsAPI, action.data, action.offset);
         console.log(`### front/sagas/user.jsx... *loadFollowings(action)... const result = yield call(loadFollowingsAPI, action.data): ${JSON.stringify(result)} ###`);
 
         yield put({

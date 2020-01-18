@@ -260,7 +260,7 @@ export default (state = initialState, action) => {
 
             return {
                 ...state,
-                followerList: action.data,
+                followerList: state.followerList.concat(action.data),
             };
         }
 
@@ -280,7 +280,7 @@ export default (state = initialState, action) => {
 
             return {
                 ...state,
-                followingList: action.data,
+                followingList: state.followingList.concat(action.data),
             };
         }
 
