@@ -7,7 +7,19 @@ router.get('/:tag', async (req, res, next) => {
     console.log(`### back/routes/hashtag.js... ###`);
 
     try {
+
+        let where = {};
+        if(parseInt(req.query.lastId, 10)) {
+            where = {
+                id: {
+                    [db.Sequelize.Op.lt]: parseInt(req.query.lastId, 10)
+                }
+            };
+        }
         const posts = await db.Post.findAll({
+
+            where,
+
             include: [{
                 model: db.Hashtag,
                 where: {name: decodeURIComponent(req.params.tag)}, // 이 조건은 User 테이블에 대한 조건 (Post 테이블 기준이 아님) // 한글일수도 있으므로 함수 사용
@@ -32,6 +44,9 @@ router.get('/:tag', async (req, res, next) => {
                     model: db.Image,
                 }]
             }],
+
+            limit: parseInt(req.query.limit, 10),
+
         });
 
         res.json(posts);

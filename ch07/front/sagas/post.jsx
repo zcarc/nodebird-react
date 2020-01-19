@@ -79,19 +79,20 @@ function* watchAddPost() {
   yield takeLatest(ADD_POST_REQUEST, addPost);
 }
 
-
-function loadMainPostsAPI() {
+// 서버쪽에서 lastId가 0이 왔다면
+// 게시글 id가 '0'이 아니라 처음부터 불러온다는 의미이다.
+function loadMainPostsAPI(lastId = 0, limit = 10) {
 
   // 로그인하지 않은 사용자로 메인 페이지 게시글을 볼 수 있으니
   // withCredentials 설정을 하지 않아도 된다.
-  return axios.get('/posts');
+  return axios.get(`/posts?lastId=${lastId}&limit=${limit}`);
 }
 
-function* loadMainPosts() {
+function* loadMainPosts(action) {
 
   try {
 
-    const result = yield call(loadMainPostsAPI);
+    const result = yield call(loadMainPostsAPI, action.lastId);
     yield put({
       type: LOAD_MAIN_POSTS_SUCCESS,
       data: result.data,
@@ -109,18 +110,18 @@ function* watchLoadMainPosts() {
   yield takeLatest(LOAD_MAIN_POSTS_REQUEST, loadMainPosts);
 }
 
-function loadHashtagPostsAPI(tag) {
+function loadHashtagPostsAPI(tag, lastId) {
 
   // 로그인하지 않은 사용자로 메인 페이지 게시글을 볼 수 있으니
   // withCredentials 설정을 하지 않아도 된다.
-  return axios.get(`/hashtag/${encodeURIComponent(tag)}`);
+  return axios.get(`/hashtag/${encodeURIComponent(tag)}?lastId=${lastId}&limit=${10}`);
 }
 
 function* loadHashtagPosts(action) {
 
   try {
 
-    const result = yield call(loadHashtagPostsAPI, action.data);
+    const result = yield call(loadHashtagPostsAPI, action.data, action.lastId);
     yield put({
       type: LOAD_HASHTAG_POSTS_SUCCESS,
       data: result.data,
@@ -138,6 +139,7 @@ function* watchLoadHashtagPosts() {
   yield takeLatest(LOAD_HASHTAG_POSTS_REQUEST, loadHashtagPosts);
 }
 
+// 유저포스트를 인피니트 스크롤링으로 만드는건 숙제이다.
 function loadUserPostsAPI(id = 0) {
 
   // 로그인하지 않은 사용자도 메인 페이지 게시글을 볼 수 있으니
