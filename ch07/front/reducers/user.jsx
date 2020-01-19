@@ -11,6 +11,8 @@ export const initialState = {
     userInfo: null, // 남의 정보
     isEditingNickname: false, // 닉네임 변경 중
     editNicknameErrorReason: '', // 이름 변경 실패 사유
+    hasMoreFollower: false,
+    hasMoreFollowing: false,
 
 };
 
@@ -253,6 +255,11 @@ export default (state = initialState, action) => {
         case LOAD_FOLLOWERS_REQUEST: {
             return {
                 ...state,
+
+                // 처음에는 데이터가 아무것도 없으니 데이터를 가져오기 위한
+                // 더보기 버튼을 보여주는(true) 걸로 한다.
+                // 처음에는 더보기 버튼을 무조건 만들고 그 다음에는 SUCCESS에서 결정한다.
+                hasMoreFollower: action.offset ? state.hasMoreFollower : true,
             };
         }
 
@@ -261,6 +268,12 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 followerList: state.followerList.concat(action.data),
+
+                // 데이터를 가져왔는데 데이터가 1 ~ 2개면 더보기를 없애주고
+                // 3개면 다음 데이터가 있을수도 있으니 보여준다.
+                // 3개를 가져올 때 그 데이터가 마지막 데이터일 때 더보기 버튼이 남을 수도 있는데
+                // 이것은 어떤 로직을 써도 숨길수가 없어서 더보기 버튼을 누르고 아무것도 가져오지 않게 처리되는 방법 밖에 없다.
+                hasMoreFollower: action.data.length === 3,
             };
         }
 
@@ -273,6 +286,7 @@ export default (state = initialState, action) => {
         case LOAD_FOLLOWINGS_REQUEST: {
             return {
                 ...state,
+                hasMoreFollowing: action.offset ? state.hasMoreFollowing : true, // 처음 데이터를 가져올 때는 더보기 버튼을 보여주는(true) 걸로 한다.
             };
         }
 
@@ -281,6 +295,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 followingList: state.followingList.concat(action.data),
+                hasMoreFollowing: action.data.length === 3,
             };
         }
 
