@@ -181,9 +181,18 @@ const reducer = (state = initialState, action) => {
         case LOAD_HASHTAG_POSTS_REQUEST:
         case LOAD_USER_POSTS_REQUEST: {
 
+            // mainPosts
+            // 다른 페이지에서 다시 해당 페이지로 온다면
+            // 기존 데이터를 삭제하고 새로 로딩해줘야한다.
+            // lastId가 0이면 새로 불러오고 아니면 그대로 유지
+
+            // hasMorePost
+            // action.lastId가 처음이면('0' 이면) 스크롤을 활성화
+            // 불러오고 있는 중이라면 스크롤을 유지
             return {
                 ...state,
-                mainPosts: [],
+                mainPosts: action.lastId === 0 ? [] : state.mainPosts,
+                hasMorePost: action.lastId ? state.hasMorePost : true,
             };
         }
 
@@ -211,7 +220,8 @@ const reducer = (state = initialState, action) => {
 
             return {
                 ...state,
-                mainPosts: action.data,
+                mainPosts: state.mainPosts.concat(action.data),
+                hasMorePost: action.data.length === 10,
             };
         }
 

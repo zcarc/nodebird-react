@@ -1,4 +1,4 @@
-import {all, fork, takeLatest, put, delay, call} from 'redux-saga/effects';
+import {all, fork, takeLatest, put, delay, call, throttle} from 'redux-saga/effects';
 import {
   ADD_POST_REQUEST,
   ADD_POST_SUCCESS,
@@ -106,8 +106,9 @@ function* loadMainPosts(action) {
   }
 }
 
+// throttle을 사용하면 호출되고나서 1초(2000 ms) 안에 반복해서 호출될 수 없다.
 function* watchLoadMainPosts() {
-  yield takeLatest(LOAD_MAIN_POSTS_REQUEST, loadMainPosts);
+  yield throttle(2000,LOAD_MAIN_POSTS_REQUEST, loadMainPosts);
 }
 
 function loadHashtagPostsAPI(tag, lastId) {

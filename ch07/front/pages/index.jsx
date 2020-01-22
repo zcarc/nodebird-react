@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import PostForm from '../components/PostForm';
 import PostCard from '../components/PostCard';
@@ -20,13 +20,14 @@ const Home = () => {
     // useSelector()의 매개변수인 state는 전체 state를 의미한다.
     // 거기에서 reducers/index combineReducers()의 user를 가져온다는 의미이고
     const {me} = useSelector(state => state.user);
-    const {mainPosts} = useSelector(state => state.post);
+    const {mainPosts, hasMorePost} = useSelector(state => state.post);
 
     console.log(`### pages/index.jsx mainPosts: ${JSON.stringify(mainPosts)} ###`);
 
     const dispatch = useDispatch();
 
-    const onScroll = () => {
+
+    const onScroll = useCallback(() => {
 
         // window.scrollY: 스크롤 내린 거리
         // document.documentElement.clientHeight: 화면 높이
@@ -36,18 +37,25 @@ const Home = () => {
         console.log('window.scrollY + document.documentElement.clientHeight: , ', window.scrollY + document.documentElement.clientHeight);
         console.log('document.documentElement.scrollHeight: , ', document.documentElement.scrollHeight);
 
+        // 브라우저 스크롤을 내렸을 때 마지막까지 내리기 전 -300 값인 경우
         if(window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
 
-            dispatch({
-               type: LOAD_MAIN_POSTS_REQUEST,
+            // 더 불러올 게시글들이 있다면 불러오고
+            // 다 불러왔으면 요청하지 않는다.
+            if(hasMorePost) {
+                dispatch({
+                    type: LOAD_MAIN_POSTS_REQUEST,
 
-                // 스크롤을 내리는 도중 누군가 새롤운 게시글을 작성했을 수도 있으므로
-                // 특정 게시글 전에 작성된 게시글들만 가져온다.
-                lastId: mainPosts[mainPosts.length - 1].id,
-            });
+                    // 스크롤을 내리는 도중 누군가 새롤운 게시글을 작성했을 수도 있으므로
+                    // 특정 게시글 전에 작성된 게시글들만 가져온다.
+                    lastId: mainPosts[mainPosts.length - 1].id,
+                });
+            }
+
+
         }
 
-    };
+    }, [hasMorePost, mainPosts.length]);
 
     // 스크롤을 감지하려면 window에 addEventListner를 추가해야한다.
     // 컴포넌트가 처음 실행될 때 addEventListener 를 달아주고
@@ -55,6 +63,8 @@ const Home = () => {
     useEffect(() => {
         console.log('addEventListener');
         window.addEventListener('scroll', onScroll);
+
+        // return이 있는 경우 다음 컴포넌트가 실행되기전에 한번 실행해준다.
         return () => {
             console.log('return removeEventListener');
             window.removeEventListener('scroll', onScroll);

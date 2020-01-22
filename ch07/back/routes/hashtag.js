@@ -44,7 +44,7 @@ router.get('/:tag', async (req, res, next) => {
                     model: db.Image,
                 }]
             }],
-
+            order: [['createdAt', 'DESC']], // 작성일 기준 내림차순으로 해쉬태그 게시글들을 가져옴
             limit: parseInt(req.query.limit, 10),
 
         });
