@@ -836,3 +836,13 @@ multer 라는 모듈을 사용해야한다.
 7-5. 회원가입 리다이렉션과 포스트 제거
 
         - 태그를 눌렀을 때 이동하는 링크는 CSR이고 SSR이 아니다.
+
+
+7-10. immer로 불변성 쉽게 쓰기
+
+        - 지우는거는 splice
+        - 추가하는거는 unshift 또는 push
+        - concat: forEach로 push
+        - immer 말고 immuterble이라고 있는데 코드도 복잡하고 배워야할게 많아서
+          추천하지는 않고 요즙에는 immer를 많이 사용하니 추천한다.
+        - immer는 reducer에서만 쓰는게 아니라 불변성때문에 스프레드 문법을 사용하는곳에서는 모두 사용가능하다. setState 등등
