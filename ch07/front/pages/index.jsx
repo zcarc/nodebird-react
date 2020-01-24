@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import PostForm from '../components/PostForm';
 import PostCard from '../components/PostCard';
@@ -26,6 +26,9 @@ const Home = () => {
 
     const dispatch = useDispatch();
 
+    // 요청을 보냈던 lastId 들을 기록
+    const countRef = useRef([]);
+
 
     const onScroll = useCallback(() => {
 
@@ -43,13 +46,24 @@ const Home = () => {
             // 더 불러올 게시글들이 있다면 불러오고
             // 다 불러왔으면 요청하지 않는다.
             if(hasMorePost) {
-                dispatch({
-                    type: LOAD_MAIN_POSTS_REQUEST,
+                const lastId = mainPosts[mainPosts.length - 1].id;
 
-                    // 스크롤을 내리는 도중 누군가 새롤운 게시글을 작성했을 수도 있으므로
-                    // 특정 게시글 전에 작성된 게시글들만 가져온다.
-                    lastId: mainPosts[mainPosts.length - 1].id,
-                });
+                // 한번 보낸 lastId 는 다시 요청이 가지 않게 설정
+                if(!countRef.current.includes(lastId)) {
+                    dispatch({
+                        type: LOAD_MAIN_POSTS_REQUEST,
+
+                        // 스크롤을 내리는 도중 누군가 새롤운 게시글을 작성했을 수도 있으므로
+                        // 특정 게시글 전에 작성된 게시글들만 가져온다.
+                        lastId,
+                    });
+
+                    // lastId 를 countRef 에 기록
+                    // 한번 요청을 보낸 lastId 들이 countRef 에 기록되어 있기 때문에
+                    // 만약 다음에 요청을 보낼 때 그 lastId 는 서버로 또 안가게 해주면 된다.
+                    countRef.current.push(lastId);
+                }
+
             }
 
 
