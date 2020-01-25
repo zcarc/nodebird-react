@@ -30,7 +30,7 @@ import {
   RETWEET_SUCCESS,
   RETWEET_FAILURE,
   RETWEET_REQUEST,
-  REMOVE_POST_SUCCESS, REMOVE_POST_FAILURE, REMOVE_POST_REQUEST
+  REMOVE_POST_SUCCESS, REMOVE_POST_FAILURE, REMOVE_POST_REQUEST, LOAD_POST_REQUEST, LOAD_POST_FAILURE, LOAD_POST_SUCCESS
 } from '../reducers/post';
 import axios from 'axios';
 import {ADD_POST_TO_ME, REMOVE_POST_OF_ME} from "../reducers/user";
@@ -414,6 +414,36 @@ function* watchRemovePost() {
   yield takeLatest(REMOVE_POST_REQUEST, removePost);
 }
 
+function loadPostAPI(postId) {
+  console.log('### front/sagas/post loadPostAPI... postId: ', postId ,' ###');
+
+  return axios.get(`/post/${postId}`);
+}
+
+function* loadPost(action) {
+  console.log('### front/sagas/post *loadPost... action: ', action ,' ###');
+
+  try {
+    const result = yield call(loadPostAPI, action.data);
+    yield put({
+      type: LOAD_POST_SUCCESS,
+      data: result.data,
+    });
+
+  } catch (e) {
+    console.error(e);
+    yield put({
+      type: LOAD_POST_FAILURE,
+      error: e,
+    });
+  }
+}
+
+function* watchLoadPost() {
+  console.log('### front/sagas/post *watchLoadPost... ###');
+  yield takeLatest(LOAD_POST_REQUEST, loadPost);
+}
+
 export default function* postSaga() {
   console.log('### front/sagas/post... ###');
 
@@ -429,5 +459,6 @@ export default function* postSaga() {
     fork(watchUnlikePost),
     fork(watchRetweet),
     fork(watchRemovePost),
+    fork(watchLoadPost),
   ]);
 }

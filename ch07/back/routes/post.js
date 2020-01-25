@@ -166,6 +166,31 @@ router.post('/images', upload.array('image'), (req, res) => {
 
 });
 
+// 개별 게시글 불러오기
+router.get('/:id', async (req, res, next) => {
+
+   try {
+
+    const post = await db.Post.findOne({
+        where: { id: req.params.id },
+        include: [{
+            model: db.User,
+            attributes: ['id', 'nickname'],
+        }, {
+            model: db.Image,
+        }],
+    });
+
+    console.log('### back/routes/post... post: ', post,' ###');
+
+    res.json(post);
+
+   } catch (e) {
+       console.log(e);
+       next(e);
+   }
+});
+
 // 게시글 삭제
 router.delete('/:id', isLoggedIn, async (req, res, next) => {
 

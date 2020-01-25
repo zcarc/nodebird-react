@@ -852,3 +852,9 @@ multer 라는 모듈을 사용해야한다.
 
         - saga에서 throttle하는 것은 saga action에 대한 것만 throttle 하는 것이고
           redux action 이 실행되는 것은 막을 수 없어서 따로 설정을 해줘야한다.
+
+
+7-12. 개별 포스트 불러오기
+
+        - 링크를 보내면 이미지, 타이틀 내용이 자동적으로 출력되는데 이게 바로 메타 태그이다.
+          각각 og: image, og: title, og: description
