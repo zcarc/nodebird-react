@@ -1,5 +1,6 @@
 import React from "react";
 import Helmet from 'react-helmet';
+import PropTypes from 'prop-types';
 import Document, { Main, NextScript } from "next/document";
 
 // 원래는 _app.jsx에서 html, head, body 태그가 필요없었지만
@@ -11,13 +12,23 @@ class MyDocument extends Document{
 
     // 클래스로 사용하게 되면 static으로 사용해야한다.
     static getInitialProps(context) {
+        console.log('### front/pages/_document... MyDocument... getInitialProps()...');
+
+        // renderPage의 App : front/pages/_app.jsx
+        // 이것을 추가해야 _app.jsx 를 실행할 수 있게 된다.
+        // _document 가 _app 의 상위이기 때문에 이 부분을 실행해서 _app 을 렌더링 해줘야한다.
+        // 그리고 그 _app 은 각 component 들의 getInitialProps 를 실행시켜준다.
+        const page = context.renderPage( (App) => (props) => <App {...props} /> );
+
+        console.log('### front/pages/_document... page: ', page, ' ###');
 
         // Helmet.renderStatic() : SSR을 할 수 있게 된다.
         // 여기서 return 한 것은 this.props에 들어가게 된다.
-        return { helmet: Helmet.renderStatic() }
+        return { ...page, helmet: Helmet.renderStatic() };
     }
 
     render() {
+        console.log('### front/pages/_document... MyDocument... render()...');
 
         // htmlAttributes: html의 속성들을 helmet에서 제공
         // bodyAttributes: body의 속성들을 helmet에서 제공
@@ -29,6 +40,8 @@ class MyDocument extends Document{
         const htmlAttrs = htmlAttributes.toComponent();
         const bodyAttrs = bodyAttributes.toComponent();
 
+        console.log('### front/pages/_document... this.props: ', this.props, ' ###');
+        console.log('### front/pages/_document... helmet: ', helmet, ' ###');
         console.log('### front/pages/_document... Object.values(helmet).map(el => el.toComponent()): ', Object.values(helmet).map(el => el.toComponent()), ' ###');
 
         return(
@@ -44,3 +57,9 @@ class MyDocument extends Document{
         );
     }
 }
+
+MyDocument.propTypes = {
+    helmet: PropTypes.object.isRequired,
+};
+
+export default MyDocument;
