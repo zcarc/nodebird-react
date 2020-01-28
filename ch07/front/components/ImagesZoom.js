@@ -70,7 +70,7 @@ const ImgWrapper = styled.div`
     padding: 32px;
     text-align: center;
     
-    $ img {
+    & img {
         margin: 0 auto;
         max-height: 750px;
     }

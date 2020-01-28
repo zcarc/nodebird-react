@@ -2,6 +2,7 @@ import React from "react";
 import Helmet from 'react-helmet';
 import PropTypes from 'prop-types';
 import Document, { Main, NextScript } from "next/document";
+import { ServerStyleSheet } from "styled-components";
 
 // 원래는 _app.jsx에서 html, head, body 태그가 필요없었지만
 // 이 파일을 수정함으로써 그런 태그들을 직접 컨트롤할 수 있게 된다.
@@ -14,17 +15,22 @@ class MyDocument extends Document{
     static getInitialProps(context) {
         console.log('### front/pages/_document... MyDocument... getInitialProps()...');
 
+        // styled-components를 SSR 적용
+        const sheet = new ServerStyleSheet();
+
         // renderPage의 App : front/pages/_app.jsx
         // 이것을 추가해야 _app.jsx 를 실행할 수 있게 된다.
         // _document 가 _app 의 상위이기 때문에 이 부분을 실행해서 _app 을 렌더링 해줘야한다.
         // 그리고 그 _app 은 각 component 들의 getInitialProps 를 실행시켜준다.
-        const page = context.renderPage( (App) => (props) => <App {...props} /> );
+        // styled-components를 SSR 적용 하기 위해서 sheet.collectStyles() 로 App을 감싸줘야한다.
+        const page = context.renderPage( (App) => (props) => sheet.collectStyles(<App {...props} />) );
+        const styleTags = sheet.getStyleElement();
 
         console.log('### front/pages/_document... page: ', page, ' ###');
 
         // Helmet.renderStatic() : SSR을 할 수 있게 된다.
         // 여기서 return 한 것은 this.props에 들어가게 된다.
-        return { ...page, helmet: Helmet.renderStatic() };
+        return { ...page, helmet: Helmet.renderStatic(), styleTags };
     }
 
     render() {
@@ -47,6 +53,7 @@ class MyDocument extends Document{
         return(
             <html {...htmlAttrs}>
                 <head>
+                    {this.props.styleTags}
                     {Object.values(helmet).map(el => el.toComponent())}
                 </head>
                 <body {...bodyAttrs}>
@@ -60,6 +67,7 @@ class MyDocument extends Document{
 
 MyDocument.propTypes = {
     helmet: PropTypes.object.isRequired,
+    styleTags: PropTypes.object.isRequired,
 };
 
 export default MyDocument;
