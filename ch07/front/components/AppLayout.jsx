@@ -3,8 +3,8 @@ import Link from 'next/link';
 import {useDispatch, useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import {Menu, Input, Row, Col} from 'antd';
-import LoginForm from './LoginForm';
-import UserProfile from './UserProfile';
+import LoginForm from '../containers/LoginForm';
+import UserProfile from '../containers/UserProfile';
 import {LOAD_USER_REQUEST} from "../reducers/user";
 import Router from "next/router";
 
@@ -57,7 +57,7 @@ const AppLayout = ({children}) => {
 };
 
 AppLayout.propTypes = {
-    children: PropTypes.node,
+    children: PropTypes.node.isRequired,
 };
 
 export default AppLayout;

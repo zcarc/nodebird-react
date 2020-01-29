@@ -2,7 +2,7 @@ import React, {useCallback, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {useDispatch, useSelector} from "react-redux";
 import {LOAD_HASHTAG_POSTS_REQUEST, LOAD_MAIN_POSTS_REQUEST} from "../reducers/post";
-import PostCard from "../components/PostCard";
+import PostCard from "../containers/PostCard";
 
 // _app.js의 <Component {...pageProps}/>
 const Hashtag = ({tag}) => {

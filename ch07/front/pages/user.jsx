@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
-import PostCard from "../components/PostCard";
+import PostCard from "../containers/PostCard";
 import {Avatar, Card} from "antd";
 import {useDispatch, useSelector} from "react-redux";
 import {LOAD_USER_REQUEST} from "../reducers/user";

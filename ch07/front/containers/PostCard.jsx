@@ -10,8 +10,8 @@ import {
     UNLIKE_POST_REQUEST
 } from "../reducers/post";
 import Link from 'next/link';
-import PostImages from './PostImages';
-import PostCardContent from './PostCardContent';
+import PostImages from '../components/PostImages';
+import PostCardContent from '../components/PostCardContent';
 import {FOLLOW_USER_REQUEST, UNFOLLOW_USER_REQUEST} from "../reducers/user";
 import styled from "styled-components";
 
