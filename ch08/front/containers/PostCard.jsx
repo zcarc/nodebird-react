@@ -14,6 +14,9 @@ import PostImages from '../components/PostImages';
 import PostCardContent from '../components/PostCardContent';
 import {FOLLOW_USER_REQUEST, UNFOLLOW_USER_REQUEST} from "../reducers/user";
 import styled from "styled-components";
+import moment from "moment";
+
+moment.locale('ko');
 
 const CardWrapper = styled.div`
     margin-bottom: 20px;
@@ -186,6 +189,7 @@ const PostCard = ({post}) => {
                                 // 컴포넌트로 만든 이유: 리트윗 한 경우, 하지 않은 경우의 중복 제거(서로 내용이 같아서 컴포넌트로 만듦)
                                 description={<PostCardContent postData={post.Retweet.content}/>}
                             />
+                            {moment(post.createAt).format('YYYY.MM.DD.')}
                         </Card>
                     )
                     // 원래 게시글
