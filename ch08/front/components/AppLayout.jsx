@@ -19,11 +19,13 @@ const AppLayout = ({children}) => {
         Router.push({ pathname: '/hashtag', query: { tag: value }}, `/hashtag/${value}`);
     };
 
+    // prefetch를 사용하는 페이지(AppLayout)를 불러올 때 해당 링크의 페이지로 같이 로딩된다.
+    // 개발환경에서는 안되고 배포환경에서만 적용된다.
     return (
         <div>
             <Menu mode="horizontal">
                 <Menu.Item key="home"><Link href="/"><a>노드버드</a></Link></Menu.Item>
-                <Menu.Item key="profile"><Link href="/profile"><a>프로필</a></Link></Menu.Item>
+                <Menu.Item key="profile"><Link href="/profile" prefetch><a>프로필</a></Link></Menu.Item>
                 <Menu.Item key="mail">
                     <Input.Search
                         enterButton

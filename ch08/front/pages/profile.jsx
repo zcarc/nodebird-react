@@ -73,8 +73,6 @@ const Profile = () => {
     return (
         <div>
             <NicknameEditForm/>
-
-
             <List
                 style={{marginBottom: '20px'}}
                 grid={{gutter: 4, xs: 2, md: 3}}
@@ -111,7 +109,7 @@ const Profile = () => {
 
             <div>
                 {mainPosts.map(c => (
-                    <PostCard key={+c.created} post={c}></PostCard>
+                    <PostCard key={+c.createdAt} post={c} />
                 ))}
             </div>
 

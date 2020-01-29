@@ -26,19 +26,19 @@ const UserProfile = () => {
                 // <div key="followers">팔로워<br />{me.Followers.length}</div>
 
                 // key 값은 제일 상위에 있어야한다.
-                <Link href="/profile" key="twit">
+                <Link href="/profile" key="twit" prefetch>
                     <a>
                         <div>짹짹<br/>{me.Posts.length}</div>
                     </a>
                 </Link>,
 
-                <Link href="/profile" key="following">
+                <Link href="/profile" key="following" prefetch>
                     <a>
                         <div>팔로잉<br/>{me.Followings.length}</div>
                     </a>
                 </Link>,
 
-                <Link href="/profile" key="followers">
+                <Link href="/profile" key="followers" prefetch>
                     <a>
                         <div>팔로워<br/>{me.Followers.length}</div>
                     </a>
