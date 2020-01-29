@@ -41,7 +41,7 @@ const Hashtag = ({tag}) => {
 
                     // 스크롤을 내리는 도중 누군가 새롤운 게시글을 작성했을 수도 있으므로
                     // 특정 게시글 전에 작성된 게시글들만 가져온다.
-                    lastId: mainPosts[mainPosts.length - 1].id,
+                    lastId: mainPosts[mainPosts.length - 1].id && mainPosts[mainPosts.length - 1].id,
                     data: tag,
                 });
             }
