@@ -892,3 +892,9 @@ multer 라는 모듈을 사용해야한다.
 
           ReactLoadablePlugin: 코드 스플리팅
           NextJsRequireCacheHotReloader, HotModuleReplacementPlugin: 핫 리로더 (코드 수정 시 바로 반영되는 플러그인)
+
+
+8-3. next-bundle-analyzer
+
+        - @zeit/next-bundle-analyzer: 프론트에 있는 패키지들을 분석해준다.
+        - npm run build 를 하면 client, server 이 html 파일로 분석되어 파일 구조와 용량을 볼 수 있게 된다.
