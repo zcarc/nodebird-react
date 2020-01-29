@@ -127,7 +127,6 @@ const PostCard = ({post}) => {
     return (
         <CardWrapper>
             <Card
-                key={+post.createdAt}
                 cover={post.Images && post.Images[0] && <PostImages images={post.Images}/>}
                 actions={[
                     <Icon type="retweet" key="retweet" onClick={onRetweet}/>,
@@ -260,8 +259,8 @@ PostCard.protoTypes = {
         User: PropTypes.object,
         content: PropTypes.string,
         img: PropTypes.string,
-        createdAt: PropTypes.object,
-    }),
+        createdAt: PropTypes.string,
+    }).isRequired,
 };
 
 export default PostCard;

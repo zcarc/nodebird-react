@@ -263,15 +263,24 @@ export default (state = initialState, action) => {
             }
 
             case LOAD_FOLLOWERS_REQUEST: {
-                return {
-                    ...state,
 
-                    // 처음에는 데이터가 아무것도 없으니 데이터를 가져오기 위한
-                    // 더보기 버튼을 보여주는(true) 걸로 한다.
-                    // 처음에는 더보기 버튼을 무조건 만들고 그 다음에는 SUCCESS에서 결정한다.
-                    hasMoreFollower: action.offset ? state.hasMoreFollower : true,
-                };
+                // offset이 없는 경우 지우기 아니라면 유지 (이 부분이 없으면 계속해서 중복되서 데이터가 생김)
+                draft.followerList = !action.offset ? [] : draft.followerList;
+                // 처음 데이터를 가져올 때는 더보기 버튼을 보여주는 걸로
+                draft.hasMoreFollower = action.offset ? draft.hasMoreFollower : true;
+                break;
             }
+
+            // case LOAD_FOLLOWERS_REQUEST: {
+            //     return {
+            //         ...state,
+            //
+            //         // 처음에는 데이터가 아무것도 없으니 데이터를 가져오기 위한
+            //         // 더보기 버튼을 보여주는(true) 걸로 한다.
+            //         // 처음에는 더보기 버튼을 무조건 만들고 그 다음에는 SUCCESS에서 결정한다.
+            //         hasMoreFollower: action.offset ? state.hasMoreFollower : true,
+            //     };
+            // }
 
             case LOAD_FOLLOWERS_SUCCESS: {
 
@@ -294,11 +303,20 @@ export default (state = initialState, action) => {
             }
 
             case LOAD_FOLLOWINGS_REQUEST: {
-                return {
-                    ...state,
-                    hasMoreFollowing: action.offset ? state.hasMoreFollowing : true, // 처음 데이터를 가져올 때는 더보기 버튼을 보여주는(true) 걸로 한다.
-                };
+
+                // offset이 없는 경우 지우기 아니라면 유지 (이 부분이 없으면 계속해서 중복되서 데이터가 생김)
+                draft.followingList = !action.offset ? [] : draft.followingList;
+                // 처음 데이터를 가져올 때는 더보기 버튼을 보여주는 걸로
+                draft.hasMoreFollowing = action.offset ? draft.hasMoreFollowing : true;
+                break;
             }
+
+            // case LOAD_FOLLOWINGS_REQUEST: {
+            //     return {
+            //         ...state,
+            //         hasMoreFollowing: action.offset ? state.hasMoreFollowing : true, // 처음 데이터를 가져올 때는 더보기 버튼을 보여주는(true) 걸로 한다.
+            //     };
+            // }
 
             case LOAD_FOLLOWINGS_SUCCESS: {
 

@@ -69,7 +69,7 @@ const Hashtag = ({tag}) => {
     return (
         <div>
             {mainPosts.map(c => (
-                <PostCard key={+c.created} post={c}></PostCard>
+                <PostCard key={c.id} post={c} />
             ))}
         </div>
     );

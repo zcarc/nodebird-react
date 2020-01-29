@@ -84,6 +84,7 @@ const NodeBird = ({Component, store, pageProps}) => {
 NodeBird.propTypes = {
     Component: PropTypes.elementType.isRequired,
     store: PropTypes.object.isRequired,
+    pageProps: PropTypes.object.isRequired,
 };
 
 // getInitialProps는 next가 알아서 실행해준다.
@@ -133,7 +134,7 @@ NodeBird.getInitialProps = async (context) => {
     if (Component.getInitialProps) {
         console.log(`### front/pages/_app.jsx... if (Component.getInitialProps)... ###`);
 
-        pageProps = await Component.getInitialProps(ctx);
+        pageProps = await Component.getInitialProps(ctx) || {};
     }
 
     console.log(`### front/pages/_app.jsx... pageProps = await Component.getInitialProps(ctx)... pageProps: ${JSON.stringify(pageProps)} ###`);
