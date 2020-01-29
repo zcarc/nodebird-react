@@ -880,3 +880,15 @@ multer 라는 모듈을 사용해야한다.
 
         - front/containers 폴더 밑에 redux의 dispatch 하는 component들을 넣는다.
           dispatch가 없는 component는 front/components에 넣는다
+
+
+8-2. next.config.js
+
+        - next가 webpack, babel 들을 다 제공해서 그걸 사용했는데
+          커스터마이징을 해야 패키지 간의 최적화를 할 수 있다.
+
+        - front/next.config... config 에서 DefinePlugin 는
+          process.env.NODE_ENV 와 같은 변수에 값을 넣어주거나 변수를 문자열로 대체하는 플러그인
+
+          ReactLoadablePlugin: 코드 스플리팅
+          NextJsRequireCacheHotReloader, HotModuleReplacementPlugin: 핫 리로더 (코드 수정 시 바로 반영되는 플러그인)
