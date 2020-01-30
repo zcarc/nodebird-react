@@ -31,7 +31,7 @@ const PostCard = memo(({post}) => {
     // console.log(' ### front/components/PostCard.jsx... const PostCard = ({post})... post.id: ', post.id, ' ###');
 
     const [commentFormOpened, setCommentFormOpened] = useState(false);
-    const {id} = useSelector(state => state.user.me && state.user.me.id);
+    const id = useSelector(state => state.user.me && state.user.me.id);
     const dispatch = useDispatch();
 
     const liked = id && post.Likers && post.Likers.find(v => v.id === id);
@@ -50,16 +50,16 @@ const PostCard = memo(({post}) => {
         }
     }, []);
 
-    const idMemory = useRef(id);
-
-    console.log(' ### front/components/PostCard... id: ', id, ' ###');
-    console.log(' ### front/components/PostCard... useRef(id): ', idMemory.current, ' ###');
-
-    useEffect(() => {
-        console.log(' ### front/components/PostCard... useEffect id: ', id, ' ###');
-        console.log(' ### front/components/PostCard... useEffect useRef(id): ', idMemory.current, ' ###');
-        console.log(' ### front/components/PostCard... useEffect id === meMemory.current: ', id === idMemory.current, ' ###');
-    }, [id]);
+    // const idMemory = useRef(id);
+    //
+    // console.log(' ### front/components/PostCard... id: ', id, ' ###');
+    // console.log(' ### front/components/PostCard... useRef(id): ', idMemory.current, ' ###');
+    //
+    // useEffect(() => {
+    //     console.log(' ### front/components/PostCard... useEffect id: ', id, ' ###');
+    //     console.log(' ### front/components/PostCard... useEffect useRef(id): ', idMemory.current, ' ###');
+    //     console.log(' ### front/components/PostCard... useEffect id === meMemory.current: ', id === idMemory.current, ' ###');
+    // }, [id]);
 
     const onToggleLike = useCallback(() => {
 
