@@ -1,4 +1,4 @@
-import {useState, useCallback, useEffect, memo} from 'react';
+import {useState, useCallback, useEffect, useRef, memo} from 'react';
 import {Button, Card, Icon, Avatar, Form, Input, List, Comment, Popover} from 'antd';
 import PropTypes from 'prop-types';
 import {useSelector, useDispatch} from "react-redux";
@@ -16,6 +16,7 @@ import {FOLLOW_USER_REQUEST, UNFOLLOW_USER_REQUEST} from "../reducers/user";
 import styled from "styled-components";
 import moment from "moment";
 import CommentForm from "./CommentForm";
+import FollowButton from "../components/FollowButton";
 
 moment.locale('ko');
 
@@ -26,14 +27,14 @@ const CardWrapper = styled.div`
 // memo를 사용할 때는 props(post)가 깊은 객체면 안된다.
 // memo가 얕은 비교만 해줘서 깊은 객체면 안될 수도 있다.
 const PostCard = memo(({post}) => {
-    console.log(' ### front/components/PostCard.jsx... const PostCard = ({post})... post: ', post, ' ###');
-    console.log(' ### front/components/PostCard.jsx... const PostCard = ({post})... post.id: ', post.id, ' ###');
+    // console.log(' ### front/components/PostCard.jsx... const PostCard = ({post})... post: ', post, ' ###');
+    // console.log(' ### front/components/PostCard.jsx... const PostCard = ({post})... post.id: ', post.id, ' ###');
 
     const [commentFormOpened, setCommentFormOpened] = useState(false);
-    const {me} = useSelector(state => state.user);
+    const {id} = useSelector(state => state.user.me && state.user.me.id);
     const dispatch = useDispatch();
 
-    const liked = me && post.Likers && post.Likers.find(v => v.id === me.id);
+    const liked = id && post.Likers && post.Likers.find(v => v.id === id);
 
     const onToggleComment = useCallback(() => {
         console.log(' ### front/components/PostCard.jsx... befre setCommentFormOpened... commentFormOpened: ', commentFormOpened, ' ###');
@@ -49,9 +50,20 @@ const PostCard = memo(({post}) => {
         }
     }, []);
 
+    const idMemory = useRef(id);
+
+    console.log(' ### front/components/PostCard... id: ', id, ' ###');
+    console.log(' ### front/components/PostCard... useRef(id): ', idMemory.current, ' ###');
+
+    useEffect(() => {
+        console.log(' ### front/components/PostCard... useEffect id: ', id, ' ###');
+        console.log(' ### front/components/PostCard... useEffect useRef(id): ', idMemory.current, ' ###');
+        console.log(' ### front/components/PostCard... useEffect id === meMemory.current: ', id === idMemory.current, ' ###');
+    }, [id]);
+
     const onToggleLike = useCallback(() => {
 
-        if (!me) {
+        if (!id) {
             return alert('로그인이 필요합니다.');
         }
         // post.Likers: 좋아요를 누른사람들의 아이디가 배열로 들어있다.
@@ -67,10 +79,10 @@ const PostCard = memo(({post}) => {
                 data: post.id,
             })
         }
-    }, [me && me.id, post && post.id, liked]);
+    }, [id, post && post.id, liked]);
 
     const onRetweet = useCallback(() => {
-        if (!me) {
+        if (!id) {
             return alert('로그인이 필요합니다.');
         }
         return dispatch({
@@ -78,7 +90,7 @@ const PostCard = memo(({post}) => {
             data: post.id,
         })
 
-    }, [me && me.id, post && post.id]);
+    }, [id, post && post.id]);
 
     const onFollow = useCallback( (userId) => () => {
         dispatch({
@@ -117,7 +129,7 @@ const PostCard = memo(({post}) => {
                         key="ellipsis"
                         content={(
                             <Button.Group>
-                                {me && post.UserId === me.id
+                                {id && post.UserId === id
                                     ? (
                                         <>
                                             <Button>수정</Button>
@@ -137,15 +149,7 @@ const PostCard = memo(({post}) => {
 
                 // 팔로우 <-> 언팔로우
                 // 로그인을 안했거나 자기의 게시글이면
-                extra={ !me || post.User.id === me.id
-                    ? null
-                    // 남의 게시글의 작성자를 내가 팔로잉하고 있다면
-                    : me.Followings && me.Followings.find(v => v.id === post.User.id)
-                        ? <Button onClick={onUnfollow(post.User.id)}>언팔로우</Button>
-                        : <Button onClick={onFollow(post.User.id)}>팔로우</Button>
-
-
-                }
+                extra={<FollowButton post={post} onUnfollow={onUnfollow} onFollow={onFollow} />}
             >
 
                 {/*원래 게시글, 리트윗한 게시글 분기처리*/}
