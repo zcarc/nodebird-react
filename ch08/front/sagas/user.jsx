@@ -58,9 +58,13 @@ function* login(action) {
         });
 
     } catch (e) { // loginAPI 실패
-        console.error(e);
+
+        console.error('### front/sagas/user... LOG_IN_FAILURE... e:', e, ' ###');
+        // console.dir(e);
+
         yield put({
             type: LOG_IN_FAILURE,
+            reason: e.response && e.response.data,
         });
     }
 

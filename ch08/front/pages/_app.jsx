@@ -47,8 +47,12 @@ const NodeBird = ({Component, store, pageProps}) => {
                         // open graph로 검색해보면 다양한 옵션들이 있다.
                         // 검색엔진에서 잘 노출되기를 원한다면 open graph 또는 scheme.org 를 활용하면 된다.
                         property: 'og:type', content: 'website',
+                    }, {
+                        property: 'og:image', content: 'http://localhost:3000/favicon.ico',
                     }]}
                     link={[{
+                        rel: 'shortcut icon', href: '/favicon.ico',
+                    }, {
                         rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/antd/3.25.3/antd.css',
                     }, {
                         rel: 'stylesheet',

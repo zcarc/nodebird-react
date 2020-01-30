@@ -911,3 +911,11 @@ multer 라는 모듈을 사용해야한다.
         - 원치않은 부분이 같이 렌더링 되는 경우 해당 컴포넌트를 다른 파일로 분리
           memo 적용해보고 안된다면, useState or useSelector 에 객체가 있는 지 확인
           객체가 하나만 바뀌어도 리렌더링 되기 때문에 객체를 값으로 꺼내서 사용해야한다.
+
+
+8-8. 배포전 마지막 준비 (IE, 에러 표시)
+
+        - package.json에서 포트 바꾸는 방법
+          "start": "cross-env NODE_ENV=production next start -p 3050"
+        - babel: 문법만 변경해주고 새로 생긴 객체는 생성하지 않는다.
+        - pollyfill: 새로 생긴 객체를 넣어준다. (ex: NodeList.prototype.forEach... etc...)
